@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+
+import '../authentication/login_page.dart';
 
 class OnboardingPageHolder extends StatefulWidget{
   const OnboardingPageHolder({super.key});
@@ -13,7 +14,7 @@ class OnboardingPageHolder extends StatefulWidget{
 }
 
 class _OnboardingPageHolderState extends State<OnboardingPageHolder> {
-  int _currentIndex = 0;
+  int _selectedIndex = 0;
   final List<String> _onboardingTitles = [onboardingTitle1, onboardingTitle2, onboardingTitle3];
   final List<String> _onboardingDescription = [onboardingDescription1, onboardingDescription2, onboardingDescription3];
   final List<String> _onboardingImages = [AppIcons.onboarding1, AppIcons.onboarding2, AppIcons.onboarding3];
@@ -27,16 +28,20 @@ class _OnboardingPageHolderState extends State<OnboardingPageHolder> {
       body: PageView.builder(
         controller: _pageController,
           itemCount: _onboardingTitles.length,
-          onPageChanged: (index)=> setState(()=>  _currentIndex = index),
+          onPageChanged: (index)=> setState(()=>  _selectedIndex = index),
           itemBuilder: (ctx, index){
-            return OnboardingItemWidget(isSelected: _currentIndex == index,
+            return OnboardingItemWidget(selectedIndex: _selectedIndex,
               title: _onboardingTitles[index],
               description: _onboardingDescription[index],
               image: _onboardingImages[index],
               onTap: () {
+              if(_selectedIndex != _onboardingTitles.length-1){
                 _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn);
+              }else{
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> LoginPage()), (val)=> false);
+              }
               },);
       })
     );
@@ -46,11 +51,11 @@ class _OnboardingPageHolderState extends State<OnboardingPageHolder> {
 class OnboardingItemWidget extends StatelessWidget {
   const OnboardingItemWidget({
     super.key,
-    required bool isSelected,
+    required int selectedIndex,
     required String title, required String description, required String image, required VoidCallback onTap,
-  }) : _isSelected = isSelected, _title = title, _description = description, _image = image, _onTap = onTap;
+  }) : _selectedIndex = selectedIndex, _title = title, _description = description, _image = image, _onTap = onTap;
 
-  final bool _isSelected;
+  final int _selectedIndex;
   final String _title;
   final String _description;
   final String _image;
@@ -63,6 +68,10 @@ class OnboardingItemWidget extends StatelessWidget {
         Expanded(child: Image.asset(_image)),
         Card(
           color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 40),
           child: Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(
@@ -70,26 +79,47 @@ class OnboardingItemWidget extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(3, (index){
+                  children: List.generate(3, (int index) {
+                    bool isSelected = _selectedIndex == index;
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      decoration:  BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(50),
+                          ),
+                          color: isSelected ? AppColors.primaryColor : Colors.grey,
+                        // color: color ?? (isDarkTheme ? Colors.white : const Color(0xFF000000)),
+                      ),
 
+                      height: 10,
+                      margin: EdgeInsets.only(right: 10),
+                      width: isSelected ? 40 : 15,
+                    );
+                  }),
+                ),
+                /*Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(3, (index){
+                    bool isSelected = _selectedIndex == _currentIndex;
                     return Container(
                       height: 10,
                       margin: EdgeInsets.only(right: 10),
-                      width: _isSelected ? 40 : 15,
+                      width: isSelected ? 40 : 15,
                       decoration: BoxDecoration(
-                          color: _isSelected ? AppColors.primaryColor : Colors.grey,
+                          color: isSelected ? AppColors.primaryColor : Colors.grey,
                           borderRadius: BorderRadius.circular(10)
                       ),
                     );
                   }),
-                ),
+                ),*/
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40.0),
                   child: Text(_title, textAlign: TextAlign.center, style:TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
                 ),
                 Text(_description, textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle,),
+
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
+                  padding: const EdgeInsets.only(bottom: 20.0, top: 20),
                   child: SizedBox(
                     width: 200,
                     height: 50,
@@ -97,7 +127,7 @@ class OnboardingItemWidget extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryColor
                         ),
-                        onPressed: _onTap, child: Text("Continue",style: AppTextStyles.titleTextStyle.copyWith(color: Colors.white),)),
+                        onPressed: _onTap, child: Text(_selectedIndex == 2 ? "Get Started" : "Continue",style: AppTextStyles.titleTextStyle.copyWith(color: Colors.white),)),
                   ),
                 )
               ],
