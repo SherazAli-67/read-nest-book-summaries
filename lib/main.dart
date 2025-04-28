@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:read_nest/src/features/rotating_books.dart';
+import 'package:read_nest/src/features/welcome_page.dart';
+import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
 
 void main() {
@@ -15,10 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: appTitle,
       theme: ThemeData(
-        fontFamily: appFontFamily,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        fontFamily: appFontFamilyMontserrat,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
       ),
-      home: RotatingBooksScreen()
+      home: WelcomePage()
     );
   }
 }

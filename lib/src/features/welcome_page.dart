@@ -1,14 +1,16 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/features/onboarding/onboarding_page3.dart';
+import 'package:read_nest/src/res/app_colors.dart';
 
-class RotatingBooksScreen extends StatefulWidget {
-  const RotatingBooksScreen({super.key});
+class WelcomePage extends StatefulWidget {
+  const WelcomePage({super.key});
 
   @override
-  RotatingBooksScreenState createState() => RotatingBooksScreenState();
+  WelcomePageState createState() => WelcomePageState();
 }
 
-class RotatingBooksScreenState extends State<RotatingBooksScreen> with TickerProviderStateMixin {
+class WelcomePageState extends State<WelcomePage> with TickerProviderStateMixin {
   late AnimationController _rotationController;
   late AnimationController _buttonController;
   bool _showButton = false;
@@ -43,25 +45,20 @@ class RotatingBooksScreenState extends State<RotatingBooksScreen> with TickerPro
     super.dispose();
   }
 
-  Widget _buildRotatingCard(double angle, double radius, String label) {
+  Widget _buildRotatingCard(double angle, double radius, int index) {
     final double rad = angle * pi / 180;
 
     return Transform(
       transform: Matrix4.identity()
         ..translate(radius * cos(rad), radius * sin(rad)),
       child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        child: Container(
-          width: 75,
+        child: SizedBox(
+          width: 70,
           height: 100,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-
-            color: Colors.deepPurpleAccent,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: Image.asset('assets/icons/onboarding$index.png', fit: BoxFit.cover,),
           ),
-          alignment: Alignment.center,
-          child: Text(label, style: TextStyle(color: Colors.white)),
         ),
       ),
     );
@@ -84,21 +81,21 @@ class RotatingBooksScreenState extends State<RotatingBooksScreen> with TickerPro
                 Stack(
                   alignment: Alignment.center,
                   children:
-                  List.generate(5, (index){
+                  List.generate(4, (index){
                     return Container(
                       height:  100 * (index+1),
                       width:  100 * (index+1),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: Colors.grey[200]!)
+                          border: Border.all(color: AppColors.primaryColor.withOpacity(0.1))
                       ),
                     );
                   }),
                 ),
                 Text(
-                  'Escape into \nworld of words',
+                  'ESCAPE INTO \nWORLD OF WORDS',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 AnimatedBuilder(
                   animation: _rotationController,
@@ -107,8 +104,8 @@ class RotatingBooksScreenState extends State<RotatingBooksScreen> with TickerPro
 
                     return Stack(
                       children: List.generate(6, (index) {
-                        double angle = (350 / 6) * index + rotationAngle;
-                        return _buildRotatingCard(angle, radius, 'Book ${index + 1}');
+                        double angle = (360 / 6) * index + rotationAngle;
+                        return _buildRotatingCard(angle, radius, index + 1);
                       }),
                     );
                   },
@@ -126,14 +123,14 @@ class RotatingBooksScreenState extends State<RotatingBooksScreen> with TickerPro
                   opacity: _buttonController,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Navigate to next screen
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> OnboardingPageHolder()));
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 15),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      backgroundColor: Colors.deepPurple,
+                      backgroundColor: AppColors.primaryColor,
                     ),
-                    child: Text("Let's Get Started", style: TextStyle(fontSize: 18, color: Colors.white)),
+                    child: Text("LET'S GET STARTED", style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600)),
                   )
               ),
             ),
