@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/features/rotating_books.dart';
 import 'package:read_nest/src/res/app_constants.dart';
-import 'package:read_nest/src/welcome_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,9 +15,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: appTitle,
       theme: ThemeData(
+        fontFamily: appFontFamily,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: WelcomePage()
+      home: RotatingBooksScreen()
     );
   }
 }
