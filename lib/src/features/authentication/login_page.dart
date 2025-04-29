@@ -1,94 +1,121 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:read_nest/src/res/app_colors.dart';
+import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
+import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
-class LoginPage extends StatefulWidget{
-  const LoginPage({super.key});
+import '../../res/app_colors.dart';
+import '../../res/app_constants.dart';
+import '../../res/app_icons.dart';
+import 'login_email_page.dart';
 
+class LoginPage extends StatefulWidget{
+  const LoginPage({super.key, required this.emailAddress});
+  final String emailAddress;
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+  bool _rememberMe = false;
 
+  @override
+  void initState() {
+    _emailController.text = widget.emailAddress;
+    super.initState();
+  }
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
+    _passController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: Column(
-        spacing: 40,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      /*appBar: AppBar(
+        leading: CircleAvatar(
+          backgroundColor: Colors.grey[300],
+          child: Center(child: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios_rounded)),),
+        ),
+        leadingWidth: 45,
+        title: Text("Sign In", style: AppTextStyles.regularTextStyle,),
+      ),*/
+      body: SafeArea(child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10),
+        child: Column(
+          spacing: 20,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 45.0),
-                  child: Text("Hi, Welcome Back 👋", textAlign: TextAlign.center, style: AppTextStyles.largeTextStyle.copyWith(color: Colors.white),),
+                CircleAvatar(
+                  backgroundColor: Colors.grey[200],
+                  child: Center(child: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back)),),
                 ),
-                Text("Please enter your username/email and password to sign in", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.white, fontSize: 15),),
+                Text("Sign In", style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                const SizedBox(width: 40,)
               ],
             ),
-          ),
-          Expanded(
-            child: Card(
-              color: Colors.white,
-              margin: EdgeInsets.zero,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  spacing: 5,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            AppTextField(textController: _emailController, readOnly: true,  hintText: "Email Address", titleText: "Email"),
+            AppTextField(textController: _passController, isPassword: true, hintText: "***********", titleText: "Password"),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
                   children: [
-                    Text("Email", style: AppTextStyles.regularTextStyle,),
-                    TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                          hintText: "Enter your email address",
-                          hintStyle: AppTextStyles.regularTextStyle,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(25),
-                          borderSide: BorderSide(color: Colors.grey[200]!)
-                        ),
-                        fillColor: Colors.grey[200],
-                        filled: true
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text("Password", style: AppTextStyles.regularTextStyle,),
-                    TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                          hintText: "Enter your password",
-                          hintStyle: AppTextStyles.regularTextStyle,
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25),
-                              borderSide: BorderSide(color: Colors.grey[200]!)
-                          ),
-                          fillColor: Colors.grey[200],
-                          filled: true
-                      ),
-                    ),
+                    Checkbox(value: _rememberMe, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(99)), onChanged: (val)=> setState(()=> _rememberMe = val!)),
+                    Text("Remember Me", style: AppTextStyles.regularTextStyle.copyWith(fontSize: 14, color: Colors.grey),)
                   ],
                 ),
-              ),
+                TextButton(onPressed: (){}, child: Text("Forget Password", style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w600),))
+              ],
             ),
-          )
-        ],
-      ),
+            SizedBox(
+              height: 55,
+              width: double.infinity,
+              child: PrimaryBtn(onTap: (){}, btnText: "Sign In"),
+            ),
+            Row(
+              spacing: 20,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Divider(),
+                ),
+                Text("Or continue with", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.grey),),
+                SizedBox(
+                  width: 100,
+                  child: Divider(),
+                ),
+              ],
+            ),
+            SocialSignInBtn(btnText: "Continue with Google", socialIcon: AppIcons.icGoogle, onTap: (){},),
+            SocialSignInBtn(btnText: "Continue with Apple", socialIcon: AppIcons.icApple, onTap: (){},),
+            // const Spacer(),
+            Align(
+              alignment: Alignment.center,
+              child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      children: [
+                        TextSpan(text: "Don't have an account? ", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.grey, fontFamily: appFontFamilyMontserrat, )),
+                        TextSpan(
+                            recognizer: TapGestureRecognizer()..onTap = (){
+
+                            },
+                            text: "Sign up", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor, fontFamily: appFontFamilyMontserrat, fontWeight: FontWeight.w600 )),
+                      ]
+                  )),
+            ),
+          ],
+        ),
+      )),
     );
   }
 }

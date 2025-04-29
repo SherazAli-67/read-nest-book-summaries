@@ -4,7 +4,7 @@ import 'package:read_nest/src/res/app_constants.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
-import '../authentication/login_page.dart';
+import '../authentication/login_email_page.dart';
 
 class OnboardingPageHolder extends StatefulWidget{
   const OnboardingPageHolder({super.key});
@@ -40,7 +40,7 @@ class _OnboardingPageHolderState extends State<OnboardingPageHolder> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeIn);
               }else{
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> LoginPage()), (val)=> false);
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> LoginEmailPage()), (val)=> false);
               }
               },);
       })
