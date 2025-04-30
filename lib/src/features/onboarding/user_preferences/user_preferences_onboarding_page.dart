@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:read_nest/src/features/home_page.dart';
 import 'package:read_nest/src/features/onboarding/user_preferences/choose_your_age_page.dart';
 import 'package:read_nest/src/features/onboarding/user_preferences/choose_your_book_genre.dart';
 import 'package:read_nest/src/features/onboarding/user_preferences/select_gender_page.dart';
 import 'package:read_nest/src/features/widgets/app_back_button.dart';
+import 'package:read_nest/src/features/widgets/loading_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_colors.dart';
+import 'package:read_nest/src/res/app_icons.dart';
+import 'package:read_nest/src/res/app_textstyle.dart';
 
 class UserPreferencesOnboardingPage extends StatefulWidget{
   const UserPreferencesOnboardingPage({super.key});
@@ -62,12 +67,44 @@ class _UserPreferencesOnboardingPageState extends State<UserPreferencesOnboardin
                 height: 55,
                 width: double.infinity,
                 child: PrimaryBtn(onTap: (){
-                  _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                  if(_currentPageIndex == 2){
+                    showDialog(context: context, builder: (ctx){
+                      return AlertDialog(
+                        elevation: 0,
+                        backgroundColor: Colors.white,
+                        content: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20.0),
+                          child: Column(
+                            spacing: 20,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Lottie.asset(AppIcons.icSuccessAnim, repeat: false),
+                              Text("Sign Up Successful!", textAlign: TextAlign.center, style: AppTextStyles.headingTextStyle,),
+                              Text("Your account has been created. Please wait a moment, we are preparing for you", textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle,),
+                              FutureBuilder(future: loadDataForUser(), builder: (ctx, snapshot){
+                                return LoadingWidget();
+                              })
+                            ],
+                          ),
+                        )
+                      );
+                    });
+
+                  }else{
+                    _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+                  }
                 }, btnText: "Continue"))
           ],
         ),
       )),
     );
+  }
+
+  Future<void> loadDataForUser()async{
+    await Future.delayed(const Duration(seconds: 2)).then((value){
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> HomePage()), (value)=> false);
+    });
+
   }
 }
 

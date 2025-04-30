@@ -6,4 +6,6 @@ class AppIcons {
   static const icGoogle = 'assets/icons/ic_google.svg';
 
 
+  static const icSuccessAnim ='assets/lottie_anims/Animation - 1746010675699.json';
+
 }
