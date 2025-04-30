@@ -1,6 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:read_nest/src/features/onboarding/onboarding_page3.dart';
+import 'package:read_nest/src/features/onboarding/welcome_onboarding/onboarding_page3.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 
 class WelcomePage extends StatefulWidget {

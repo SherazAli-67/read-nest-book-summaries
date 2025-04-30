@@ -73,7 +73,8 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 55,
               width: double.infinity,
-              child: PrimaryBtn(onTap: (){}, btnText: "Sign In"),
+              child: PrimaryBtn(onTap: (){
+              }, btnText: "Sign In"),
             ),
             Row(
               spacing: 20,

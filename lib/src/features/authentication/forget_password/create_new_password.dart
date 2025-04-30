@@ -3,6 +3,8 @@ import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
+import '../../widgets/app_back_button.dart';
+
 class CreateNewPassword extends StatefulWidget{
   const CreateNewPassword({super.key,});
   @override
@@ -28,13 +30,7 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
         child: Column(
           spacing: 20,
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(child: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back)),),
-              ),
-            ),
+            AppBackButton(),
             Column(
               children: [
                 Text("Create a\nNew Password", textAlign: TextAlign.center, style: AppTextStyles.headingTextStyle.copyWith(fontWeight: FontWeight.w600),),
@@ -56,3 +52,4 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
     );
   }
 }
+

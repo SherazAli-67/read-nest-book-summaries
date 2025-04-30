@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:read_nest/src/features/welcome_page.dart';
+import 'package:provider/provider.dart';
+import 'package:read_nest/src/features/onboarding/user_preferences/user_preferences_onboarding_page.dart';
+import 'package:read_nest/src/providers/user_preferences_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(create: (_)=> UserPreferencesProvider(), child: const MyApp(),),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +24,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor, ),
         scaffoldBackgroundColor: Colors.white
       ),
-      home: WelcomePage()
+      home: UserPreferencesOnboardingPage()
     );
   }
 }

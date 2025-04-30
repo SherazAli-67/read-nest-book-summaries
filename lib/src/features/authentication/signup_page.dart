@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/authentication/login_email_page.dart';
+import 'package:read_nest/src/features/onboarding/user_preferences/user_preferences_onboarding_page.dart';
 import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_colors.dart';
@@ -67,7 +68,9 @@ class _SignupPageState extends State<SignupPage> {
             SizedBox(
               height: 55,
               width: double.infinity,
-              child: PrimaryBtn(onTap: (){}, btnText: "Sign up"),
+              child: PrimaryBtn(onTap: (){
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> UserPreferencesOnboardingPage()), (value)=> false);
+              }, btnText: "Sign up"),
             ),
             Align(
               alignment: Alignment.center,

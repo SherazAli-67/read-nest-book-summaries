@@ -4,7 +4,7 @@ import 'package:read_nest/src/res/app_constants.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
-import '../authentication/login_email_page.dart';
+import '../../authentication/login_email_page.dart';
 
 class OnboardingPageHolder extends StatefulWidget{
   const OnboardingPageHolder({super.key});
