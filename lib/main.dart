@@ -16,8 +16,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: appTitle,
       theme: ThemeData(
-        fontFamily: appFontFamilyMontserrat,
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+        fontFamily: appFontFamilyJakartaSans,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor, ),
+        scaffoldBackgroundColor: Colors.white
       ),
       home: WelcomePage()
     );

@@ -9,8 +9,9 @@ class AppTextField extends StatefulWidget {
     required String hintText,
     required String titleText,
     this.isPassword = false,
-    this.readOnly = false
-  }) : _textController = textController,_hintText = hintText, _titleText = titleText;
+    this.readOnly = false,
+    TextInputType? textInputType
+  }) : _textController = textController,_hintText = hintText, _titleText = titleText, _textInputType = textInputType;
 
   final TextEditingController _textController;
   final String _hintText;
@@ -18,6 +19,7 @@ class AppTextField extends StatefulWidget {
   
   final bool isPassword;
   final bool readOnly;
+  final TextInputType? _textInputType;
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -36,10 +38,10 @@ class _AppTextFieldState extends State<AppTextField> {
           controller: widget._textController,
           readOnly: widget.readOnly,
           obscureText: widget.isPassword && hidePassword,
-
+          keyboardType: widget._textInputType,
           decoration: InputDecoration(
-              hintText: widget._hintText,
-              hintStyle: AppTextStyles.regularTextStyle,
+              hintText: widget.isPassword ? '● ● ● ● ● ● ● ● ● ● ●' : widget._hintText,
+              hintStyle: AppTextStyles.regularTextStyle.copyWith(fontSize: 12, color: Colors.grey),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide(color: Colors.grey[200]!)

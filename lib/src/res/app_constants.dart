@@ -1,6 +1,6 @@
 const appTitle = 'Read Nest';
 const appFontFamilyMontserrat ='Montserrat';
-const appFontFamilyPoppins ='Poppins';
+const appFontFamilyJakartaSans ='PlusJakartaSans';
 
 const onboardingTitle1 = 'Now reading books will be easier';
 const onboardingDescription1 = 'Discover new worlds, join a vibrant reading community. Start your reading adventure effortlessly with us.';

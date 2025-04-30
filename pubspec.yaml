@@ -82,12 +82,12 @@ flutter:
          - asset: assets/fonts/Montserrat-Medium.ttf
          - asset: assets/fonts/Montserrat-Bold.ttf
            weight: 700
-#    - family: Poppins
-#      fonts:
-#        - asset: assets/fonts/Poppins-Regular.ttf
-#        - asset: assets/fonts/Poppins-Medium.ttf
-#        - asset: assets/fonts/Poppins-Bold.ttf
-#          weight: 700
+    - family: PlusJakartaSans
+      fonts:
+        - asset: assets/fonts/PlusJakartaSans-Regular.ttf
+        - asset: assets/fonts/PlusJakartaSans-Medium.ttf
+        - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+          weight: 700
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

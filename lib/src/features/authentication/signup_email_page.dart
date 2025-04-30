@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:read_nest/src/features/authentication/login_page.dart';
+import 'package:read_nest/src/features/authentication/signup_page.dart';
 import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_colors.dart';
@@ -11,14 +11,14 @@ import 'package:read_nest/src/res/app_textstyle.dart';
 
 import '../widgets/social_signin_btn.dart';
 
-class LoginEmailPage extends StatefulWidget{
-  const LoginEmailPage({super.key});
+class SignupEmailPage extends StatefulWidget{
+  const SignupEmailPage({super.key});
 
   @override
-  State<LoginEmailPage> createState() => _LoginEmailPageState();
+  State<SignupEmailPage> createState() => _SignupEmailPageState();
 }
 
-class _LoginEmailPageState extends State<LoginEmailPage> {
+class _SignupEmailPageState extends State<SignupEmailPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -43,9 +43,9 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 45.0),
-                  child: Text("Hi, Welcome Back 👋", textAlign: TextAlign.center, style: AppTextStyles.largeTextStyle.copyWith(color: Colors.white),),
+                  child: Text("Create Account", textAlign: TextAlign.center, style: AppTextStyles.largeTextStyle.copyWith(color: Colors.white),),
                 ),
-                Text("Please enter your username/email and password to sign in", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.white, fontSize: 15),),
+                Text("Create account and get started with $appTitle", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.white, fontSize: 15),),
               ],
             ),
           ),
@@ -73,8 +73,8 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                         if(emailAddress.isEmpty){
                           return;
                         }
-                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> LoginPage(emailAddress: emailAddress)));
-                      }, btnText: "Continue with Email"),
+                        Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> SignupPage(emailAddress: emailAddress)));
+                      }, btnText: "Signup with Email"),
                     ),
                     Row(
                       spacing: 20,
@@ -100,15 +100,15 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
                       child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                        children: [
-                          TextSpan(text: "Don't have an account? ", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.grey, fontFamily: appFontFamilyMontserrat, )),
-                          TextSpan(
-                            recognizer: TapGestureRecognizer()..onTap = (){
-
-                            },
-                              text: "Sign up", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor, fontFamily: appFontFamilyMontserrat, fontWeight: FontWeight.w600 )),
-                        ]
-                      )),
+                              children: [
+                                TextSpan(text: "Already have an account? ", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.grey, fontFamily: appFontFamilyMontserrat, )),
+                                TextSpan(
+                                    recognizer: TapGestureRecognizer()..onTap = (){
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> SignupEmailPage()));
+                                    },
+                                    text: "Sign in", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor, fontFamily: appFontFamilyMontserrat, fontWeight: FontWeight.w600 )),
+                              ]
+                          )),
                     ),
 
                     // const Spacer(),
@@ -122,4 +122,3 @@ class _LoginEmailPageState extends State<LoginEmailPage> {
     );
   }
 }
-
