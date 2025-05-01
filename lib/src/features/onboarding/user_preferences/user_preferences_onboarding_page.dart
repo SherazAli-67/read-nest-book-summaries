@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:read_nest/src/features/home_page.dart';
+import 'package:read_nest/src/features/main_menu/main_menu_page.dart';
 import 'package:read_nest/src/features/onboarding/user_preferences/choose_your_age_page.dart';
 import 'package:read_nest/src/features/onboarding/user_preferences/choose_your_book_genre.dart';
 import 'package:read_nest/src/features/onboarding/user_preferences/select_gender_page.dart';
@@ -102,7 +102,7 @@ class _UserPreferencesOnboardingPageState extends State<UserPreferencesOnboardin
 
   Future<void> loadDataForUser()async{
     await Future.delayed(const Duration(seconds: 2)).then((value){
-      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> HomePage()), (value)=> false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> MainMenuPage()), (value)=> false);
     });
 
   }
