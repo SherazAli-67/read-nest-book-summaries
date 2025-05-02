@@ -8,7 +8,6 @@ import 'package:read_nest/src/features/main_menu/bookmark_page.dart';
 import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
-import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class MainMenuPage extends StatelessWidget{
