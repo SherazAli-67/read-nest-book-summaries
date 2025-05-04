@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
         spacing: 20,
@@ -91,8 +91,9 @@ class _HomePageState extends State<HomePage> {
                             contentPadding: EdgeInsets.zero,
                             leading: ClipRRect(
                               borderRadius: BorderRadius.circular(5),
-                              child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl,),
+                              child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl, fit: BoxFit.cover,),
                             ),
+                            minLeadingWidth: 50,
                             title: Text("Born a crime, Stories from south", style: AppTextStyles.titleTextStyle, overflow: TextOverflow.ellipsis,),
                             subtitle: RichText(text: TextSpan(
                               children: [
@@ -134,6 +135,62 @@ class _HomePageState extends State<HomePage> {
                     ),
                   );
             }),
+          ),
+          SizedBox(
+            height: size.height*0.35,
+            child: ListView.builder(
+                itemCount: 5,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (ctx, index){
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: Stack(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.all(15),
+                              decoration: BoxDecoration(
+                                  color: AppColors.textFieldFillColor
+                              ),
+                              margin: EdgeInsets.only(right: 15),
+                              child:  ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl2)),
+                            ),
+                            Positioned(
+                                left: 0,
+                                top: 0,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.primaryColor,
+                                      borderRadius: BorderRadius.circular(99)
+                                  ),
+                                  child: Text("50% off", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.white),),
+                                )),
+                            Positioned(
+                                right: 20,
+                                top: 0,
+                                child: IconButton(
+                                  onPressed: (){}, icon: Icon(Icons.favorite, color: Colors.red,),
+                                  style: IconButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                    backgroundColor: Colors.white
+                                  ),
+                                ))
+                          ],
+                        ),
+                      ),
+                      Padding(padding: EdgeInsets.only(right: 15), child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("The trials of appollo",overflow: TextOverflow.ellipsis, style: AppTextStyles.titleTextStyle,),
+                          Text("Greek mythology", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.grey),)
+                        ],
+                      ),)
+                    ],
+                  );
+                }),
           )
         ],
       ),
