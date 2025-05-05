@@ -44,11 +44,7 @@ class _HomePageState extends State<HomePage> {
                   )
                 ],
               ),
-              Row(
-                children: [
-                  SvgPicture.asset(AppIcons.icNotification)
-                ],
-              )
+              IconButton(onPressed: (){}, icon: SvgPicture.asset(AppIcons.icNotification))
             ],
           ),
           SizedBox(
@@ -89,9 +85,13 @@ class _HomePageState extends State<HomePage> {
 
                           ListTile(
                             contentPadding: EdgeInsets.zero,
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl, fit: BoxFit.cover,),
+                            leading: SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl, fit: BoxFit.cover,),
+                              ),
                             ),
                             minLeadingWidth: 50,
                             title: Text("Born a crime, Stories from south", style: AppTextStyles.titleTextStyle, overflow: TextOverflow.ellipsis,),
