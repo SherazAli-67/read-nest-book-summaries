@@ -27,7 +27,7 @@ class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
       child: Column(
         spacing: 20,
@@ -145,9 +145,40 @@ class _ExplorePageState extends State<ExplorePage> {
               TextButton(onPressed: (){}, child: Text("See All", style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w700),))
             ],
           ),
-          Expanded(child: ListView.builder(itemBuilder: (ctx, index){
 
-          }))
+          Column(
+            children: List.generate(5, (index){
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 15.0),
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    SizedBox(
+                      height: 75,
+                      width: 75,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl,fit: BoxFit.cover,),
+                      ),
+                    ),
+                    Expanded(child: Column(
+                      children: [
+                        Text("Fantasy", style: AppTextStyles.regularTextStyle,),
+                        Text("The trials of appollo", style: AppTextStyles.titleTextStyle,),
+                        Row(
+                          children: List.generate(4, (index){
+                            return Icon(Icons.star, color: Colors.yellow,);
+                          }),
+                        )
+                      ],
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                    ),
+                    )
+                  ],
+                ),
+              );
+            }),
+          )
         ],
       ),
     );
