@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/features/authentication/login_email_page.dart';
 import 'package:read_nest/src/features/authentication/signup_page.dart';
 import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
@@ -76,7 +77,7 @@ class _SignupEmailPageState extends State<SignupEmailPage> {
                       }, btnText: "Signup with Email"),
                     ),
                     Row(
-                      spacing: 20,
+                      spacing: 10,
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -103,7 +104,7 @@ class _SignupEmailPageState extends State<SignupEmailPage> {
                                 TextSpan(text: "Already have an account? ", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.grey, fontFamily: appFontFamilyMontserrat, )),
                                 TextSpan(
                                     recognizer: TapGestureRecognizer()..onTap = (){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> SignupEmailPage()));
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> LoginEmailPage()));
                                     },
                                     text: "Sign in", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor, fontFamily: appFontFamilyMontserrat, fontWeight: FontWeight.w600 )),
                               ]

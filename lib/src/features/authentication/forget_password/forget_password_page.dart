@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/authentication/forget_password/create_new_password.dart';
+import 'package:read_nest/src/features/widgets/app_back_button.dart';
 import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
@@ -28,20 +29,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         child: Column(
           spacing: 20,
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                child: Center(child: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back)),),
-              ),
-            ),
+            AppBackButton(),
+
             Column(
               children: [
                 Text("Forget Password", style: AppTextStyles.headingTextStyle.copyWith(fontWeight: FontWeight.w600),),
                 Text("Recover your account password", style: AppTextStyles.regularTextStyle,)
               ],
             ),
-            AppTextField(textController: _emailController, readOnly: true,  hintText: "Email Address", titleText: "Email", textInputType: TextInputType.emailAddress,),
+            AppTextField(textController: _emailController, hintText: "Email Address", titleText: "Email", textInputType: TextInputType.emailAddress,),
             const SizedBox(height: 20,),
             SizedBox(
               height: 55,

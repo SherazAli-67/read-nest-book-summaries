@@ -13,7 +13,9 @@ class AppBackButton extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: CircleAvatar(
           backgroundColor: Colors.grey[200],
-          child: Center(child: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back)),),
+          child: Center(child: IconButton(onPressed: (){
+            Navigator.of(context).pop();
+          }, icon: Icon(Icons.arrow_back)),),
         ),
       ),
     );

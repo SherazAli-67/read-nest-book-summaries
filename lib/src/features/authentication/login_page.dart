@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: Padding(
+      body: SafeArea(child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 10),
         child: Column(
           spacing: 20,
@@ -73,11 +73,10 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 55,
               width: double.infinity,
-              child: PrimaryBtn(onTap: (){
-              }, btnText: "Sign In"),
+              child: PrimaryBtn(onTap: (){}, btnText: "Sign In"),
             ),
             Row(
-              spacing: 20,
+              spacing: 10,
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -103,8 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextSpan(text: "Don't have an account? ", style: AppTextStyles.regularTextStyle.copyWith(color: Colors.grey, fontFamily: appFontFamilyMontserrat, )),
                         TextSpan(
-                            recognizer: TapGestureRecognizer()..onTap = (){
+                            recognizer: TapGestureRecognizer()..onTap = () {
                               Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> SignupEmailPage()));
+                              // Single tapped.
                             },
                             text: "Sign up", style: AppTextStyles.regularTextStyle.copyWith(color: AppColors.primaryColor, fontFamily: appFontFamilyMontserrat, fontWeight: FontWeight.w600 )),
                       ]

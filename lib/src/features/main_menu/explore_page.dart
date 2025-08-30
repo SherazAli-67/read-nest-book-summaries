@@ -73,7 +73,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(99),
                           border: Border.all(color: isSelected ? Colors.transparent : AppColors.textFieldFillColor),
-                          color: isSelected ? AppColors.primaryColor.withOpacity(0.2) : Colors.white
+                          color: isSelected ? AppColors.primaryColor.withValues(alpha: 0.2) : Colors.white
                       ),
                       alignment: Alignment.center,
                       child: Text(AppDate.genres[index], textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle.copyWith(color: isSelected ? AppColors.primaryColor : Colors.black, fontWeight: FontWeight.w600),),
@@ -162,6 +162,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                     ),
                     Expanded(child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("Fantasy", style: AppTextStyles.regularTextStyle,),
                         Text("The trials of appollo", style: AppTextStyles.titleTextStyle,),
@@ -171,7 +172,6 @@ class _ExplorePageState extends State<ExplorePage> {
                           }),
                         )
                       ],
-                      crossAxisAlignment: CrossAxisAlignment.start,
                     ),
                     )
                   ],

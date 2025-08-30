@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/features/main_menu/main_menu_page.dart';
 import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
@@ -37,14 +38,16 @@ class _CreateNewPasswordState extends State<CreateNewPassword> {
                 Text("Enter your new password",textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle,)
               ],
             ),
-            AppTextField(textController: _newPasswordController, readOnly: true,  hintText: "*******", titleText: "New Password", isPassword: true,),
-            AppTextField(textController: _confirmNewPasswordController, readOnly: true,  hintText: "*******", titleText: "Confirm Password", isPassword: true,),
+            AppTextField(textController: _newPasswordController, hintText: "*******", titleText: "New Password", isPassword: true,),
+            AppTextField(textController: _confirmNewPasswordController,   hintText: "*******", titleText: "Confirm Password", isPassword: true,),
 
             const SizedBox(height: 20,),
             SizedBox(
               height: 55,
               width: double.infinity,
-              child: PrimaryBtn(onTap: (){}, btnText: "Continue"),
+              child: PrimaryBtn(onTap: (){
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> MainMenuPage()), (val)=> false);
+              }, btnText: "Continue"),
             ),
           ],
         ),
