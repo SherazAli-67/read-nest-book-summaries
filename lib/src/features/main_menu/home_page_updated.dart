@@ -27,7 +27,7 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
         spacing: 20,
@@ -105,7 +105,24 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
                     child: Text(AppData.genres[index], textAlign: TextAlign.center, style: AppTextStyles.smallTextStyle,),
                   );*/
             }),
-          )
+          ),
+          Expanded(child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 20, mainAxisSpacing: 20, childAspectRatio: 2/3), itemBuilder: (_, index) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(child: CachedNetworkImage(imageUrl: 'https://www.classificationoffice.govt.nz/media/images/killers_of_the_flower_moon.width-1200.jpg', fit: BoxFit.cover, width: double.infinity,)),
+                  Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Text('David Grann', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
+                  )
+                ],
+              ),
+            );
+          }))
         ],
       ),
     );
