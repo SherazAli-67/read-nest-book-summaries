@@ -113,7 +113,40 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(child: CachedNetworkImage(imageUrl: 'https://www.classificationoffice.govt.nz/media/images/killers_of_the_flower_moon.width-1200.jpg', fit: BoxFit.cover, width: double.infinity,)),
+                  Expanded(child: Stack(
+                    children: [
+                      CachedNetworkImage(imageUrl: 'https://www.classificationoffice.govt.nz/media/images/killers_of_the_flower_moon.width-1200.jpg', fit: BoxFit.cover, width: double.infinity,),
+                      Positioned(
+                          right: 10,
+                          top: 10,
+                          child: Container(
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                        color: AppColors.textFieldFillColor,
+                          shape: BoxShape.circle
+                      ),
+                        child: Icon(Icons.favorite_border, color: Colors.black45, size: 18,),)),
+                      Positioned(
+                          left: 10,
+                          bottom: 10,
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                                color: AppColors.textFieldFillColor,
+                                borderRadius: BorderRadius.circular(99)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Row(
+                                spacing: 4,
+                                children: [
+                                  Icon(Icons.access_time_outlined, size: 18,),
+                                  Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                ],
+                              ),
+                            ))),
+                    ],
+                  )),
                   Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
