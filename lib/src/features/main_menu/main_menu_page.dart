@@ -18,7 +18,15 @@ class MainMenuPage extends StatelessWidget{
   Widget build(BuildContext context) {
     return Consumer<MainMenuTabChangeProvider>(builder: (ctx, provider, _){
       return Scaffold(
-        bottomNavigationBar: SalomonBottomBar(
+        bottomNavigationBar: BottomNavigationBar(
+            onTap: (int index)=> provider.onTabChange(index),
+            items: [
+          _buildBottomNavigationItemWidget(icon: AppIcons.icHome, label: 'Home', isSelected: provider.currentIndex == 0),
+          _buildBottomNavigationItemWidget(icon: AppIcons.icBookmark, label: 'Favorite', isSelected: provider.currentIndex == 1),
+          _buildBottomNavigationItemWidget(icon: AppIcons.icUserProfile, label: 'Profile', isSelected: provider.currentIndex == 2),
+        ]),
+
+        /*SalomonBottomBar(
           onTap: (index)=> provider.onTabChange(index),
             selectedItemColor: AppColors.primaryColor,
             currentIndex: provider.currentIndex,
@@ -29,25 +37,25 @@ class MainMenuPage extends StatelessWidget{
           _buildBottomNavigationItemWidget(icon: AppIcons.icDiscover, label: 'Discover', isSelected: provider.currentIndex == 1),
           _buildBottomNavigationItemWidget(icon: AppIcons.icBookmark, label: 'Bookmark', isSelected: provider.currentIndex == 2),
           _buildBottomNavigationItemWidget(icon: AppIcons.icUserProfile, label: 'Profile', isSelected: provider.currentIndex == 3),
-        ]),
+        ]),*/
         body: SafeArea(child: _buildPage(provider.currentIndex)),
       );
     },
     );
   }
 
-  SalomonBottomBarItem _buildBottomNavigationItemWidget({required String icon, required String label, required bool isSelected}) =>
-      SalomonBottomBarItem(
+  BottomNavigationBarItem _buildBottomNavigationItemWidget({required String icon, required String label, required bool isSelected}) =>
+      /*SalomonBottomBarItem(
         icon: SvgPicture.asset(icon, colorFilter: ColorFilter.mode(
             isSelected ? AppColors.primaryColor : Colors.grey,
             BlendMode.srcIn)),
         title: Text(label),
         selectedColor: AppColors.primaryColor,
-      );
-    /*  BottomNavigationBarItem(
+      );*/
+      BottomNavigationBarItem(
         icon: SvgPicture.asset(icon, colorFilter: ColorFilter.mode(
             isSelected ? AppColors.primaryColor : Colors.grey,
-            BlendMode.srcIn)), label: label,);*/
+            BlendMode.srcIn)), label: label,);
 
   Widget _buildPage(int currentIndex) {
     switch(currentIndex){

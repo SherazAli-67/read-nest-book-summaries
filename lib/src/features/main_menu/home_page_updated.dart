@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:read_nest/src/data/app_data.dart';
 import 'package:read_nest/src/res/app_avatars.dart';
 import 'package:read_nest/src/res/app_colors.dart';
-import 'package:read_nest/src/res/app_constants.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
@@ -26,7 +25,6 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
@@ -112,6 +110,7 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
               borderRadius: BorderRadius.circular(15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: 15,
                 children: [
                   Expanded(child: Stack(
                     children: [
@@ -147,11 +146,17 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
                             ))),
                     ],
                   )),
-                  Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8.0),
-                    child: Text('David Grann', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: Text('David Grann', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
+                      )
+                    ],
                   )
+
                 ],
               ),
             );
