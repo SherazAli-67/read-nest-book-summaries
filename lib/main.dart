@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:read_nest/src/features/main_menu/main_menu_page.dart';
 import 'package:read_nest/src/features/welcome_page.dart';
 import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/providers/user_preferences_provider.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor, ),
         scaffoldBackgroundColor: Colors.white
       ),
-      home: WelcomePage()
+      home: MainMenuPage()
     );
   }
 }

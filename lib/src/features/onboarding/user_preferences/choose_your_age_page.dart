@@ -19,7 +19,7 @@ class ChooseYourAgePage extends StatelessWidget{
         Text("Select age range for better content", style: AppTextStyles.regularTextStyle,),
         Consumer<UserPreferencesProvider>(builder: (ctx, provider, _){
           return Wrap(
-            children: AppDate.ageRanges.map((ageRange){
+            children: AppData.ageRanges.map((ageRange){
 
               bool isSelected = provider.age == ageRange;
               

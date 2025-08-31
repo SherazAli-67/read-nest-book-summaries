@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
             height: 45,
             width: double.infinity,
             child: ListView.builder(
-                itemCount: AppDate.genres.length,
+                itemCount: AppData.genres.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (ctx, index){
                   bool isSelected = _selectedCategoryIndex == index;
@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                         color: isSelected ? AppColors.primaryColor.withOpacity(0.4) : Colors.white
                       ),
                       alignment: Alignment.center,
-                      child: Text(AppDate.genres[index], textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle.copyWith(color: isSelected ? AppColors.primaryColor : Colors.black, fontWeight: FontWeight.w600),),
+                      child: Text(AppData.genres[index], textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle.copyWith(color: isSelected ? AppColors.primaryColor : Colors.black, fontWeight: FontWeight.w600),),
                     ),
                   );
             }),

@@ -61,7 +61,7 @@ class _ExplorePageState extends State<ExplorePage> {
             height: 45,
             width: double.infinity,
             child: ListView.builder(
-                itemCount: AppDate.genres.length,
+                itemCount: AppData.genres.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (ctx, index){
                   bool isSelected = _selectedCategoryIndex == index;
@@ -76,7 +76,7 @@ class _ExplorePageState extends State<ExplorePage> {
                           color: isSelected ? AppColors.primaryColor.withValues(alpha: 0.2) : Colors.white
                       ),
                       alignment: Alignment.center,
-                      child: Text(AppDate.genres[index], textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle.copyWith(color: isSelected ? AppColors.primaryColor : Colors.black, fontWeight: FontWeight.w600),),
+                      child: Text(AppData.genres[index], textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle.copyWith(color: isSelected ? AppColors.primaryColor : Colors.black, fontWeight: FontWeight.w600),),
                     ),
                   );
                 }),

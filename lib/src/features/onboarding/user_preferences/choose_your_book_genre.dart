@@ -20,7 +20,7 @@ class ChooseBookGenrePage extends StatelessWidget{
         Consumer<UserPreferencesProvider>(builder: (ctx, provider, _){
           return Expanded(
             child: Wrap(
-              children: AppDate.genres.map((genre){
+              children: AppData.genres.map((genre){
 
                 bool isSelected = provider.favGenres.contains(genre);
             
