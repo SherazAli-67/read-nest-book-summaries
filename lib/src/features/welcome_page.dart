@@ -87,7 +87,7 @@ class WelcomePageState extends State<WelcomePage> with TickerProviderStateMixin 
                       width:  100 * (index+1),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.primaryColor.withOpacity(0.1))
+                          border: Border.all(color: AppColors.primaryColor.withValues(alpha: 0.1))
                       ),
                     );
                   }),

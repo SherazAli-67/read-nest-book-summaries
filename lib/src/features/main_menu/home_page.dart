@@ -128,7 +128,7 @@ class _HomePageState extends State<HomePage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(99),
                         border: Border.all(color: isSelected ? Colors.transparent : Colors.grey),
-                        color: isSelected ? AppColors.primaryColor.withOpacity(0.4) : Colors.white
+                        color: isSelected ? AppColors.primaryColor.withValues(alpha: 0.4) : Colors.white
                       ),
                       alignment: Alignment.center,
                       child: Text(AppData.genres[index], textAlign: TextAlign.center, style: AppTextStyles.regularTextStyle.copyWith(color: isSelected ? AppColors.primaryColor : Colors.black, fontWeight: FontWeight.w600),),
