@@ -16,7 +16,8 @@ class ProfileOverviewWidget extends StatelessWidget{
           _buildOverviewSection(),
           _buildReadingGoalSection(),
           _buildWeeklyReadingChartSection(),
-          _buildReadingByCategorySection()
+          _buildReadingByCategorySection(),
+          _buildAchievementSection()
         ],
       ),
     );
@@ -144,6 +145,62 @@ class ProfileOverviewWidget extends StatelessWidget{
           )
         ],
       );
+  }
+
+  _buildAchievementSection() {
+    return Padding(padding: EdgeInsets.all(10), child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 10,
+      children: [
+        Text("Achievement", style: AppTextStyles.regularTextStyle,),
+        Row(
+          spacing: 20,
+          children: [
+            Expanded(
+              child: _buildAchievementItemWidget(icon: Icons.menu_book_rounded, title: 'First Steps', subtitle: 'Read your first book summary'),
+            ),
+            Expanded(
+              child: _buildAchievementItemWidget(icon: Icons.trending_up, title: 'Speed Reader', subtitle: 'Read 10 books in a week'),
+            )
+          ],
+        ),
+        Row(
+          spacing: 20,
+          children: [
+            Expanded(
+              child: _buildAchievementItemWidget(icon: Icons.local_fire_department_outlined, title: 'Streak Master', subtitle: 'Maintain a 30-day reading streak'),
+            ),
+            Expanded(
+              child: _buildAchievementItemWidget(icon: Icons.star_border_rounded, title: 'Knowledge Seeker', subtitle: 'Read books from 5 different categories'),
+            )
+          ],
+        )
+      ],
+    ),);
+  }
+
+  Container _buildAchievementItemWidget({required IconData icon, required String title, required String subtitle}) {
+    return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.grey),
+                color: AppColors.textFieldFillColor.withValues(alpha: 0.3)
+              ),
+              padding: EdgeInsets.all(15),
+              child: Column(
+                spacing: 10,
+                children: [
+                  Row(
+                    spacing: 10,
+                    children: [
+                      Icon(icon),
+                      Expanded(child: Text(title, style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),))
+                    ],
+                  ),
+                  Text(subtitle, style: AppTextStyles.smallTextStyle,)
+                ],
+              ),
+            );
   }
 }
 
