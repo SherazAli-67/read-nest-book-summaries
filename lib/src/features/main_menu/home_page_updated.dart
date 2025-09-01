@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:read_nest/src/data/app_data.dart';
@@ -6,6 +5,7 @@ import 'package:read_nest/src/res/app_avatars.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+import 'package:read_nest/src/widgets/home_page_categories_books_widget.dart';
 
 class UpdatedHomePage extends StatefulWidget{
   const UpdatedHomePage({super.key});
@@ -25,7 +25,7 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;;
+    Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
@@ -100,178 +100,22 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
           SizedBox(
             height: size.height*0.4,
             width: size.width,
-            child:Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      spacing: 5,
-                      children: [
-                        Icon(Icons.trending_up, color: Colors.black, size: 20,),
-                        Text("Trending Now", style: AppTextStyles.smallTextStyle,),
-                      ],
-                    ),
-                    TextButton(onPressed: (){}, child: Text("See All", style: AppTextStyles.smallTextStyle))
-                  ],
-                ),
-                
-                Expanded(
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (_, index) {
-                    return SizedBox(
-                      width: size.width*0.45,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            spacing: 15,
-                            children: [
-                              Expanded(child: Stack(
-                                children: [
-                                  CachedNetworkImage(imageUrl: 'https://www.classificationoffice.govt.nz/media/images/killers_of_the_flower_moon.width-1200.jpg', fit: BoxFit.cover,width: size.width*0.45,),
-                                  Positioned(
-                                      right: 10,
-                                      top: 10,
-                                      child: Container(
-                                        padding: EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            color: AppColors.textFieldFillColor,
-                                            shape: BoxShape.circle
-                                        ),
-                                        child: Icon(Icons.favorite_border, color: Colors.black45, size: 18,),)),
-                                  Positioned(
-                                      left: 10,
-                                      bottom: 10,
-                                      child: Container(
-                                          padding: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                              color: AppColors.textFieldFillColor,
-                                              borderRadius: BorderRadius.circular(99)
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                            child: Row(
-                                              spacing: 4,
-                                              children: [
-                                                Icon(Icons.access_time_outlined, size: 18,),
-                                                Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                                              ],
-                                            ),
-                                          ))),
-                                ],
-                              )),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Text('David Grann', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
-                                  )
-                                ],
-                              )
-                  
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
-              ],
-            ),
+            child:HomePageCategoriesBooksWidget(width: size.width*0.45, icon: Icons.trending_up, title: 'Trending Now', onSeeAllTap: (){}),
           ),
           SizedBox(
             height: size.height*0.4,
             width: size.width,
-            child:Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      spacing: 5,
-                      children: [
-                        Icon(Icons.access_time_rounded, color: Colors.black, size: 20,),
-                        Text("Quick Read", style: AppTextStyles.smallTextStyle,),
-                      ],
-                    ),
-                    TextButton(onPressed: (){}, child: Text("See All", style: AppTextStyles.smallTextStyle))
-                  ],
-                ),
-
-                Expanded(
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (_, index) {
-                        return SizedBox(
-                          width: size.width*0.45,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                spacing: 15,
-                                children: [
-                                  Expanded(child: Stack(
-                                    children: [
-                                      CachedNetworkImage(imageUrl: 'https://www.classificationoffice.govt.nz/media/images/killers_of_the_flower_moon.width-1200.jpg', fit: BoxFit.cover,width: size.width*0.45,),
-                                      Positioned(
-                                          right: 10,
-                                          top: 10,
-                                          child: Container(
-                                            padding: EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                                color: AppColors.textFieldFillColor,
-                                                shape: BoxShape.circle
-                                            ),
-                                            child: Icon(Icons.favorite_border, color: Colors.black45, size: 18,),)),
-                                      Positioned(
-                                          left: 10,
-                                          bottom: 10,
-                                          child: Container(
-                                              padding: EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.textFieldFillColor,
-                                                  borderRadius: BorderRadius.circular(99)
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                                child: Row(
-                                                  spacing: 4,
-                                                  children: [
-                                                    Icon(Icons.access_time_outlined, size: 18,),
-                                                    Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                                                  ],
-                                                ),
-                                              ))),
-                                    ],
-                                  )),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                                      Padding(
-                                        padding: const EdgeInsets.only(bottom: 8.0),
-                                        child: Text('David Grann', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
-                                      )
-                                    ],
-                                  )
-
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      }),
-                ),
-              ],
-            ),
+            child: HomePageCategoriesBooksWidget(width: size.width*0.45, icon: Icons.access_time_rounded, title: 'Quick Reads', onSeeAllTap: (){}),
+          ),
+          SizedBox(
+            height: size.height*0.4,
+            width: size.width,
+            child: HomePageCategoriesBooksWidget(width: size.width*0.45, icon: Icons.star_border_rounded, title: 'Popular in Business', onSeeAllTap: (){}),
+          ),
+          SizedBox(
+            height: size.height*0.4,
+            width: size.width,
+            child: HomePageCategoriesBooksWidget(width: size.width*0.45, icon: Icons.fiber_new_rounded, title: 'Recently Added', onSeeAllTap: (){}),
           )
         ],
       ),
