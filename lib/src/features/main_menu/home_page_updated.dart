@@ -25,7 +25,8 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    Size size = MediaQuery.of(context).size;;
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
         spacing: 20,
@@ -93,74 +94,185 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
                     ),
                     onPressed: ()=> setState(()=> _selectedCategoryIndex = index), child: Text(AppData.genres[index], textAlign: TextAlign.center, style: AppTextStyles.smallTextStyle.copyWith(color: isSelected ? Colors.white : Colors.black),),),
                 );
-                  /*return Container(
-                    decoration: BoxDecoration(
 
-                      borderRadius: BorderRadius.circular(99)
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    margin: EdgeInsets.only(right: 10),
-                    child: Text(AppData.genres[index], textAlign: TextAlign.center, style: AppTextStyles.smallTextStyle,),
-                  );*/
             }),
           ),
-          Expanded(child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 20, mainAxisSpacing: 20, childAspectRatio: 2/3), itemBuilder: (_, index) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                spacing: 15,
-                children: [
-                  Expanded(child: Stack(
-                    children: [
-                      CachedNetworkImage(imageUrl: 'https://www.classificationoffice.govt.nz/media/images/killers_of_the_flower_moon.width-1200.jpg', fit: BoxFit.cover, width: double.infinity,),
-                      Positioned(
-                          right: 10,
-                          top: 10,
-                          child: Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                        color: AppColors.textFieldFillColor,
-                          shape: BoxShape.circle
-                      ),
-                        child: Icon(Icons.favorite_border, color: Colors.black45, size: 18,),)),
-                      Positioned(
-                          left: 10,
-                          bottom: 10,
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: AppColors.textFieldFillColor,
-                                borderRadius: BorderRadius.circular(99)
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                              child: Row(
-                                spacing: 4,
+          SizedBox(
+            height: size.height*0.4,
+            width: size.width,
+            child:Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      spacing: 5,
+                      children: [
+                        Icon(Icons.trending_up, color: Colors.black, size: 20,),
+                        Text("Trending Now", style: AppTextStyles.smallTextStyle,),
+                      ],
+                    ),
+                    TextButton(onPressed: (){}, child: Text("See All", style: AppTextStyles.smallTextStyle))
+                  ],
+                ),
+                
+                Expanded(
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (_, index) {
+                    return SizedBox(
+                      width: size.width*0.45,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 15,
+                            children: [
+                              Expanded(child: Stack(
                                 children: [
-                                  Icon(Icons.access_time_outlined, size: 18,),
-                                  Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                  CachedNetworkImage(imageUrl: 'https://www.classificationoffice.govt.nz/media/images/killers_of_the_flower_moon.width-1200.jpg', fit: BoxFit.cover,width: size.width*0.45,),
+                                  Positioned(
+                                      right: 10,
+                                      top: 10,
+                                      child: Container(
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            color: AppColors.textFieldFillColor,
+                                            shape: BoxShape.circle
+                                        ),
+                                        child: Icon(Icons.favorite_border, color: Colors.black45, size: 18,),)),
+                                  Positioned(
+                                      left: 10,
+                                      bottom: 10,
+                                      child: Container(
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                              color: AppColors.textFieldFillColor,
+                                              borderRadius: BorderRadius.circular(99)
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                            child: Row(
+                                              spacing: 4,
+                                              children: [
+                                                Icon(Icons.access_time_outlined, size: 18,),
+                                                Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                              ],
+                                            ),
+                                          ))),
+                                ],
+                              )),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Text('David Grann', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
+                                  )
+                                ],
+                              )
+                  
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: size.height*0.4,
+            width: size.width,
+            child:Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      spacing: 5,
+                      children: [
+                        Icon(Icons.access_time_rounded, color: Colors.black, size: 20,),
+                        Text("Quick Read", style: AppTextStyles.smallTextStyle,),
+                      ],
+                    ),
+                    TextButton(onPressed: (){}, child: Text("See All", style: AppTextStyles.smallTextStyle))
+                  ],
+                ),
+
+                Expanded(
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (_, index) {
+                        return SizedBox(
+                          width: size.width*0.45,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                spacing: 15,
+                                children: [
+                                  Expanded(child: Stack(
+                                    children: [
+                                      CachedNetworkImage(imageUrl: 'https://www.classificationoffice.govt.nz/media/images/killers_of_the_flower_moon.width-1200.jpg', fit: BoxFit.cover,width: size.width*0.45,),
+                                      Positioned(
+                                          right: 10,
+                                          top: 10,
+                                          child: Container(
+                                            padding: EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                                color: AppColors.textFieldFillColor,
+                                                shape: BoxShape.circle
+                                            ),
+                                            child: Icon(Icons.favorite_border, color: Colors.black45, size: 18,),)),
+                                      Positioned(
+                                          left: 10,
+                                          bottom: 10,
+                                          child: Container(
+                                              padding: EdgeInsets.all(5),
+                                              decoration: BoxDecoration(
+                                                  color: AppColors.textFieldFillColor,
+                                                  borderRadius: BorderRadius.circular(99)
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                                child: Row(
+                                                  spacing: 4,
+                                                  children: [
+                                                    Icon(Icons.access_time_outlined, size: 18,),
+                                                    Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                                  ],
+                                                ),
+                                              ))),
+                                    ],
+                                  )),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                                      Padding(
+                                        padding: const EdgeInsets.only(bottom: 8.0),
+                                        child: Text('David Grann', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
+                                      )
+                                    ],
+                                  )
+
                                 ],
                               ),
-                            ))),
-                    ],
-                  )),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Killers of the FLOWER MOON", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text('David Grann', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
-                      )
-                    ],
-                  )
-
-                ],
-              ),
-            );
-          }))
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
