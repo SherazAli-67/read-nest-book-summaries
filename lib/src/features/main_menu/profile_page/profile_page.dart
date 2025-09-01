@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+
+import 'profile_tabbar_view_widget.dart';
 
 class ProfilePage extends StatelessWidget{
   const ProfilePage({super.key});
@@ -99,61 +100,6 @@ class ProfilePage extends StatelessWidget{
           Expanded(child: ProfileTabBarViewWidget())
         ],
       ),
-    );
-  }
-}
-
-class ProfileTabBarViewWidget extends StatefulWidget{
-  const ProfileTabBarViewWidget({super.key});
-
-  @override
-  State<ProfileTabBarViewWidget> createState() => _ProfileTabBarViewWidgetState();
-}
-
-class _ProfileTabBarViewWidgetState extends State<ProfileTabBarViewWidget> with SingleTickerProviderStateMixin{
-  late TabController _tabController;
-
-  @override
-  void initState() {
-    _tabController = TabController(length: 3, vsync: this);
-    super.initState();
-  }
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      spacing: 10,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(99),
-
-            color: AppColors.textFieldFillColor,
-          ),
-          child: TabBar(
-            controller: _tabController,
-            tabs: [
-              Tab(text: 'Overview'),
-        
-              Tab(text: 'Activity'),
-        
-              Tab(text: 'Settings'),
-            ],
-            dividerHeight: 0,
-            indicatorSize: TabBarIndicatorSize.label,
-            labelColor: AppColors.primaryColor,
-            labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,),
-            unselectedLabelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,),
-            indicatorColor: AppColors.primaryColor,
-          ),
-        ),
-        Expanded(child: TabBarView(
-            controller: _tabController,
-            children: [
-             Center(child: Text("Overview page"),),
-              Center(child: Text("Activity page"),),
-              Center(child: Text("Settings page"),),
-            ]))
-      ],
     );
   }
 }
