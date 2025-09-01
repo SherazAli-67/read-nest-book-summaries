@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:read_nest/src/features/main_menu/explore_page.dart';
 import 'package:read_nest/src/features/main_menu/home_page.dart';
 import 'package:read_nest/src/features/main_menu/home_page_updated.dart';
 import 'package:read_nest/src/features/main_menu/profile_page.dart';
