@@ -10,7 +10,7 @@ class ProfilePage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         spacing: 20,
@@ -95,9 +95,65 @@ class ProfilePage extends StatelessWidget{
                 )
               ],
             ),
-          )
+          ),
+          Expanded(child: ProfileTabBarViewWidget())
         ],
       ),
+    );
+  }
+}
+
+class ProfileTabBarViewWidget extends StatefulWidget{
+  const ProfileTabBarViewWidget({super.key});
+
+  @override
+  State<ProfileTabBarViewWidget> createState() => _ProfileTabBarViewWidgetState();
+}
+
+class _ProfileTabBarViewWidgetState extends State<ProfileTabBarViewWidget> with SingleTickerProviderStateMixin{
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 3, vsync: this);
+    super.initState();
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      spacing: 10,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(99),
+
+            color: AppColors.textFieldFillColor,
+          ),
+          child: TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(text: 'Overview'),
+        
+              Tab(text: 'Activity'),
+        
+              Tab(text: 'Settings'),
+            ],
+            dividerHeight: 0,
+            indicatorSize: TabBarIndicatorSize.label,
+            labelColor: AppColors.primaryColor,
+            labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,),
+            unselectedLabelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,),
+            indicatorColor: AppColors.primaryColor,
+          ),
+        ),
+        Expanded(child: TabBarView(
+            controller: _tabController,
+            children: [
+             Center(child: Text("Overview page"),),
+              Center(child: Text("Activity page"),),
+              Center(child: Text("Settings page"),),
+            ]))
+      ],
     );
   }
 }
