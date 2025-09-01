@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
 class ProfileOverviewWidget extends StatelessWidget{
@@ -10,18 +11,24 @@ class ProfileOverviewWidget extends StatelessWidget{
     return SingleChildScrollView(
       child: Column(
         spacing: 20,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildOverviewSection(),
           _buildReadingGoalSection(),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: WeeklyReadingChart(
-              data: [2, 4, 1, 5, 3, 4, 2], // books read Mon–Sun
-            ),
-          ),
+          _buildWeeklyReadingChartSection(),
+          _buildReadingByCategorySection()
         ],
       ),
     );
+  }
+
+  Widget _buildWeeklyReadingChartSection() {
+    return Padding(
+          padding: const EdgeInsets.all(20),
+          child: WeeklyReadingChart(
+            data: [2, 4, 1, 5, 3, 4, 2], // books read Mon–Sun
+          ),
+        );
   }
 
   Widget _buildOverviewSection() {
@@ -93,6 +100,50 @@ class ProfileOverviewWidget extends StatelessWidget{
         BookProgressWidget(booksRead: 23, goal: 50)
       ],
     );
+  }
+
+  _buildReadingByCategorySection() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: 10,
+        children: [
+          Text("Reading by Category", style: AppTextStyles.regularTextStyle,),
+          _buildCategoryItemWidget(Colors.green, 'Business', '5'),
+          _buildCategoryItemWidget(Colors.red, 'Motivation', '3'),
+          _buildCategoryItemWidget(Colors.purple, 'Self-Improvement', '1'),
+          _buildCategoryItemWidget(Colors.orange, 'Inspiration', '1'),
+
+        ],
+      ),
+    );
+  }
+
+  Row _buildCategoryItemWidget(Color color, String title, String number) {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            spacing: 10,
+            children: [
+              CircleAvatar(
+                backgroundColor: color,
+                radius: 5,
+              ),
+              Text(title, style: AppTextStyles.smallTextStyle,)
+            ],
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.textFieldFillColor,
+              borderRadius: BorderRadius.circular(5)
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 10,vertical: 2),
+            child: Text(number),
+          )
+        ],
+      );
   }
 }
 
