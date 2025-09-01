@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
@@ -6,16 +7,24 @@ class ProfileOverviewWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 20,
-      children: [
-        _buildOverviewSection(),
-        _buildReadingGoalSection()
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        spacing: 20,
+        children: [
+          _buildOverviewSection(),
+          _buildReadingGoalSection(),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: WeeklyReadingChart(
+              data: [2, 4, 1, 5, 3, 4, 2], // books read Mon–Sun
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  _buildOverviewSection() {
+  Widget _buildOverviewSection() {
     return Column(
       spacing: 20,
       children: [
@@ -74,9 +83,9 @@ class ProfileOverviewWidget extends StatelessWidget{
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: Colors.black45)
+                border: Border.all(color: Colors.grey)
               ),
-              padding: EdgeInsets.all(2),
+              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 2),
               child: Text('This Year', style: TextStyle(fontSize: 10),),
             )
           ],
@@ -146,6 +155,78 @@ class BookProgressWidget extends StatelessWidget {
           style: TextStyle(
             fontSize: 13,
             color: Colors.grey.shade600,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class WeeklyReadingChart extends StatelessWidget {
+  final List<int> data; // books read each day (Mon–Sun)
+
+  const WeeklyReadingChart({super.key, required this.data});
+
+  @override
+  Widget build(BuildContext context) {
+    final days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "This Week's Reading",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        const SizedBox(height: 16),
+
+        SizedBox(
+          height: 200,
+          child: BarChart(
+            BarChartData(
+              backgroundColor: Colors.white,
+              alignment: BarChartAlignment.spaceAround,
+              borderData: FlBorderData(show: false),
+              gridData: FlGridData(show: false),
+
+              titlesData: FlTitlesData(
+                leftTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                topTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                rightTitles: const AxisTitles(
+                  sideTitles: SideTitles(showTitles: false),
+                ),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    getTitlesWidget: (value, meta) {
+                      final index = value.toInt();
+                      if (index < 0 || index >= days.length) return Container();
+                      return Text(
+                        days[index],
+                        style: const TextStyle(fontSize: 12),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              barGroups: List.generate(data.length, (index) {
+                return BarChartGroupData(
+                  x: index,
+                  barRods: [
+                    BarChartRodData(
+                      toY: data[index].toDouble(),
+                      color: Colors.black87,
+                      width: 20,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ],
+                );
+              }),
+            ),
           ),
         ),
       ],
