@@ -31,10 +31,37 @@ class ProfileSettingsWidget extends StatelessWidget{
               _buildSettingsItemWidget(icon: Icons.help, title: 'Help & Support'),
               _buildSettingsItemWidget(icon: Icons.settings, title: 'App Settings'),
             ],
-          )
+          ),
+
+          _buildInviteLogoutBtn(icon: Icons.people_outline_rounded, title: 'Invite Friends'),
+          _buildInviteLogoutBtn(icon: Icons.logout, title: 'Sign out', isLogout: true)
+
         ],
       ),
     );
+  }
+
+  Widget _buildInviteLogoutBtn({required IconData icon, required String title, bool isLogout = false}) {
+    return SizedBox(
+          height: 35,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: isLogout ? Colors.red.withValues(alpha: 0.1) : AppColors.textFieldFillColor.withValues(alpha: 0.4)),
+                  borderRadius: BorderRadius.circular(10)
+                )
+              ),
+              onPressed: (){}, child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 5,
+            children: [
+              Icon(icon, color:  isLogout ? Colors.red :Colors.grey,),
+              Text(title, style: AppTextStyles.smallTextStyle.copyWith(color:  isLogout ? Colors.red : Colors.black45),)
+            ],
+          )),
+        );
   }
 
   Widget _buildSettingsItemWidget({required IconData icon, required String title,}) {
