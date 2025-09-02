@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/features/main_menu/profile_page/profile_activity_widget.dart';
 import 'package:read_nest/src/features/main_menu/profile_page/profile_overview_widget.dart';
 
 import '../../../res/app_colors.dart';
@@ -56,7 +57,7 @@ class _ProfileTabBarViewWidgetState extends State<ProfileTabBarViewWidget> with 
             controller: _tabController,
             children: [
               ProfileOverviewWidget(),
-              Center(child: Text("Activity page"),),
+              ProfileActivityWidget(),
               Center(child: Text("Settings page"),),
             ]))
       ],

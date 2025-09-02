@@ -103,7 +103,7 @@ class ProfileOverviewWidget extends StatelessWidget{
     );
   }
 
-  _buildReadingByCategorySection() {
+  Widget _buildReadingByCategorySection() {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -121,7 +121,7 @@ class ProfileOverviewWidget extends StatelessWidget{
     );
   }
 
-  Row _buildCategoryItemWidget(Color color, String title, String number) {
+  Widget _buildCategoryItemWidget(Color color, String title, String number) {
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -147,7 +147,7 @@ class ProfileOverviewWidget extends StatelessWidget{
       );
   }
 
-  _buildAchievementSection() {
+  Widget _buildAchievementSection() {
     return Padding(padding: EdgeInsets.all(10), child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 10,
@@ -179,7 +179,7 @@ class ProfileOverviewWidget extends StatelessWidget{
     ),);
   }
 
-  Container _buildAchievementItemWidget({required IconData icon, required String title, required String subtitle}) {
+  Widget _buildAchievementItemWidget({required IconData icon, required String title, required String subtitle}) {
     return Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
