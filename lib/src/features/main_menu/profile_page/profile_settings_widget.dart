@@ -11,10 +11,11 @@ class ProfileSettingsWidget extends StatelessWidget{
     return SingleChildScrollView(
       padding: const EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 20,
         children: [
-          Text('Preferences', style: AppTextStyles.regularTextStyle,),
+          Align(
+              alignment: Alignment.topLeft,
+              child: Text('Preferences', style: AppTextStyles.regularTextStyle,)),
           Column(
             children: [
               _buildSettingSwitchWidget(icon: Icons.dark_mode_outlined, title: 'Dark Mode', subTitle: 'Switch to dark theme', val: false),
@@ -34,7 +35,9 @@ class ProfileSettingsWidget extends StatelessWidget{
           ),
 
           _buildInviteLogoutBtn(icon: Icons.people_outline_rounded, title: 'Invite Friends'),
-          _buildInviteLogoutBtn(icon: Icons.logout, title: 'Sign out', isLogout: true)
+          _buildInviteLogoutBtn(icon: Icons.logout, title: 'Sign out', isLogout: true),
+          Text("HappyLife v1.0.0", style: AppTextStyles.smallTextStyle,),
+          Text("Made with ❤️ for book lovers", style: AppTextStyles.smallTextStyle,),
 
         ],
       ),
