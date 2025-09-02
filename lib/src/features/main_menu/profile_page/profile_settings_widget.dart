@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
 class ProfileSettingsWidget extends StatelessWidget{
@@ -7,7 +8,7 @@ class ProfileSettingsWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,10 +22,37 @@ class ProfileSettingsWidget extends StatelessWidget{
               _buildSettingSwitchWidget(icon: Icons.file_download_outlined, title: 'Auto Download', subTitle: 'Download summaries offline', val: false)
 
             ],
+          ),
+          Column(
+            children: [
+              _buildSettingsItemWidget(icon: Icons.notifications_none_rounded, title: 'Notifications'),
+              _buildSettingsItemWidget(icon: Icons.security, title: 'Privacy'),
+              _buildSettingsItemWidget(icon: Icons.file_download_outlined, title: 'Download Settings'),
+              _buildSettingsItemWidget(icon: Icons.help, title: 'Help & Support'),
+              _buildSettingsItemWidget(icon: Icons.settings, title: 'App Settings'),
+            ],
           )
         ],
       ),
     );
+  }
+
+  Widget _buildSettingsItemWidget({required IconData icon, required String title,}) {
+    return Column(
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Icon(icon),
+              title: Text(title, style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
+              trailing: Icon(Icons.navigate_next_rounded),
+            ),
+            Container(
+              width: double.infinity,
+              height: 1,
+              color: AppColors.textFieldFillColor.withValues(alpha: 0.4),
+            )
+          ],
+        );
   }
 
   ListTile _buildSettingSwitchWidget({required IconData icon, required String title, required String subTitle, required bool val}) {
