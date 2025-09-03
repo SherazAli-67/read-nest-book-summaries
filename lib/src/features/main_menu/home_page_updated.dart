@@ -24,9 +24,7 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
   void initState() {
     super.initState();
     // Fetch books data when the page loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<BooksProvider>().fetchAllBooks();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_)=>  context.read<BooksProvider>().fetchAllBooks());
   }
 
   @override
@@ -111,10 +109,10 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
           // Trending Now Section
           Consumer<BooksProvider>(
             builder: (context, booksProvider, child) {
-              debugPrint("UI Consumer - Loading: ${booksProvider.isLoading}");
-              debugPrint("UI Consumer - Error: ${booksProvider.error}");
-              debugPrint("UI Consumer - Trending Books Count: ${booksProvider.trendingBooks.length}");
-              
+              // debugPrint("UI Consumer - Loading: ${booksProvider.isLoading}");
+              // debugPrint("UI Consumer - Error: ${booksProvider.error}");
+              // debugPrint("UI Consumer - Trending Books Count: ${booksProvider.trendingBooks.length}");
+              //
               if (booksProvider.isLoading) {
                 return SizedBox(
                   height: size.height*0.4,

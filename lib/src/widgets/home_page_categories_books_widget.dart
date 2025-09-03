@@ -47,9 +47,7 @@ class HomePageCategoriesBooksWidget extends StatelessWidget{
                 itemBuilder: (_, index) {
                   final book = _books[index];
                   return GestureDetector(
-                    onTap: ()=> Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_)=> SummaryDetailPage())
-                    ),
+                    onTap: ()=> Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryDetailPage(book: book,))),
                     child: SizedBox(
                       width:_width,
                       child: Padding(

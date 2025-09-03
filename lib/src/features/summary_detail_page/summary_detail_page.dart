@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 
 class SummaryDetailPage extends StatelessWidget{
-  const SummaryDetailPage({super.key});
-
+  const SummaryDetailPage({super.key, required Book book}) : _book = book;
+  final Book _book;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -30,16 +31,16 @@ class SummaryDetailPage extends StatelessWidget{
               child: Center(
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: CachedNetworkImage(imageUrl: 'https://delivery.happylife.ai/21_Be%20Fearless_Jean%20Case.jpg', fit: BoxFit.cover,)),
+                    child: CachedNetworkImage(imageUrl: _book.image, fit: BoxFit.cover,)),
               ),
             ),
             Column(
               spacing: 10,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Think and Grow Rich", style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                Text("Napolean Hill", style: AppTextStyles.smallTextStyle),
-                Row(
+                Text(_book.bookName, style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                Text(_book.author, style: AppTextStyles.smallTextStyle),
+                /*Row(
                   spacing: 20,
                   children: [
                    Row(
@@ -57,7 +58,7 @@ class SummaryDetailPage extends StatelessWidget{
                       ],
                     )
                   ],
-                ),
+                ),*/
                 Row(
                   spacing: 10,
                   children: [
@@ -78,25 +79,27 @@ class SummaryDetailPage extends StatelessWidget{
                             ],
                           ),
                         )),
-                    Container(
-                        padding: EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(99),
-                          border: Border.all(color: Colors.grey)
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Row(
+                          spacing: 10,
+                          children: List.generate(_book.categories.length, (index){
+                            return Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(99),
+                                    border: Border.all(color: Colors.grey)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                  child: Text(_book.categories[index], style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                ));
+                          })
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Row(
-                            spacing: 4,
-                            children: [
-                              Icon(Icons.access_time_outlined, size: 18,),
-                              Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                            ],
-                          ),
-                        ))
+                      ),
+                    )
                   ],
                 )
-
 
               ],
             )
