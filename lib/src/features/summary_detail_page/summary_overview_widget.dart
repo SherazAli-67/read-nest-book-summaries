@@ -16,7 +16,7 @@ class SummaryOverviewWidget extends StatelessWidget{
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: AppColors.textFieldFillColor.withValues(alpha: 0.4)
+              color: AppColors.textFieldFillColor.withOpacity(0.4)
             ),
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: Column(
@@ -34,26 +34,28 @@ class SummaryOverviewWidget extends StatelessWidget{
             ),
           ),
           Theme(
-            data: Theme.of(context).copyWith(dividerColor: Colors.transparent, splashColor: Colors.transparent ),
+            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
             child: ExpansionTile(
-              dense: true,
               title: Text('About ${_book.author}', style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
               subtitle: Text("Author", style: AppTextStyles.smallTextStyle,),
               children: [
-                Text(_book.aboutAuthor, style: AppTextStyles.smallTextStyle,)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Text(_book.aboutAuthor, style: AppTextStyles.smallTextStyle,)
+                )
               ],
             ),
           ),
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.blue.withValues(alpha: 0.1)
+                color: Colors.blue.withOpacity(0.1)
             ),
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               leading: CircleAvatar(
-                backgroundColor: Colors.blue.withValues(alpha: 0.2),
+                backgroundColor: Colors.blue.withOpacity(0.2),
                 child: Icon(Icons.download, color: Colors.blue,),
               ),
               title: Text("Download for Offline Reading", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),

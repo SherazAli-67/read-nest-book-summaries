@@ -27,79 +27,82 @@ class SummaryDetailPage extends StatelessWidget{
           child: NestedScrollView(
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      spacing: 20,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: size.height*0.35,
-                          child: Center(
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: CachedNetworkImage(imageUrl: _book.image, fit: BoxFit.cover,)),
+                SliverOverlapAbsorber(
+                  handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                  sliver: SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        spacing: 20,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: size.height*0.35,
+                            child: Center(
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: CachedNetworkImage(imageUrl: _book.image, fit: BoxFit.cover,)),
+                            ),
                           ),
-                        ),
-                        Column(
-                          spacing: 10,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(_book.bookName, style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                            Text(_book.author, style: AppTextStyles.smallTextStyle),
-                            Row(
-                              spacing: 10,
-                              children: [
-                                Container(
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                        color: AppColors.textFieldFillColor,
-                                        borderRadius: BorderRadius.circular(99)
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        spacing: 4,
-                                        children: [
-                                          Icon(Icons.access_time_outlined, size: 18,),
-                                          Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                                        ],
+                          Column(
+                            spacing: 10,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(_book.bookName, style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                              Text(_book.author, style: AppTextStyles.smallTextStyle),
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  Container(
+                                      padding: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                          color: AppColors.textFieldFillColor,
+                                          borderRadius: BorderRadius.circular(99)
                                       ),
-                                    )),
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      spacing: 10,
-                                      children: List.generate(_book.categories.length, (index){
-                                        return Container(
-                                            padding: EdgeInsets.all(3),
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(99),
-                                                border: Border.all(color: Colors.grey)
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                              child: Text(_book.categories[index], style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                                            ));
-                                      })
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          spacing: 4,
+                                          children: [
+                                            Icon(Icons.access_time_outlined, size: 18,),
+                                            Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                          ],
+                                        ),
+                                      )),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
+                                        spacing: 10,
+                                        children: List.generate(_book.categories.length, (index){
+                                          return Container(
+                                              padding: EdgeInsets.all(3),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(99),
+                                                  border: Border.all(color: Colors.grey)
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                                child: Text(_book.categories[index], style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                              ));
+                                        })
+                                      ),
                                     ),
-                                  ),
-                                )
-                              ],
-                            ),
-                            Row(
-                              spacing: 10,
-                              children: [
-                                Expanded(child: _buildReadingListeningBtn(isReading: true, title: 'Start reading',)),
-                                Expanded(child: _buildReadingListeningBtn(isReading: false, title: 'Start listening')),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
+                                  )
+                                ],
+                              ),
+                              Row(
+                                spacing: 10,
+                                children: [
+                                  Expanded(child: _buildReadingListeningBtn(isReading: true, title: 'Start reading',)),
+                                  Expanded(child: _buildReadingListeningBtn(isReading: false, title: 'Start listening')),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -140,9 +143,56 @@ class SummaryDetailPage extends StatelessWidget{
             },
             body: TabBarView(
               children: [
-                SummaryOverviewWidget(book: _book,),
-                Center(child: Text("Summary Insights Page"),),
-                Center(child: Text("Summary Related Page"),),
+                Builder(
+                  builder: (context) {
+                    return CustomScrollView(
+                      // key: PageStorageKey('overview'),
+                      slivers: [
+                        SliverOverlapInjector(
+                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                        ),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: SummaryOverviewWidget(book: _book,),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                Builder(
+                  builder: (context) {
+                    return CustomScrollView(
+                      key: PageStorageKey<String>('insights'),
+                      slivers: [
+                        SliverOverlapInjector(
+                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                        ),
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Center(child: Text("Summary Insights Page")),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                Builder(
+                  builder: (context) {
+                    return CustomScrollView(
+                      key: PageStorageKey<String>('related'),
+                      slivers: [
+                        SliverOverlapInjector(
+                          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+                        ),
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: Center(child: Text("Summary Related Page")),
+                        ),
+                      ],
+                    );
+                  },
+                ),
               ],
             ),
           ),
