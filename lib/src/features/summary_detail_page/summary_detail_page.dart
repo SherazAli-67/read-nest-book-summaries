@@ -68,7 +68,7 @@ class SummaryDetailPage extends StatelessWidget{
                                           spacing: 4,
                                           children: [
                                             Icon(Icons.access_time_outlined, size: 18,),
-                                            Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                            Text(_book.time, style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
                                           ],
                                         ),
                                       )),
@@ -189,9 +189,11 @@ class SummaryDetailPage extends StatelessWidget{
                         SliverOverlapInjector(
                           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                         ),
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: SummaryRelatedBooks(),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: SummaryRelatedBooks(currentBook: _book,),
+                          ),
                         ),
                       ],
                     );

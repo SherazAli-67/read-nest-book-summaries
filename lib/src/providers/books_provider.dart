@@ -7,16 +7,21 @@ class BooksProvider extends ChangeNotifier {
   List<Book> _quickReads = [];
   List<Book> _popularBusinessBooks = [];
   List<Book> _recentlyAddedBooks = [];
+  List<Book> _relatedBooks = [];
 
   bool _isLoading = false;
+  bool _isLoadingRelated = false;
   String? _error;
+  Book? _currentBookForRelated;
 
   // Getters
   List<Book> get trendingBooks => _trendingBooks;
   List<Book> get quickReads => _quickReads;
   List<Book> get popularBusinessBooks => _popularBusinessBooks;
   List<Book> get recentlyAddedBooks => _recentlyAddedBooks;
+  List<Book> get relatedBooks => _relatedBooks;
   bool get isLoading => _isLoading;
+  bool get isLoadingRelated => _isLoadingRelated;
   String? get error => _error;
 
   // Fetch all categories
@@ -101,6 +106,32 @@ class BooksProvider extends ChangeNotifier {
   // Refresh all data
   Future<void> refreshData() async {
     await fetchAllBooks();
+  }
+
+  // Fetch related books for a specific book
+  Future<void> fetchRelatedBooks(Book currentBook) async {
+    // Avoid re-fetching for the same book
+    if (_currentBookForRelated?.bookID == currentBook.bookID) {
+      debugPrint("Related books already fetched for: ${currentBook.bookName}");
+      return;
+    }
+
+    _isLoadingRelated = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      debugPrint("Fetching related books for: ${currentBook.bookName}");
+      _currentBookForRelated = currentBook;
+      _relatedBooks = await BooksService.getRelatedBooks(currentBook);
+      debugPrint("Related books fetched: ${_relatedBooks.length}");
+    } catch (e) {
+      debugPrint("Error fetching related books: $e");
+      _error = e.toString();
+    } finally {
+      _isLoadingRelated = false;
+      notifyListeners();
+    }
   }
 
   // Clear error
