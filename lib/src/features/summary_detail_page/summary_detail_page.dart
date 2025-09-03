@@ -99,14 +99,37 @@ class SummaryDetailPage extends StatelessWidget{
                       ),
                     )
                   ],
-                )
+                ),
+                Row(
+                  spacing: 10,
+                  children: [
+                    Expanded(child: _buildReadingListeningBtn(isReading: true, title: 'Start reading',)),
+                    Expanded(child: _buildReadingListeningBtn(isReading: false, title: 'Start listening')),
 
+                  ],
+                )
               ],
             )
           ],
         ),
       )),
     );
+  }
+
+  ElevatedButton _buildReadingListeningBtn({required bool isReading, required String title}) {
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            backgroundColor: isReading ? Colors.black : Colors.white
+        ),
+        onPressed: () {}, child: Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 5,
+      children: [
+        Icon(isReading ? Icons.play_arrow_rounded : Icons.headset_rounded, color: isReading ? Colors.white : Colors.black,),
+        Text(title,
+          style: AppTextStyles.smallTextStyle.copyWith(color: isReading ? Colors.white : Colors.black),)
+      ],
+    ));
   }
 
 }
