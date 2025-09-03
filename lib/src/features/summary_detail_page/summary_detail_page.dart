@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/features/summary_detail_page/summary_overview_widget.dart';
 import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
@@ -10,109 +11,143 @@ class SummaryDetailPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        scrolledUnderElevation: 0,
-        elevation: 0,
-        actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.share)),
-          IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border_rounded)),
-        ],
-      ),
-      body: SafeArea(child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          spacing: 20,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: size.height*0.35,
-              child: Center(
-                child: ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: CachedNetworkImage(imageUrl: _book.image, fit: BoxFit.cover,)),
-              ),
-            ),
-            Column(
-              spacing: 10,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(_book.bookName, style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                Text(_book.author, style: AppTextStyles.smallTextStyle),
-                /*Row(
-                  spacing: 20,
-                  children: [
-                   Row(
-                     spacing: 5,
-                     children: [
-                       Icon(Icons.star_rounded, color: Colors.amber,),
-                       Text("4.8", style: AppTextStyles.smallTextStyle,)
-                     ],
-                   ),
-                    Row(
-                      spacing: 5,
-                      children: [
-                        Icon(Icons.trending_up, color: Colors.green,),
-                        Text("Trending", style: AppTextStyles.smallTextStyle,)
-                      ],
-                    )
-                  ],
-                ),*/
-                Row(
-                  spacing: 10,
-                  children: [
-                    Container(
-                        padding: EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                            color: AppColors.textFieldFillColor,
-                            borderRadius: BorderRadius.circular(99)
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            spacing: 4,
-                            children: [
-                              Icon(Icons.access_time_outlined, size: 18,),
-                              Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                            ],
-                          ),
-                        )),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Row(
-                          spacing: 10,
-                          children: List.generate(_book.categories.length, (index){
-                            return Container(
-                                padding: EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(99),
-                                    border: Border.all(color: Colors.grey)
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                  child: Text(_book.categories[index], style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                                ));
-                          })
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Row(
-                  spacing: 10,
-                  children: [
-                    Expanded(child: _buildReadingListeningBtn(isReading: true, title: 'Start reading',)),
-                    Expanded(child: _buildReadingListeningBtn(isReading: false, title: 'Start listening')),
-
-                  ],
-                )
-              ],
-            )
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          scrolledUnderElevation: 0,
+          elevation: 0,
+          actions: [
+            IconButton(onPressed: (){}, icon: Icon(Icons.share)),
+            IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border_rounded)),
           ],
         ),
-      )),
+        body: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      spacing: 20,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: size.height*0.35,
+                          child: Center(
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(5),
+                                child: CachedNetworkImage(imageUrl: _book.image, fit: BoxFit.cover,)),
+                          ),
+                        ),
+                        Column(
+                          spacing: 10,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(_book.bookName, style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                            Text(_book.author, style: AppTextStyles.smallTextStyle),
+                            Row(
+                              spacing: 10,
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                        color: AppColors.textFieldFillColor,
+                                        borderRadius: BorderRadius.circular(99)
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        spacing: 4,
+                                        children: [
+                                          Icon(Icons.access_time_outlined, size: 18,),
+                                          Text('15 min', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                        ],
+                                      ),
+                                    )),
+                                Expanded(
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    child: Row(
+                                      spacing: 10,
+                                      children: List.generate(_book.categories.length, (index){
+                                        return Container(
+                                            padding: EdgeInsets.all(3),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(99),
+                                                border: Border.all(color: Colors.grey)
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                              child: Text(_book.categories[index], style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                            ));
+                                      })
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              spacing: 10,
+                              children: [
+                                Expanded(child: _buildReadingListeningBtn(isReading: true, title: 'Start reading',)),
+                                Expanded(child: _buildReadingListeningBtn(isReading: false, title: 'Start listening')),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: _TabBarDelegate(
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(99),
+                          color: AppColors.textFieldFillColor,
+                        ),
+                        child: TabBar(
+                          tabs: [
+                            Tab(text: 'Overview'),
+                            Tab(text: 'Insights'),
+                            Tab(text: 'Related'),
+                          ],
+                          dividerHeight: 0,
+                          indicatorSize: TabBarIndicatorSize.tab,
+                          indicatorPadding: EdgeInsets.all(5),
+                          indicator: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(99)
+                          ),
+                          labelColor: AppColors.primaryColor,
+                          labelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w600,),
+                          unselectedLabelStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w500,),
+                          indicatorColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ];
+            },
+            body: TabBarView(
+              children: [
+                SummaryOverviewWidget(book: _book,),
+                Center(child: Text("Summary Insights Page"),),
+                Center(child: Text("Summary Related Page"),),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -132,4 +167,30 @@ class SummaryDetailPage extends StatelessWidget{
     ));
   }
 
+}
+
+class _TabBarDelegate extends SliverPersistentHeaderDelegate {
+  _TabBarDelegate(this._tabBarContainer);
+
+  final Widget _tabBarContainer;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      alignment: Alignment.centerLeft,
+      child: _tabBarContainer,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
 }
