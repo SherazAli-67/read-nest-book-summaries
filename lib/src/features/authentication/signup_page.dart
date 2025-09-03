@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/authentication/login_email_page.dart';
-import 'package:read_nest/src/features/onboarding/user_preferences/user_preferences_onboarding_page.dart';
 import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_colors.dart';
