@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/features/summary_detail_page/summary_insights_widget.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_overview_widget.dart';
 import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
@@ -164,14 +165,16 @@ class SummaryDetailPage extends StatelessWidget{
                 Builder(
                   builder: (context) {
                     return CustomScrollView(
-                      key: PageStorageKey<String>('insights'),
+                      // key: PageStorageKey('overview'),
                       slivers: [
                         SliverOverlapInjector(
                           handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                         ),
-                        SliverFillRemaining(
-                          hasScrollBody: false,
-                          child: Center(child: Text("Summary Insights Page")),
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: SummaryInsightsWidget(book: _book,),
+                          ),
                         ),
                       ],
                     );

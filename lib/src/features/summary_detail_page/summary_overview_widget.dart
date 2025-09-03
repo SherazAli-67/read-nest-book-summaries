@@ -16,7 +16,7 @@ class SummaryOverviewWidget extends StatelessWidget{
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: AppColors.textFieldFillColor.withOpacity(0.4)
+              color: AppColors.textFieldFillColor.withValues(alpha: 0.4)
             ),
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: Column(
@@ -49,13 +49,13 @@ class SummaryOverviewWidget extends StatelessWidget{
           Container(
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.blue.withOpacity(0.1)
+                color: Colors.blue.withValues(alpha: 0.1)
             ),
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               leading: CircleAvatar(
-                backgroundColor: Colors.blue.withOpacity(0.2),
+                backgroundColor: Colors.blue.withValues(alpha: 0.2),
                 child: Icon(Icons.download, color: Colors.blue,),
               ),
               title: Text("Download for Offline Reading", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),

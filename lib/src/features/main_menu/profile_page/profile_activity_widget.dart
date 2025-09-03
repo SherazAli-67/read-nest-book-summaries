@@ -30,7 +30,7 @@ class ProfileActivityWidget extends StatelessWidget{
               _buildAchievementListTileItem(icon: Icons.menu_book_rounded, title: 'First Steps', subTitle: 'Read your first book summary'),
               _buildAchievementListTileItem(icon: Icons.trending_up, title: 'Speed Reader', subTitle: 'Read 10 books in a week'),
               ActivityProgressCard(icon: Icons.star_border_rounded,title: 'Knowledge Seeker', subtitle: 'Read books from 5 different categories', current: 3, total: 5),
-              ActivityProgressCard(icon: Icons.celebration,title: 'Bookworm', subtitle: 'Read 100 book summaries', current: 23, total: 100),
+              ActivityProgressCard(icon: Icons.emoji_events,title: 'Bookworm', subtitle: 'Read 100 book summaries', current: 23, total: 100),
               ActivityProgressCard(icon: Icons.widgets_rounded,title: 'Wisdom Collector', subtitle: 'Save 50 key insights', current: 35, total: 50),
 
             ],
