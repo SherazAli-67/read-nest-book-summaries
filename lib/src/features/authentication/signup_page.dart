@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/authentication/login_email_page.dart';
@@ -7,6 +8,7 @@ import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+import 'package:read_nest/src/upload/upload_books_page.dart';
 
 class SignupPage extends StatefulWidget{
   const SignupPage({super.key, required this.emailAddress});
@@ -22,6 +24,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
 
+  bool _creatingAccount = false;
   @override
   void initState() {
     super.initState();
@@ -69,8 +72,9 @@ class _SignupPageState extends State<SignupPage> {
               height: 55,
               width: double.infinity,
               child: PrimaryBtn(onTap: (){
-                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> UserPreferencesOnboardingPage()), (value)=> false);
-              }, btnText: "Sign up"),
+                // Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> UserPreferencesOnboardingPage()), (value)=> false);
+                _onSignupTap();
+              }, btnText: "Sign up", isLoading: _creatingAccount,),
             ),
             Align(
               alignment: Alignment.center,
@@ -91,5 +95,17 @@ class _SignupPageState extends State<SignupPage> {
         ),
       )),
     );
+  }
+
+  void _onSignupTap()async{
+    FirebaseAuth auth = FirebaseAuth.instance;
+    setState(()=> _creatingAccount = true);
+    // String fName = _firstNameController.text.trim();
+    // String lName = _lastNameController.text.trim();
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+    await auth.createUserWithEmailAndPassword(email: email, password: password);
+    setState(()=> _creatingAccount = false);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> UploadBooksPage()), (_)=> false);
   }
 }

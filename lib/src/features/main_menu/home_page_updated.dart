@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:read_nest/src/data/app_data.dart';
+import 'package:read_nest/src/providers/books_provider.dart';
 import 'package:read_nest/src/res/app_avatars.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
@@ -17,6 +19,15 @@ class UpdatedHomePage extends StatefulWidget{
 class _UpdatedHomePageState extends State<UpdatedHomePage> {
   int _selectedCategoryIndex = 0;
   final TextEditingController _searchTextEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch books data when the page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BooksProvider>().fetchAllBooks();
+    });
+  }
 
   @override
   void dispose() {
@@ -97,26 +108,105 @@ class _UpdatedHomePageState extends State<UpdatedHomePage> {
 
             }),
           ),
-          SizedBox(
-            height: size.height*0.4,
-            width: size.width,
-            child:HomePageCategoriesBooksWidget(width: size.width*0.45, icon: Icons.trending_up, title: 'Trending Now', onSeeAllTap: (){}),
+          // Trending Now Section
+          Consumer<BooksProvider>(
+            builder: (context, booksProvider, child) {
+              debugPrint("UI Consumer - Loading: ${booksProvider.isLoading}");
+              debugPrint("UI Consumer - Error: ${booksProvider.error}");
+              debugPrint("UI Consumer - Trending Books Count: ${booksProvider.trendingBooks.length}");
+              
+              if (booksProvider.isLoading) {
+                return SizedBox(
+                  height: size.height*0.4,
+                  width: size.width,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              
+              if (booksProvider.error != null) {
+                return SizedBox(
+                  height: size.height*0.4,
+                  width: size.width,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Error: ${booksProvider.error}', style: AppTextStyles.smallTextStyle),
+                        SizedBox(height: 8),
+                        ElevatedButton(
+                          onPressed: () => booksProvider.fetchAllBooks(),
+                          child: Text('Retry'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              
+              return SizedBox(
+                height: size.height*0.4,
+                width: size.width,
+                child: HomePageCategoriesBooksWidget(
+                  width: size.width*0.45, 
+                  icon: Icons.trending_up, 
+                  title: 'Trending Now', 
+                  books: booksProvider.trendingBooks,
+                  onSeeAllTap: (){}
+                ),
+              );
+            },
           ),
-          SizedBox(
-            height: size.height*0.4,
-            width: size.width,
-            child: HomePageCategoriesBooksWidget(width: size.width*0.45, icon: Icons.access_time_rounded, title: 'Quick Reads', onSeeAllTap: (){}),
+
+          // Quick Reads Section
+          Consumer<BooksProvider>(
+            builder: (context, booksProvider, child) {
+              return SizedBox(
+                height: size.height*0.4,
+                width: size.width,
+                child: HomePageCategoriesBooksWidget(
+                  width: size.width*0.45, 
+                  icon: Icons.access_time_rounded, 
+                  title: 'Quick Reads', 
+                  books: booksProvider.quickReads,
+                  onSeeAllTap: (){}
+                ),
+              );
+            },
           ),
-          SizedBox(
-            height: size.height*0.4,
-            width: size.width,
-            child: HomePageCategoriesBooksWidget(width: size.width*0.45, icon: Icons.star_border_rounded, title: 'Popular in Business', onSeeAllTap: (){}),
+
+          // Popular in Business Section
+          Consumer<BooksProvider>(
+            builder: (context, booksProvider, child) {
+              return SizedBox(
+                height: size.height*0.4,
+                width: size.width,
+                child: HomePageCategoriesBooksWidget(
+                  width: size.width*0.45, 
+                  icon: Icons.star_border_rounded, 
+                  title: 'Popular in Business', 
+                  books: booksProvider.popularBusinessBooks,
+                  onSeeAllTap: (){}
+                ),
+              );
+            },
           ),
-          SizedBox(
-            height: size.height*0.4,
-            width: size.width,
-            child: HomePageCategoriesBooksWidget(width: size.width*0.45, icon: Icons.fiber_new_rounded, title: 'Recently Added', onSeeAllTap: (){}),
-          )
+
+          // Recently Added Section
+          Consumer<BooksProvider>(
+            builder: (context, booksProvider, child) {
+              return SizedBox(
+                height: size.height*0.4,
+                width: size.width,
+                child: HomePageCategoriesBooksWidget(
+                  width: size.width*0.45, 
+                  icon: Icons.fiber_new_rounded, 
+                  title: 'Recently Added', 
+                  books: booksProvider.recentlyAddedBooks,
+                  onSeeAllTap: (){}
+                ),
+              );
+            },
+          ),
         ],
       ),
     );

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "907115744720",
+    "project_id": "book-summaries-mobile-app",
+    "storage_bucket": "book-summaries-mobile-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907115744720:android:c4ba20aab88c183e10bdd5",
+        "android_client_info": {
+          "package_name": "com.example.read_nest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5ZyUBz9z8MJ69gUKUmq3QWp63nKK5bFA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
