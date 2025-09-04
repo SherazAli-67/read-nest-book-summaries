@@ -51,9 +51,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
   void _startPageTimer() {
     _stopwatch.start();
     _pageTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _pageTimeInSeconds = _stopwatch.elapsed.inSeconds;
-      });
+      setState(() => _pageTimeInSeconds = _stopwatch.elapsed.inSeconds);
     });
   }
 
@@ -106,9 +104,9 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
     
     final content = widget._book.sections[_currentReadingChapter].content;
     final wordCount = _calculateWordCount(content);
-    final readingTimeMinutes = (wordCount / 250).ceil(); // 250 words per minute average
+    final readingTimeMinutes = (wordCount / 175).ceil(); // 250 words per minute average
     
-    return "${readingTimeMinutes} min read";
+    return "$readingTimeMinutes min read";
   }
 
   // Helper method to format page time spent
@@ -130,7 +128,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
       appBar: AppBar(
         scrolledUnderElevation: 0,
         backgroundColor: Colors.white,
-        leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_rounded)),
+        leading: IconButton(onPressed: ()=> Navigator.of(context).pop(), icon: Icon(Icons.arrow_back_rounded)),
         actions: [
           IconButton(onPressed: (){}, icon: Icon(Icons.bookmark_border_rounded)),
           IconButton(onPressed: (){}, icon: Icon(Icons.dark_mode_outlined)),
@@ -218,7 +216,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
                   TextButton(
                     onPressed: _canGoPrevious ? () {
                       setState(() => _currentReadingChapter--);
-                      _resetPageTimer();
+                      // _resetPageTimer();
                       _animateToNewProgress();
                     } : null,
                     child: Row(
@@ -235,7 +233,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
                       ),
                       onPressed: _canGoNext ? () {
                         setState(() => _currentReadingChapter++);
-                        _resetPageTimer();
+                        // _resetPageTimer();
                         _animateToNewProgress();
                       } : null,
                       child: Row(
