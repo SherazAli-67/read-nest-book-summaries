@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_insights_widget.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_overview_widget.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_related_books.dart';
+import 'package:read_nest/src/features/summary_reading/summary_reading_page.dart';
 import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
@@ -41,9 +42,12 @@ class SummaryDetailPage extends StatelessWidget{
                           SizedBox(
                             height: size.height*0.35,
                             child: Center(
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(5),
-                                  child: CachedNetworkImage(imageUrl: _book.image, fit: BoxFit.cover,)),
+                              child: Hero(
+                                tag: 'bookImage-${_book.bookID}',
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(5),
+                                    child: CachedNetworkImage(imageUrl: _book.image, fit: BoxFit.cover,)),
+                              ),
                             ),
                           ),
                           Column(
@@ -97,8 +101,8 @@ class SummaryDetailPage extends StatelessWidget{
                               Row(
                                 spacing: 10,
                                 children: [
-                                  Expanded(child: _buildReadingListeningBtn(isReading: true, title: 'Start reading',)),
-                                  Expanded(child: _buildReadingListeningBtn(isReading: false, title: 'Start listening')),
+                                  Expanded(child: _buildReadingListeningBtn(context, isReading: true, btnText: 'Start reading',)),
+                                  Expanded(child: _buildReadingListeningBtn(context, isReading: false, btnText: 'Start listening')),
                                 ],
                               ),
                             ],
@@ -207,17 +211,19 @@ class SummaryDetailPage extends StatelessWidget{
     );
   }
 
-  ElevatedButton _buildReadingListeningBtn({required bool isReading, required String title}) {
+  ElevatedButton _buildReadingListeningBtn(BuildContext context, {required bool isReading, required String btnText}) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
             backgroundColor: isReading ? Colors.black : Colors.white
         ),
-        onPressed: () {}, child: Row(
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryReadingPage(book: _book)));
+        }, child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 5,
       children: [
         Icon(isReading ? Icons.play_arrow_rounded : Icons.headset_rounded, color: isReading ? Colors.white : Colors.black,),
-        Text(title,
+        Text(btnText,
           style: AppTextStyles.smallTextStyle.copyWith(color: isReading ? Colors.white : Colors.black),)
       ],
     ));

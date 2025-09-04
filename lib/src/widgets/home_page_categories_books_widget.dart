@@ -60,16 +60,19 @@ class HomePageCategoriesBooksWidget extends StatelessWidget{
                             children: [
                               Expanded(child: Stack(
                                 children: [
-                                  CachedNetworkImage(
-                                    imageUrl: book.image.isNotEmpty 
-                                      ? book.image 
-                                      : 'https://via.placeholder.com/300x400/E0E0E0/757575?text=No+Image', 
-                                    fit: BoxFit.cover,
-                                    width: _width,
-                                    errorWidget: (context, url, error) => Container(
+                                  Hero(
+                                    tag: 'bookImage-${book.bookID}',
+                                    child: CachedNetworkImage(
+                                      imageUrl: book.image.isNotEmpty 
+                                        ? book.image 
+                                        : 'https://via.placeholder.com/300x400/E0E0E0/757575?text=No+Image', 
+                                      fit: BoxFit.cover,
                                       width: _width,
-                                      color: Colors.grey[300],
-                                      child: Icon(Icons.book, size: 50, color: Colors.grey[600]),
+                                      errorWidget: (context, url, error) => Container(
+                                        width: _width,
+                                        color: Colors.grey[300],
+                                        child: Icon(Icons.book, size: 50, color: Colors.grey[600]),
+                                      ),
                                     ),
                                   ),
                                   Positioned(
