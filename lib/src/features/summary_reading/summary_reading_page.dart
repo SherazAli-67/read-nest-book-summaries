@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
@@ -12,8 +13,117 @@ class SummaryReadingPage extends StatefulWidget{
   State<SummaryReadingPage> createState() => _SummaryReadingPageState();
 }
 
-class _SummaryReadingPageState extends State<SummaryReadingPage> {
-  int _currentReadingChapter =0;  // 0 for introduction, 1 for _book.sections[0], 2 for _book.sections[1], and so on.
+class _SummaryReadingPageState extends State<SummaryReadingPage> 
+    with TickerProviderStateMixin {
+  int _currentReadingChapter = 0;
+  late AnimationController _progressAnimationController;
+  late Animation<double> _progressAnimation;
+  Timer? _pageTimer;
+  final Stopwatch _stopwatch = Stopwatch();
+  int _pageTimeInSeconds = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _progressAnimationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    _progressAnimation = Tween<double>(
+      begin: 0.0,
+      end: _readingProgress,
+    ).animate(CurvedAnimation(
+      parent: _progressAnimationController,
+      curve: Curves.easeInOut,
+    ));
+    
+    _startPageTimer();
+    _progressAnimationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _progressAnimationController.dispose();
+    _stopPageTimer();
+    super.dispose();
+  }
+
+  void _startPageTimer() {
+    _stopwatch.start();
+    _pageTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        _pageTimeInSeconds = _stopwatch.elapsed.inSeconds;
+      });
+    });
+  }
+
+  void _stopPageTimer() {
+    _pageTimer?.cancel();
+    _stopwatch.stop();
+  }
+
+  void _resetPageTimer() {
+    _stopwatch.reset();
+    _pageTimeInSeconds = 0;
+    _stopwatch.start();
+  }
+
+  void _animateToNewProgress() {
+    final newProgress = _readingProgress;
+    _progressAnimation = Tween<double>(
+      begin: _progressAnimation.value,
+      end: newProgress,
+    ).animate(CurvedAnimation(
+      parent: _progressAnimationController,
+      curve: Curves.easeInOut,
+    ));
+    _progressAnimationController.reset();
+    _progressAnimationController.forward();
+  }
+
+  // Helper method to calculate progress (0.0 to 1.0)
+  double get _readingProgress {
+    if (widget._book.sections.isEmpty) return 0.0;
+    return (_currentReadingChapter + 1) / widget._book.sections.length;
+  }
+
+  // Helper method to calculate reading percentage
+  int get _readingPercentage {
+    return (_readingProgress * 100).round();
+  }
+
+  // Helper method to calculate word count in content
+  int _calculateWordCount(String content) {
+    if (content.isEmpty) return 0;
+    return content.split(RegExp(r'\s+')).where((word) => word.isNotEmpty).length;
+  }
+
+  // Helper method to calculate estimated reading time for current section
+  String get _estimatedReadingTime {
+    if (widget._book.sections.isEmpty || _currentReadingChapter >= widget._book.sections.length) {
+      return "0 min read";
+    }
+    
+    final content = widget._book.sections[_currentReadingChapter].content;
+    final wordCount = _calculateWordCount(content);
+    final readingTimeMinutes = (wordCount / 250).ceil(); // 250 words per minute average
+    
+    return "${readingTimeMinutes} min read";
+  }
+
+  // Helper method to format page time spent
+  String get _pageTimeFormatted {
+    final minutes = _pageTimeInSeconds ~/ 60;
+    final seconds = _pageTimeInSeconds % 60;
+    return "${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}";
+  }
+
+  // Helper method to check if we can go to previous chapter
+  bool get _canGoPrevious => _currentReadingChapter > 0;
+
+  // Helper method to check if we can go to next chapter
+  bool get _canGoNext => _currentReadingChapter < widget._book.sections.length - 1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,19 +151,28 @@ class _SummaryReadingPageState extends State<SummaryReadingPage> {
                     Row(
                       mainAxisAlignment:  MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Introduction', style: AppTextStyles.smallTextStyle,),
+                        Text('Chapter ${_currentReadingChapter+1}', style: AppTextStyles.smallTextStyle,),
                         Row(
                           spacing: 10,
                           children: [
                             Icon(Icons.access_time_rounded, color: Colors.grey, size: 20,),
-                            Text("23:33", style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, color: Colors.grey),),
-                            Text("20%", style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12,),)
+                            Text(_pageTimeFormatted, style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, color: Colors.grey),),
+                            Text("$_readingPercentage%", style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12,),)
                           ],
                         )
                       ],
                     ),
 
-                    LinearProgressIndicator(value: 0.3, color: Colors.black, backgroundColor: AppColors.textFieldFillColor,)
+                    AnimatedBuilder(
+                      animation: _progressAnimation,
+                      builder: (context, child) {
+                        return LinearProgressIndicator(
+                          value: _progressAnimation.value, 
+                          color: Colors.black, 
+                          backgroundColor: AppColors.textFieldFillColor,
+                        );
+                      },
+                    )
                   ],
                 ),
                 Column(
@@ -80,7 +199,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage> {
                         color: AppColors.textFieldFillColor.withValues(alpha: 0.4)
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                    child: Text('2 min read', style: AppTextStyles.smallTextStyle),
+                    child: Text(_estimatedReadingTime, style: AppTextStyles.smallTextStyle),
                   ),
                 ),
                 Text(widget._book.sections[_currentReadingChapter].content)
@@ -96,24 +215,35 @@ class _SummaryReadingPageState extends State<SummaryReadingPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  TextButton(onPressed: ()=> setState(() => _currentReadingChapter--), child: Row(
-                    spacing: 5,
-                    children: [
-                      Icon(Icons.arrow_back_ios_new_rounded, size: 15,),
-                      Text('Previous', style: AppTextStyles.smallTextStyle,)
-                    ],
-                  )),
+                  TextButton(
+                    onPressed: _canGoPrevious ? () {
+                      setState(() => _currentReadingChapter--);
+                      _resetPageTimer();
+                      _animateToNewProgress();
+                    } : null,
+                    child: Row(
+                      spacing: 5,
+                      children: [
+                        Icon(Icons.arrow_back_ios_new_rounded, size: 15, color: _canGoPrevious ? null : Colors.grey),
+                        Text('Previous', style: AppTextStyles.smallTextStyle.copyWith(color: _canGoPrevious ? null : Colors.grey),)
+                      ],
+                    )),
                   OnBoardingDotWidget(dotsLength: widget._book.sections.length, isDarkTheme: false, currentPage: _currentReadingChapter),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black
+                          backgroundColor: _canGoNext ? Colors.black : Colors.grey
                       ),
-                      onPressed: ()=> setState(() => _currentReadingChapter++), child: Row(
-                    children: [
-                      Text('Next', style: AppTextStyles.smallTextStyle.copyWith(color: Colors.white),),
-                      Icon(Icons.navigate_next, color: Colors.white,)
-                    ],
-                  ))
+                      onPressed: _canGoNext ? () {
+                        setState(() => _currentReadingChapter++);
+                        _resetPageTimer();
+                        _animateToNewProgress();
+                      } : null,
+                      child: Row(
+                        children: [
+                          Text('Next', style: AppTextStyles.smallTextStyle.copyWith(color: Colors.white),),
+                          Icon(Icons.navigate_next, color: Colors.white,)
+                        ],
+                      ))
                 ],
               ),
             )
