@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:read_nest/src/features/summary_reading/reading_chapter_widget.dart';
 import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
@@ -66,7 +65,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage> {
                           color: AppColors.textFieldFillColor
                       ),
                       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-                      child: Text('Chapter $_currentReadingChapter of ${widget._book.sections.length}', style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                      child: Text('Chapter ${_currentReadingChapter+1} of ${widget._book.sections.length}', style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
                     ),
                     Text(widget._book.bookName, style: AppTextStyles.headingTextStyle,),
                     Text('by ${widget._book.author}', style: AppTextStyles.smallTextStyle,),
@@ -84,11 +83,10 @@ class _SummaryReadingPageState extends State<SummaryReadingPage> {
                     child: Text('2 min read', style: AppTextStyles.smallTextStyle),
                   ),
                 ),
-                Text(_currentReadingChapter == 0 ? widget._book.introduction : widget._book.sections[_currentReadingChapter].content)
+                Text(widget._book.sections[_currentReadingChapter].content)
 
               ],
             ),),),
-
 
             Card(
               elevation: 0,
@@ -105,7 +103,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage> {
                       Text('Previous', style: AppTextStyles.smallTextStyle,)
                     ],
                   )),
-                  OnBoardingDotWidget(dotsLength: widget._book.sections.length+1, isDarkTheme: false, currentPage: _currentReadingChapter),
+                  OnBoardingDotWidget(dotsLength: widget._book.sections.length, isDarkTheme: false, currentPage: _currentReadingChapter),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black
