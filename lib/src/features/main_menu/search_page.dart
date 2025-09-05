@@ -12,10 +12,14 @@ class SearchPage extends StatefulWidget{
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchTextEditingController = TextEditingController();
+  List<String>  _trendingSearches = [
+    'Productivity', 'Motivation', 'Leadership', 'Business',  'Money', 'Psychology'
+  ];
+  String _selectedTrending = '';
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
         spacing: 20,
         children: [
@@ -47,8 +51,42 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
           ),
+          _buildTrendingSearches(),
         ],
       ),
+    );
+  }
+
+  _buildTrendingSearches() {
+    return Column(
+      spacing: 10,
+      children: [
+        Row(
+          spacing: 5,
+          children: [
+            Icon(Icons.trending_up, color: Colors.black, size: 20,),
+            Text("Trending searches", style: AppTextStyles.smallTextStyle,),
+          ],
+        ),
+        Wrap(
+          children: _trendingSearches.map((trending){
+            bool isSelected = _selectedTrending == trending;
+            return Padding(
+              padding: const EdgeInsets.only(right: 10.0, bottom: 10),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: isSelected ? Colors.black : AppColors.textFieldFillColor,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(99)
+                    ),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap
+                ),
+                onPressed: ()=> setState(()=> _selectedTrending = trending), child: Text(trending, textAlign: TextAlign.center, style: AppTextStyles.smallTextStyle.copyWith(color: isSelected ? Colors.white : Colors.black),),),
+            );
+          }).toList(),
+        )
+      ],
     );
   }
 }
