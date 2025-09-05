@@ -60,12 +60,6 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
     _stopwatch.stop();
   }
 
-  void _resetPageTimer() {
-    _stopwatch.reset();
-    _pageTimeInSeconds = 0;
-    _stopwatch.start();
-  }
-
   void _animateToNewProgress() {
     final newProgress = _readingProgress;
     _progressAnimation = Tween<double>(

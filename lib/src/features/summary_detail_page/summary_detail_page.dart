@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_insights_widget.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_overview_widget.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_related_books.dart';
+import 'package:read_nest/src/features/summary_reading/summary_listening_page.dart';
 import 'package:read_nest/src/features/summary_reading/summary_reading_page.dart';
 import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
@@ -217,7 +218,11 @@ class SummaryDetailPage extends StatelessWidget{
             backgroundColor: isReading ? Colors.black : Colors.white
         ),
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryReadingPage(book: _book)));
+          if(isReading){
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryReadingPage(book: _book)));
+          }else{
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryListeningPage(book: _book)));
+          }
         }, child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 5,
