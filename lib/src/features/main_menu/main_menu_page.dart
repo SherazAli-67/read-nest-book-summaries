@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:read_nest/src/features/main_menu/home_page.dart';
 import 'package:read_nest/src/features/main_menu/home_page_updated.dart';
 import 'package:read_nest/src/features/main_menu/profile_page/profile_page.dart';
-import 'package:read_nest/src/features/main_menu/bookmark_page.dart';
+import 'package:read_nest/src/features/main_menu/search_page.dart';
 import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
@@ -20,7 +20,7 @@ class MainMenuPage extends StatelessWidget{
             onTap: (int index)=> provider.onTabChange(index),
             items: [
           _buildBottomNavigationItemWidget(icon: AppIcons.icHome, label: 'Home', isSelected: provider.currentIndex == 0),
-          _buildBottomNavigationItemWidget(icon: AppIcons.icBookmark, label: 'Favorite', isSelected: provider.currentIndex == 1),
+          _buildBottomNavigationItemWidget(icon: AppIcons.icBookmark, label: 'Discover', isSelected: provider.currentIndex == 1),
           _buildBottomNavigationItemWidget(icon: AppIcons.icUserProfile, label: 'Profile', isSelected: provider.currentIndex == 2),
         ]),
 
@@ -61,7 +61,7 @@ class MainMenuPage extends StatelessWidget{
         return UpdatedHomePage();
 
       case 1:
-        return BookMarkPage();
+        return SearchPage();
 
       case 2:
         return ProfilePage();
