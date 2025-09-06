@@ -21,9 +21,10 @@ class _SearchPageState extends State<SearchPage> {
   String _selectedTrending = '';
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
+
         spacing: 20,
         children: [
           Row(
@@ -55,7 +56,8 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
           _buildTrendingSearches(),
-          _buildAuthorsSpotLight()
+          _buildAuthorsSpotLight(),
+          _buildReadingGoals(),
         ],
       ),
     );
@@ -140,6 +142,56 @@ class _SearchPageState extends State<SearchPage> {
               }),
         ),
       ],
+    );
+  }
+
+  _buildReadingGoals() {
+    return SizedBox(
+      height: 450,
+      child: Column(
+        spacing: 10,
+        children: [
+          Row(
+            spacing: 5,
+            children: [
+              Icon(Icons.ac_unit_rounded, color: Colors.black, size: 20,),
+              Text("Reading Goals", style: AppTextStyles.smallTextStyle,),
+            ],
+          ),
+          Expanded(
+            child: GridView.builder(
+                itemCount: 4,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 15), itemBuilder: (_, index){
+              return Container(
+                margin: EdgeInsets.only(right: 10, bottom: 10),
+                decoration: BoxDecoration(
+                    color: AppColors.primaryColor.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(10)
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 10,
+                  children: [
+                    Icon(Icons.attach_money_rounded, color: Colors.amber,),
+                    Text("Wealth Building", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                    Text('4 books', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
+                    Wrap(
+                      spacing: 5,
+                      children: List.generate(4, (index){
+                        return ClipRRect(
+                            borderRadius: BorderRadius.circular(2),
+                            child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl2, height: 25,));
+                      }),
+                    )
+                  ],
+                ),
+              );
+            }),
+          ),
+        ],
+      ),
     );
   }
 }
