@@ -58,6 +58,7 @@ class _SearchPageState extends State<SearchPage> {
           _buildTrendingSearches(),
           _buildAuthorsSpotLight(),
           _buildReadingGoals(),
+          _buildMostSearchedThisWeek()
         ],
       ),
     );
@@ -192,6 +193,44 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ],
       ),
+    );
+  }
+
+  _buildMostSearchedThisWeek() {
+    return Column(
+      spacing: 10,
+      children: [
+        Row(
+          spacing: 5,
+          children: [
+            Icon(Icons.trending_up, color: Colors.black, size: 20,),
+            Text("Most Searched This Week", style: AppTextStyles.smallTextStyle,),
+          ],
+        ),
+        Column(
+          children: List.generate(3, (index){
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.black,
+                radius: 10,
+                child: Center(child: Text('${index+1}', style: AppTextStyles.smallTextStyle.copyWith(color: Colors.white, fontSize: 12),),),
+              ),
+              title: Text('Productivity', style: AppTextStyles.regularTextStyle,),
+              subtitle: Text('2.1k searches', style: TextStyle(fontSize: 12, color: Colors.grey),),
+              trailing: SizedBox(
+                width: 100,
+                child: Row(
+                  spacing: 2,
+                  children: List.generate(2, (index){
+                  return ClipRRect(
+                      borderRadius: BorderRadius.circular(2),
+                      child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl2, height: 25,));
+                }),),
+              ),
+            );
+          }),
+        )
+      ],
     );
   }
 }
