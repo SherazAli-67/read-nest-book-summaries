@@ -17,6 +17,7 @@ class Book {
   final List<Section> sections;
   final String image;
   final int timeInMinutes;
+  final DateTime createdOn;
 
 
   Book({
@@ -35,7 +36,8 @@ class Book {
     required this.introductionLink,
     required this.sections,
     required this.image,
-    required this.timeInMinutes
+    required this.timeInMinutes,
+    required this.createdOn
   });
 
   Map<String, dynamic> toMap() {
@@ -56,6 +58,7 @@ class Book {
       'sections': sections.map((s) => s.toMap()).toList(),
       'image': image,
       'timeInMinutes' : timeInMinutes,
+      'createdOn': createdOn.toIso8601String()
     };
   }
 
@@ -79,6 +82,7 @@ class Book {
           .toList(),
       image: map['image'] ?? '',
       timeInMinutes: map['timeInMinutes'] ?? 999,
+      createdOn: map['createdOn'] != null ? DateTime.parse(map['createdOn']) : DateTime.now()
     );
   }
 }

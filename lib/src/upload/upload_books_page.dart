@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../models/book_model.dart';
 import '../models/section_model.dart';
+import '../models/category_model.dart';
 
 class UploadBooksPage extends StatelessWidget {
   const UploadBooksPage({super.key});
@@ -51,6 +52,10 @@ class UploadBooksPage extends StatelessWidget {
     }
 
     final booksCol = FirebaseFirestore.instance.collection('books');
+    final categoryColRef = FirebaseFirestore.instance.collection('categories');
+    // Track categories and their summary counts
+    final categorySummaryCounts = <String, int>{};
+
 
     // 3) Iterate data rows
     for (var r = 1; r < rows.length; r++) {
@@ -77,7 +82,10 @@ class UploadBooksPage extends StatelessWidget {
       final categories = <String>[];
       for (var i = 1; i <= 5; i++) {
         final c = cell(idx, row, 'category$i');
-        if (c.isNotEmpty) categories.add(c);
+        if (c.isNotEmpty) {
+          categories.add(c);
+          categorySummaryCounts[c] = (categorySummaryCounts[c] ?? 0) + 1;
+        }
       }
 
       // Sections: "Section N", "Section N Link", "Section N Title"
@@ -102,34 +110,67 @@ class UploadBooksPage extends StatelessWidget {
 
       debugPrint("Uploading book");
       // Create doc with ID, and also store bookId inside document
-      final docRef = booksCol.doc();
+      final summaryDocRef = booksCol.doc();
       final book = Book(
-        bookID: docRef.id,
-        author: author,
-        bookName: bookName,
-        aboutAuthor: aboutAuthor,
-        introTitle: introTitle,
-        introLink: introLink,
-        shortSummary: shortSummary,
-        shortSummaryLink: shortSummaryLink,
-        time: time,
-        keyIdeas: keyIdeas,
-        categories: categories,
-        introduction: introduction,
-        introductionLink: introductionLink,
-        sections: sections,
-        image: image,
-        timeInMinutes: timeInMinutes
+          bookID: summaryDocRef.id,
+          author: author,
+          bookName: bookName,
+          aboutAuthor: aboutAuthor,
+          introTitle: introTitle,
+          introLink: introLink,
+          shortSummary: shortSummary,
+          shortSummaryLink: shortSummaryLink,
+          time: time,
+          keyIdeas: keyIdeas,
+          categories: categories,
+          introduction: introduction,
+          introductionLink: introductionLink,
+          sections: sections,
+          image: image,
+          timeInMinutes: timeInMinutes,
+          createdOn: DateTime.now()
       );
 
-      await docRef.set(book.toMap());
+      await summaryDocRef.set(book.toMap());
+
+      // Add book reference to each category's summaries sub-collection
+      for (final category in categories) {
+        await categoryColRef
+            .doc(category.toLowerCase())
+            .collection('summaries')
+            .doc(summaryDocRef.id)
+            .set({'bookId': summaryDocRef.id});
+      }
 
       // Optional debug logs
       debugPrint('Uploaded: $bookName — sections: ${sections.length}, categories: ${categories.length}, timeStr: $time, timeInt: $timeInMinutes');
     }
+
+    // Create/Update category documents with total summary counts
+    await _createCategoryDocuments(categoryColRef, categorySummaryCounts);
   }
 
-  Future<void> updateTimeInBooks()async{
+  /// Creates category documents with total summary counts
+  Future<void> _createCategoryDocuments(
+      CollectionReference categoryColRef,
+      Map<String, int> categorySummaryCounts) async {
+    for (final entry in categorySummaryCounts.entries) {
+      final categoryTitle = entry.key;
+      final totalSummaries = entry.value;
+
+      final categoryDocRef = categoryColRef.doc(categoryTitle);
+      final category = Category(
+        id: categoryTitle,
+        title: categoryTitle,
+        totalSummaries: totalSummaries,
+      );
+
+      await categoryDocRef.set(category.toMap());
+      debugPrint('Created/Updated category: $categoryTitle with $totalSummaries summaries');
+    }
+  }
+
+/*Future<void> updateTimeInBooks()async{
     debugPrint("On tap");
     final firestore = FirebaseFirestore.instance.collection('books');
     QuerySnapshot querySnapshot = await firestore.get();
@@ -147,5 +188,5 @@ class UploadBooksPage extends StatelessWidget {
       });
     }
 
-  }
+  }*/
 }

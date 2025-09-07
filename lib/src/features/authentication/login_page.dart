@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/authentication/forget_password/forget_password_page.dart';
@@ -5,6 +6,7 @@ import 'package:read_nest/src/features/authentication/signup_email_page.dart';
 import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+import 'package:read_nest/src/upload/upload_books_page.dart';
 
 import '../../res/app_colors.dart';
 import '../../res/app_constants.dart';
@@ -73,7 +75,14 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: 55,
               width: double.infinity,
-              child: PrimaryBtn(onTap: (){}, btnText: "Sign In"),
+              child: PrimaryBtn(onTap: () async {
+                final auth = FirebaseAuth.instance;
+                String email = _emailController.text.trim();
+                String password = _passController.text.trim();
+
+               await auth.signInWithEmailAndPassword(email: email, password: password);
+               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> UploadBooksPage()), (_)=> false);
+              }, btnText: "Sign In"),
             ),
             Row(
               spacing: 10,

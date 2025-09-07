@@ -10,6 +10,7 @@ import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/providers/user_preferences_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
+import 'package:read_nest/src/upload/upload_books_page.dart';
 
 Future<void> main() async {
    WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +41,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor, ),
         scaffoldBackgroundColor: Colors.white
       ),
-      home: FirebaseAuth.instance.currentUser != null ? MainMenuPage() : LoginEmailPage()
+      home: LoginEmailPage()
+
+      // FirebaseAuth.instance.currentUser != null ? MainMenuPage() : LoginEmailPage()
     );
   }
 }

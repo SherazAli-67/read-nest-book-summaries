@@ -2,8 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
-
-import '../../data/app_data.dart';
 import '../../res/app_colors.dart';
 
 class SearchPage extends StatefulWidget{
