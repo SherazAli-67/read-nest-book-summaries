@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/book_model.dart';
+import '../models/author_spotlight_model.dart';
 import '../services/books_service.dart';
 
 class BooksProvider extends ChangeNotifier {
@@ -8,6 +9,7 @@ class BooksProvider extends ChangeNotifier {
   List<Book> _popularBusinessBooks = [];
   List<Book> _recentlyAddedBooks = [];
   List<Book> _relatedBooks = [];
+  List<AuthorSpotlight> _authorsSpotlight = [];
 
   bool _isLoading = false;
   bool _isLoadingRelated = false;
@@ -20,6 +22,7 @@ class BooksProvider extends ChangeNotifier {
   List<Book> get popularBusinessBooks => _popularBusinessBooks;
   List<Book> get recentlyAddedBooks => _recentlyAddedBooks;
   List<Book> get relatedBooks => _relatedBooks;
+  List<AuthorSpotlight> get authorsSpotlight => _authorsSpotlight;
   bool get isLoading => _isLoading;
   bool get isLoadingRelated => _isLoadingRelated;
   String? get error => _error;
@@ -38,19 +41,23 @@ class BooksProvider extends ChangeNotifier {
         BooksService.getQuickReads(),
         BooksService.getPopularBusinessBooks(),
         BooksService.getRecentlyAddedBooks(),
+        BooksService.getAuthorsSpotlight(),
       ]);
 
       debugPrint("Trending books fetched: ${results[0].length}");
       debugPrint("Quick reads fetched: ${results[1].length}");
       debugPrint("Business books fetched: ${results[2].length}");
       debugPrint("Recent books fetched: ${results[3].length}");
+      debugPrint("Authors spotlight fetched: ${results[4].length}");
 
       _trendingBooks = results[0];
       _quickReads = results[1];
       _popularBusinessBooks = results[2];
       _recentlyAddedBooks = results[3];
+      _authorsSpotlight = results[4];
 
       debugPrint("Provider state updated - Trending: ${_trendingBooks.length}");
+      debugPrint("Authors spotlight: ${_authorsSpotlight.length}");
       
     } catch (e) {
       debugPrint("Error in fetchAllBooks: $e");
@@ -96,6 +103,16 @@ class BooksProvider extends ChangeNotifier {
   Future<void> fetchRecentlyAddedBooks() async {
     try {
       _recentlyAddedBooks = await BooksService.getRecentlyAddedBooks();
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    }
+  }
+
+  Future<void> fetchAuthorsSpotlight() async {
+    try {
+      _authorsSpotlight = await BooksService.getAuthorsSpotlight();
       notifyListeners();
     } catch (e) {
       _error = e.toString();

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import '../models/book_model.dart';
+import '../models/author_spotlight_model.dart';
 
 class BooksService {
   static final _firestore = FirebaseFirestore.instance;
@@ -96,6 +97,48 @@ class BooksService {
       return snapshot.docs.map((doc) => Book.fromMap(doc.data())).toList();
     } catch (e) {
       throw Exception('Failed to fetch books by category: $e');
+    }
+  }
+
+  // Fetch authors spotlight - groups books by author and creates spotlight data
+  static Future<List<AuthorSpotlight>> getAuthorsSpotlight({int limit = 6}) async {
+    try {
+      debugPrint('Fetching authors spotlight...');
+      
+      // Get all books
+      final snapshot = await _booksCollection.get();
+      List<Book> allBooks = snapshot.docs.map((doc) => Book.fromMap(doc.data())).toList();
+      
+      // Group books by author
+      Map<String, List<Book>> booksByAuthor = {};
+      for (var book in allBooks) {
+        if (book.author.isNotEmpty) {
+          if (!booksByAuthor.containsKey(book.author)) {
+            booksByAuthor[book.author] = [];
+          }
+          booksByAuthor[book.author]!.add(book);
+        }
+      }
+      
+      // Create author spotlight objects and sort by book count
+      List<AuthorSpotlight> authorsSpotlight = [];
+      booksByAuthor.forEach((author, books) {
+        if (books.isNotEmpty) {
+          authorsSpotlight.add(AuthorSpotlight.create(
+            authorName: author,
+            books: books,
+          ));
+        }
+      });
+      
+      // Sort by book count (descending) and take top authors
+      authorsSpotlight.sort((a, b) => b.totalBooks.compareTo(a.totalBooks));
+      
+      debugPrint('Found ${authorsSpotlight.length} authors, returning top $limit');
+      return authorsSpotlight.take(limit).toList();
+    } catch (e) {
+      debugPrint('Error fetching authors spotlight: $e');
+      throw Exception('Failed to fetch authors spotlight: $e');
     }
   }
 
