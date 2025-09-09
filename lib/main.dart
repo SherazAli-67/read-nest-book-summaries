@@ -6,6 +6,7 @@ import 'package:read_nest/firebase_options.dart';
 import 'package:read_nest/src/features/authentication/login_email_page.dart';
 import 'package:read_nest/src/features/main_menu/main_menu_page.dart';
 import 'package:read_nest/src/providers/books_provider.dart';
+import 'package:read_nest/src/providers/categories_provider.dart';
 import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/providers/user_preferences_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';

@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../models/book_model.dart';
 import '../models/author_spotlight_model.dart';
+import '../models/category_model.dart';
 
 class CacheService {
   static const String _trendingBooksKey = 'trending_books';
@@ -10,7 +11,9 @@ class CacheService {
   static const String _businessBooksKey = 'business_books';
   static const String _recentBooksKey = 'recent_books';
   static const String _authorsSpotlightKey = 'authors_spotlight';
+  static const String _categoriesKey = 'categories';
   static const String _cacheTimestampKey = 'cache_timestamp';
+  static const String _categoriesCacheTimestampKey = 'categories_cache_timestamp';
   static const String _cacheExpirationMinutes = '60'; // Cache expires after 1 hour
 
   static Future<SharedPreferences> get _prefs async => await SharedPreferences.getInstance();
@@ -217,6 +220,63 @@ class CacheService {
       prefs.remove(_recentBooksKey),
       prefs.remove(_authorsSpotlightKey),
       prefs.remove(_cacheTimestampKey),
+    ]);
+  }
+
+  // Categories caching methods
+  
+  // Check if categories cache is expired
+  static Future<bool> isCategoriesCacheExpired() async {
+    final prefs = await _prefs;
+    final timestamp = prefs.getInt(_categoriesCacheTimestampKey) ?? 0;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    final expirationTime = int.parse(_cacheExpirationMinutes) * 60 * 1000; // Convert to milliseconds
+    
+    return (now - timestamp) > expirationTime;
+  }
+
+  // Update categories cache timestamp
+  static Future<void> updateCategoriesCacheTimestamp() async {
+    final prefs = await _prefs;
+    await prefs.setInt(_categoriesCacheTimestampKey, DateTime.now().millisecondsSinceEpoch);
+  }
+
+  // Cache categories
+  static Future<void> cacheCategories(List<Category> categories) async {
+    final prefs = await _prefs;
+    final categoriesJson = categories.map((category) => json.encode(category.toMap())).toList();
+    await prefs.setStringList(_categoriesKey, categoriesJson);
+    await updateCategoriesCacheTimestamp();
+  }
+
+  // Get cached categories
+  static Future<List<Category>?> getCachedCategories() async {
+    final prefs = await _prefs;
+    final categoriesJson = prefs.getStringList(_categoriesKey);
+    if (categoriesJson == null) return null;
+    
+    try {
+      return categoriesJson
+          .map((categoryStr) => Category.fromMap(json.decode(categoryStr)))
+          .toList();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Check if categories cache exists and is valid
+  static Future<bool> hasFreshCategoriesCache() async {
+    final hasCache = await getCachedCategories() != null;
+    final isExpired = await isCategoriesCacheExpired();
+    return hasCache && !isExpired;
+  }
+
+  // Clear categories cache
+  static Future<void> clearCategoriesCache() async {
+    final prefs = await _prefs;
+    await Future.wait([
+      prefs.remove(_categoriesKey),
+      prefs.remove(_categoriesCacheTimestampKey),
     ]);
   }
 

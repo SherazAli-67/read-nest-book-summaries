@@ -26,7 +26,6 @@ class _SearchPageState extends State<SearchPage> {
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
       child: Column(
-
         spacing: 20,
         children: [
           Row(
@@ -60,7 +59,8 @@ class _SearchPageState extends State<SearchPage> {
           _buildTrendingSearches(),
           _buildAuthorsSpotLight(),
           _buildReadingGoals(),
-          _buildMostSearchedThisWeek()
+          _buildMostSearchedThisWeek(),
+          _buildAllCategories()
         ],
       ),
     );
@@ -315,6 +315,45 @@ class _SearchPageState extends State<SearchPage> {
           }),
         )
       ],
+    );
+  }
+
+  _buildAllCategories() {
+    return SizedBox(
+      height: 400,
+      child: Column(
+        spacing: 20,
+        children: [
+          Row(
+            spacing: 5,
+            children: [
+              Icon(Icons.star_border_rounded, color: Colors.black, size: 20,),
+              Text("Browse All Categories", style: AppTextStyles.smallTextStyle,),
+            ],
+          ),
+          Expanded(child: GridView.builder(
+            itemCount: 7,
+            physics: NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 3/2), itemBuilder: (_, index) {
+            return Expanded(child: Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+              color: AppColors.textFieldFillColor.withValues(alpha: 0.4),
+              borderRadius: BorderRadius.circular(10)
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Business", style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                const Spacer(),
+                Text('3 books', style: AppTextStyles.smallTextStyle,)
+              ],
+            ),
+            ));
+          }))
+        ],
+      ),
     );
   }
 }
