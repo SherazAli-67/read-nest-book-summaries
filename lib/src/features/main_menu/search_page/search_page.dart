@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:read_nest/src/features/main_menu/search_page/authors_spotlight_page.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
-import '../../res/app_colors.dart';
-import '../../providers/books_provider.dart';
-import '../../models/author_spotlight_model.dart';
-import '../../widgets/shimmer_widgets.dart';
+import '../../../res/app_colors.dart';
+import '../../../providers/books_provider.dart';
+import '../../../models/author_spotlight_model.dart';
+import '../../../widgets/shimmer_widgets.dart';
 
 class SearchPage extends StatefulWidget{
   const SearchPage({super.key});
@@ -106,10 +107,19 @@ class _SearchPageState extends State<SearchPage> {
           spacing: 10,
           children: [
             Row(
-              spacing: 5,
               children: [
-                Icon(Icons.stars_rounded, color: Colors.black, size: 20,),
-                Text("Authors Spotlight", style: AppTextStyles.smallTextStyle,),
+                Expanded(
+                  child: Row(
+                    spacing: 5,
+                    children: [
+                      Icon(Icons.stars_rounded, color: Colors.black, size: 20,),
+                      Text("Authors Spotlight", style: AppTextStyles.smallTextStyle,),
+                    ],
+                  ),
+                ),
+                TextButton(onPressed: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AuthorsSpotLightPage()));
+                }, child: Text("See All"))
               ],
             ),
             SizedBox(
