@@ -346,21 +346,21 @@ class _SearchPageState extends State<SearchPage> {
             physics: NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 3/2), itemBuilder: (_, index) {
-            return Expanded(child: Container(
+            return Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-              color: AppColors.textFieldFillColor.withValues(alpha: 0.4),
-              borderRadius: BorderRadius.circular(10)
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Business", style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                const Spacer(),
-                Text('3 books', style: AppTextStyles.smallTextStyle,)
-              ],
-            ),
-            ));
+                  color: AppColors.textFieldFillColor.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Business", style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                  const Spacer(),
+                  Text('3 books', style: AppTextStyles.smallTextStyle,)
+                ],
+              ),
+            );
           }))
         ],
       ),
