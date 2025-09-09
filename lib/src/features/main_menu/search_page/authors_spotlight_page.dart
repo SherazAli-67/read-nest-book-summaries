@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:read_nest/src/features/main_menu/search_page/about_author_page.dart';
 import 'package:read_nest/src/models/author_spotlight_model.dart';
 import 'package:read_nest/src/providers/books_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
@@ -106,96 +107,101 @@ class _AuthorsSpotLightPageState extends State<AuthorsSpotLightPage> {
                 elevation: 1,
                 color: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Row(
-                    spacing: 5,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: AppColors.textFieldFillColor.withValues(alpha: 0.3),
-                        child: Center(child: Icon(author.categoryIcon),),
-                      ),
-                      Expanded(child:  Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          spacing: 15,
-                          children: [
-                            Column(
-                              spacing: 8,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(author.authorName, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                                Row(
-                                  children: [
-                                    Container(
-                                        padding: EdgeInsets.all(3),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(99),
-                                            color: AppColors.textFieldFillColor
-                                        ),
-                                        child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                                            child: Text(author.primaryCategory, style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                                        )),
-                                    const Spacer(),
-                                    Row(
-                                      spacing: 5,
-                                      children: [
-                                        Icon(Icons.person, color: Colors.grey, size: 15,),
-                                        Text("2.1M",style: TextStyle(fontSize: 10, color: Colors.grey),)
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Text(author.books[0].aboutAuthor, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.smallTextStyle,),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Expanded(child: Row(
-                                  spacing: 10,
-                                  children: [
-                                    Icon(Icons.menu_book_rounded, color: Colors.grey,),
-                                    Text('${author.books.length} books', style: TextStyle(fontSize: 12, color: Colors.grey),)
-                                  ],)),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(2),
-                                  child: CachedNetworkImage(
-                                    imageUrl: AppIcons.dummyBookImageUrl2,
-                                    height: 22,
-                                    width: 16,
-                                    fit: BoxFit.cover,
-                                    placeholder: (context, url) => Container(
-                                      height: 22,
-                                      width: 16,
-                                      color: Colors.grey[300],
-                                      child: Icon(
-                                        Icons.book,
-                                        size: 12,
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                    errorWidget: (context, url, error) => Container(
-                                      height: 22,
-                                      width: 16,
-                                      color: Colors.grey[300],
-                                      child: Icon(
-                                        Icons.book,
-                                        size: 12,
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
+                child: GestureDetector(
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (_)=> AboutAuthorPage(author: author)));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      spacing: 5,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          backgroundColor: AppColors.textFieldFillColor.withValues(alpha: 0.3),
+                          backgroundImage: CachedNetworkImageProvider(author.books.first.image),
                         ),
-                      ),),
+                        Expanded(child:  Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 15,
+                            children: [
+                              Column(
+                                spacing: 8,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(author.authorName, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
+                                  Row(
+                                    children: [
+                                      Container(
+                                          padding: EdgeInsets.all(3),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(99),
+                                              color: AppColors.textFieldFillColor
+                                          ),
+                                          child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                                              child: Text(author.primaryCategory, style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
+                                          )),
+                                      const Spacer(),
+                                      Row(
+                                        spacing: 5,
+                                        children: [
+                                          Icon(Icons.person, color: Colors.grey, size: 15,),
+                                          Text("2.1M",style: TextStyle(fontSize: 10, color: Colors.grey),)
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Text(author.books[0].aboutAuthor, maxLines: 2, overflow: TextOverflow.ellipsis, style: AppTextStyles.smallTextStyle,),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(child: Row(
+                                    spacing: 10,
+                                    children: [
+                                      Icon(Icons.menu_book_rounded, color: Colors.grey,),
+                                      Text('${author.books.length} books', style: TextStyle(fontSize: 12, color: Colors.grey),)
+                                    ],)),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(2),
+                                    child: CachedNetworkImage(
+                                      imageUrl: AppIcons.dummyBookImageUrl2,
+                                      height: 22,
+                                      width: 16,
+                                      fit: BoxFit.cover,
+                                      placeholder: (context, url) => Container(
+                                        height: 22,
+                                        width: 16,
+                                        color: Colors.grey[300],
+                                        child: Icon(
+                                          Icons.book,
+                                          size: 12,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                      errorWidget: (context, url, error) => Container(
+                                        height: 22,
+                                        width: 16,
+                                        color: Colors.grey[300],
+                                        child: Icon(
+                                          Icons.book,
+                                          size: 12,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),),
 
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );
