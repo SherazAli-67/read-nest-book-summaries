@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:read_nest/src/features/main_menu/home_page.dart';
 import 'package:read_nest/src/features/main_menu/home_page_optimized.dart';
-import 'package:read_nest/src/features/main_menu/home_page_updated.dart';
 import 'package:read_nest/src/features/main_menu/profile_page/profile_page.dart';
 import 'package:read_nest/src/features/main_menu/search_page.dart';
 import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
@@ -71,7 +69,7 @@ class MainMenuPage extends StatelessWidget{
       //   return ProfilePage();
 
       default:
-        return HomePage();
+        return OptimizedHomePage();
     }
   }
 

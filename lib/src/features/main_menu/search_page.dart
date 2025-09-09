@@ -134,7 +134,7 @@ class _SearchPageState extends State<SearchPage> {
                               width: 160,
                               margin: EdgeInsets.only(right: 10),
                               decoration: BoxDecoration(
-                                color: author.categoryColor.withOpacity(0.1),
+                                color: author.categoryColor.withValues(alpha: 0.1),
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),

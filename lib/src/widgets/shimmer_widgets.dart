@@ -161,7 +161,7 @@ class AuthorSpotlightShimmer extends StatelessWidget {
             width: 160,
             margin: const EdgeInsets.only(right: 10),
             decoration: BoxDecoration(
-              color: AppColors.textFieldFillColor.withOpacity(0.3),
+              color: AppColors.textFieldFillColor.withValues(alpha: 0.3),
               borderRadius: BorderRadius.circular(10),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
