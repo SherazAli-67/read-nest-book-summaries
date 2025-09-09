@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:read_nest/src/models/author_spotlight_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+import 'package:read_nest/src/widgets/home_page_categories_books_widget.dart';
 
 class AboutAuthorPage extends StatefulWidget{
   const AboutAuthorPage({super.key, required AuthorSpotlight author}): _author = author;
@@ -16,6 +17,7 @@ class _AboutAuthorPageState extends State<AboutAuthorPage> {
   final _searchTextEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
           elevation: 0,
@@ -25,77 +27,93 @@ class _AboutAuthorPageState extends State<AboutAuthorPage> {
           leading: IconButton(onPressed: ()=> Navigator.pop(context), icon: Icon(Icons.arrow_back_rounded)),
           title: Text("Authors Spotlight",style: AppTextStyles.regularTextStyle,)
       ),
-      body: SafeArea(child: Column(
-        spacing: 20,
-        children: [
-          _buildSearchBar(),
-          Container(
-            color: AppColors.textFieldFillColor,
-            padding: EdgeInsets.all(10),
-            child: Column(
-              spacing: 20,
-              children: [
-                Row(
-                  children: [
-                    IconButton(onPressed: ()=> Navigator.pop(context), icon: Icon(Icons.arrow_back_rounded)),
-                    Text("Back to authors", style: AppTextStyles.smallTextStyle,)
-                  ],
-                ),
-                Row(
-                  spacing: 10,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: CachedNetworkImage(imageUrl: widget._author.books.first.image, fit: BoxFit.cover, height: 75,),
-                    ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 5,
-                        children: [
-                          Text(widget._author.authorName, style: AppTextStyles.regularTextStyle,),
-                          Text(widget._author.books.first.aboutAuthor, maxLines: 3, overflow: TextOverflow.ellipsis, style: AppTextStyles.smallTextStyle.copyWith(color: Colors.grey),)
-                        ],
+      body: SafeArea(child: SingleChildScrollView(
+        child: Column(
+          spacing: 20,
+          children: [
+            _buildSearchBar(),
+            Container(
+              color: AppColors.textFieldFillColor,
+              padding: EdgeInsets.all(10),
+              child: Column(
+                spacing: 20,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(onPressed: ()=> Navigator.pop(context), icon: Icon(Icons.arrow_back_rounded)),
+                      Text("Back to authors", style: AppTextStyles.smallTextStyle,)
+                    ],
+                  ),
+                  Row(
+                    spacing: 10,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: CachedNetworkImage(imageUrl: widget._author.books.first.image, fit: BoxFit.cover, height: 75,),
                       ),
-                    )
-                  ],
-                ),
-                Row(
-                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  spacing: 10,
-                  children: [
-                    _buildAuthorInfoItemWidget(value: '850k', title: 'Followers'),
-                    _buildAuthorInfoItemWidget(value: '${widget._author.books.length}', title: 'Books'),
-                    _buildAuthorInfoItemWidget(value: '4.5', title: 'Rating'),
-
-                  ],
-                )
-              ],
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          spacing: 5,
+                          children: [
+                            Text(widget._author.authorName, style: AppTextStyles.regularTextStyle,),
+                            Text(widget._author.books.first.aboutAuthor, maxLines: 3, overflow: TextOverflow.ellipsis, style: AppTextStyles.smallTextStyle.copyWith(color: Colors.grey),)
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 10,
+                    children: [
+                      _buildAuthorInfoItemWidget(value: '850k', title: 'Followers'),
+                      _buildAuthorInfoItemWidget(value: '${widget._author.books.length}', title: 'Books'),
+                      _buildAuthorInfoItemWidget(value: '4.5', title: 'Rating'),
+        
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: AppColors.textFieldFillColor.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(15)
-            ),
-            padding: EdgeInsets.all(15),
-            child: Column(
-              spacing: 20,
-              children: [
-                Row(
-                  spacing: 10,
-                  children: [
-                    Icon(Icons.person),
-                    Text("About author", style: AppTextStyles.smallTextStyle,)
-                  ],
-                ),
-                Text(widget._author.books.first.aboutAuthor,  style: AppTextStyles.smallTextStyle,)
-              ],
-            ),
-          )
-        ],
+            Container(
+              margin: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: AppColors.textFieldFillColor.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(15)
+              ),
+              padding: EdgeInsets.all(15),
+              child: Column(
+                spacing: 20,
+                children: [
+                  Row(
+                    spacing: 10,
+                    children: [
+                      Icon(Icons.person),
+                      Text("About author", style: AppTextStyles.smallTextStyle,)
+                    ],
+                  ),
+                  Text(widget._author.books.first.aboutAuthor,  style: AppTextStyles.smallTextStyle,),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15.0),
+                    child: SizedBox(
+                      height: size.height * 0.4,
+                      width: size.width,
+                      child: HomePageCategoriesBooksWidget(
+                        width: size.width * 0.45,
+                        icon: Icons.trending_up,
+                        title: 'Books by ${widget._author.authorName}',
+                        books: widget._author.books,
+                        onSeeAllTap: () {},
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       )),
     );
   }
