@@ -65,7 +65,7 @@ class BooksService {
   static Future<List<Book>> getPopularBusinessBooks({int limit = 10}) async {
     try {
       final snapshot = await _booksCollection
-          .where('categories', arrayContains: 'Business')
+          .where('categories', arrayContains: 'Money & Investments')
           .limit(limit)
           .get();
 

@@ -26,6 +26,7 @@ class BooksProvider extends ChangeNotifier {
   List<Book> get recentlyAddedBooks => _recentlyAddedBooks;
   List<Book> get relatedBooks => _relatedBooks;
   List<AuthorSpotlight> get authorsSpotlight => _authorsSpotlight;
+
   bool get isLoading => _isLoading;
   bool get isLoadingRelated => _isLoadingRelated;
   bool get isRefreshing => _isRefreshing;
