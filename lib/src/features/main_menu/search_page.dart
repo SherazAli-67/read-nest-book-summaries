@@ -6,6 +6,7 @@ import 'package:read_nest/src/res/app_textstyle.dart';
 import '../../res/app_colors.dart';
 import '../../providers/books_provider.dart';
 import '../../models/author_spotlight_model.dart';
+import '../../widgets/shimmer_widgets.dart';
 
 class SearchPage extends StatefulWidget{
   const SearchPage({super.key});
@@ -113,8 +114,8 @@ class _SearchPageState extends State<SearchPage> {
             ),
             SizedBox(
               height: 150,
-              child: booksProvider.isLoading
-                  ? Center(child: CircularProgressIndicator())
+              child: booksProvider.isLoading && !booksProvider.hasCache
+                  ? const AuthorSpotlightShimmer()
                   : booksProvider.authorsSpotlight.isEmpty
                       ? Center(
                           child: Text(

@@ -10,7 +10,6 @@ import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/providers/user_preferences_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
-import 'package:read_nest/src/upload/upload_books_page.dart';
 
 Future<void> main() async {
    WidgetsFlutterBinding.ensureInitialized();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:read_nest/src/features/main_menu/home_page.dart';
+import 'package:read_nest/src/features/main_menu/home_page_optimized.dart';
 import 'package:read_nest/src/features/main_menu/home_page_updated.dart';
 import 'package:read_nest/src/features/main_menu/profile_page/profile_page.dart';
 import 'package:read_nest/src/features/main_menu/search_page.dart';
@@ -58,7 +59,7 @@ class MainMenuPage extends StatelessWidget{
   Widget _buildPage(int currentIndex) {
     switch(currentIndex){
       case 0:
-        return UpdatedHomePage();
+        return OptimizedHomePage();
 
       case 1:
         return SearchPage();

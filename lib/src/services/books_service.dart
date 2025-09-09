@@ -8,37 +8,51 @@ class BooksService {
   static final _booksCollection = _firestore.collection('books');
 
   // Fetch quick reads (books with short reading time)
-  static Future<List<Book>> getQuickReads({int maxMinutes = 20, int limit = 10}) async {
+  static Future<List<Book>> getQuickReads({
+    int maxMinutes = 20, 
+    int limit = 10,
+    int offset = 0,
+  }) async {
     try {
-      final snapshot = await _booksCollection
+      Query query = _booksCollection
           .where('timeInMinutes', isLessThanOrEqualTo: maxMinutes)
-          .orderBy('timeInMinutes')
-          .limit(limit)
-          .get();
+          .orderBy('timeInMinutes');
 
-      return snapshot.docs.map((doc) => Book.fromMap(doc.data())).toList();
+      if (offset > 0) {
+        // For pagination, we need to skip 'offset' number of documents
+        final skipSnapshot = await query.limit(offset).get();
+        if (skipSnapshot.docs.isNotEmpty) {
+          final lastDoc = skipSnapshot.docs.last;
+          query = query.startAfterDocument(lastDoc);
+        }
+      }
+
+      final snapshot = await query.limit(limit).get();
+      return snapshot.docs.map((doc) => Book.fromMap(doc.data() as Map<String, dynamic>)).toList();
     } catch (e) {
       throw Exception('Failed to fetch quick reads: $e');
     }
   }
 
   // Fetch trending books (you can add a trending field or use recent uploads)
-  static Future<List<Book>> getTrendingBooks({int limit = 10}) async {
+  static Future<List<Book>> getTrendingBooks({
+    int limit = 10,
+    int offset = 0,
+  }) async {
     try {
-      // Option 1: If you add a 'trending' boolean field
-      // final snapshot = await _booksCollection
-      //     .where('trending', isEqualTo: true)
-      //     .limit(limit)
-      //     .get();
+      Query query = _booksCollection;
 
-      // Option 2: For now, get most recent books
-      final snapshot = await _booksCollection
-          // .orderBy(FieldPath.documentId, descending: true)
-          .limit(limit)
-          .get();
+      if (offset > 0) {
+        final skipSnapshot = await query.limit(offset).get();
+        if (skipSnapshot.docs.isNotEmpty) {
+          final lastDoc = skipSnapshot.docs.last;
+          query = query.startAfterDocument(lastDoc);
+        }
+      }
 
+      final snapshot = await query.limit(limit).get();
       debugPrint("Trending length: ${snapshot.docs.length}");
-      List<Book> books = snapshot.docs.map((doc) => Book.fromMap(doc.data())).toList();
+      List<Book> books = snapshot.docs.map((doc) => Book.fromMap(doc.data() as Map<String, dynamic>)).toList();
       debugPrint("Trending books: ${books.length}");
 
       return books;

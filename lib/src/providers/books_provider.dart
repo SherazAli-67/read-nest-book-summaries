@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/book_model.dart';
 import '../models/author_spotlight_model.dart';
 import '../services/books_service.dart';
+import '../services/cache_service.dart';
 
 class BooksProvider extends ChangeNotifier {
   List<Book> _trendingBooks = [];
@@ -13,6 +14,8 @@ class BooksProvider extends ChangeNotifier {
 
   bool _isLoading = false;
   bool _isLoadingRelated = false;
+  bool _isRefreshing = false;
+  bool _hasCache = false;
   String? _error;
   Book? _currentBookForRelated;
 
@@ -25,13 +28,39 @@ class BooksProvider extends ChangeNotifier {
   List<AuthorSpotlight> get authorsSpotlight => _authorsSpotlight;
   bool get isLoading => _isLoading;
   bool get isLoadingRelated => _isLoadingRelated;
+  bool get isRefreshing => _isRefreshing;
+  bool get hasCache => _hasCache;
   String? get error => _error;
 
-  // Fetch all categories
-  Future<void> fetchAllBooks() async {
-    _isLoading = true;
+  // Fetch all categories with smart caching
+  Future<void> fetchAllBooks({bool forceRefresh = false}) async {
     _error = null;
-    notifyListeners();
+
+    // Check for cached data first (if not forcing refresh)
+    if (!forceRefresh) {
+      final hasFreshCache = await CacheService.hasFreshCache();
+      if (hasFreshCache) {
+        await _loadFromCache();
+        // Background refresh if online
+        if (await CacheService.isOnline()) {
+          _refreshInBackground();
+        }
+        return;
+      }
+    }
+
+    // Check if we have any cached data to show while loading
+    final cachedData = await CacheService.getAllCachedBooksData();
+    if (cachedData != null && !forceRefresh) {
+      await _loadFromCache();
+      _hasCache = true;
+      notifyListeners();
+    }
+
+    _isLoading = true;
+    if (!_hasCache) {
+      notifyListeners(); // Only notify if we don't have cached data to show
+    }
 
     try {
       debugPrint("Starting fetchAllBooks...");
@@ -44,28 +73,94 @@ class BooksProvider extends ChangeNotifier {
         BooksService.getAuthorsSpotlight(),
       ]);
 
-      debugPrint("Trending books fetched: ${results[0].length}");
-      debugPrint("Quick reads fetched: ${results[1].length}");
-      debugPrint("Business books fetched: ${results[2].length}");
-      debugPrint("Recent books fetched: ${results[3].length}");
-      debugPrint("Authors spotlight fetched: ${results[4].length}");
+      debugPrint("All data fetched successfully");
 
-      _trendingBooks = results[0];
-      _quickReads = results[1];
-      _popularBusinessBooks = results[2];
-      _recentlyAddedBooks = results[3];
-      _authorsSpotlight = results[4];
+      _trendingBooks = results[0] as List<Book>;
+      _quickReads = results[1] as List<Book>;
+      _popularBusinessBooks = results[2] as List<Book>;
+      _recentlyAddedBooks = results[3] as List<Book>;
+      _authorsSpotlight = results[4] as List<AuthorSpotlight>;
 
-      debugPrint("Provider state updated - Trending: ${_trendingBooks.length}");
-      debugPrint("Authors spotlight: ${_authorsSpotlight.length}");
+      // Cache the new data
+      await CacheService.cacheAllBooksData(
+        trendingBooks: _trendingBooks,
+        quickReads: _quickReads,
+        businessBooks: _popularBusinessBooks,
+        recentBooks: _recentlyAddedBooks,
+        authorsSpotlight: _authorsSpotlight,
+      );
+
+      debugPrint("Data cached successfully");
       
     } catch (e) {
       debugPrint("Error in fetchAllBooks: $e");
       _error = e.toString();
+      
+      // If we have cached data and there's an error, keep showing cached data
+      if (_hasCache) {
+        _error = null; // Don't show error if we have cached data
+        debugPrint("Error occurred but showing cached data");
+      }
     } finally {
       _isLoading = false;
-      debugPrint("Loading set to false, notifying listeners...");
+      _isRefreshing = false;
       notifyListeners();
+    }
+  }
+
+  // Load data from cache
+  Future<void> _loadFromCache() async {
+    final cachedData = await CacheService.getAllCachedBooksData();
+    if (cachedData != null) {
+      _trendingBooks = cachedData['trendingBooks'] as List<Book>;
+      _quickReads = cachedData['quickReads'] as List<Book>;
+      _popularBusinessBooks = cachedData['businessBooks'] as List<Book>;
+      _recentlyAddedBooks = cachedData['recentBooks'] as List<Book>;
+      _authorsSpotlight = cachedData['authorsSpotlight'] as List<AuthorSpotlight>;
+      _hasCache = true;
+      debugPrint("Data loaded from cache");
+    }
+  }
+
+  // Refresh data in background without showing loading
+  void _refreshInBackground() async {
+    if (_isRefreshing) return;
+    
+    _isRefreshing = true;
+    try {
+      debugPrint("Background refresh started...");
+      
+      final results = await Future.wait([
+        BooksService.getTrendingBooks(),
+        BooksService.getQuickReads(),
+        BooksService.getPopularBusinessBooks(),
+        BooksService.getRecentlyAddedBooks(),
+        BooksService.getAuthorsSpotlight(),
+      ]);
+
+      _trendingBooks = results[0] as List<Book>;
+      _quickReads = results[1] as List<Book>;
+      _popularBusinessBooks = results[2] as List<Book>;
+      _recentlyAddedBooks = results[3] as List<Book>;
+      _authorsSpotlight = results[4] as List<AuthorSpotlight>;
+
+      // Cache the refreshed data
+      await CacheService.cacheAllBooksData(
+        trendingBooks: _trendingBooks,
+        quickReads: _quickReads,
+        businessBooks: _popularBusinessBooks,
+        recentBooks: _recentlyAddedBooks,
+        authorsSpotlight: _authorsSpotlight,
+      );
+
+      debugPrint("Background refresh completed");
+      notifyListeners();
+      
+    } catch (e) {
+      debugPrint("Background refresh error: $e");
+      // Don't update error state for background refresh failures
+    } finally {
+      _isRefreshing = false;
     }
   }
 
@@ -122,7 +217,7 @@ class BooksProvider extends ChangeNotifier {
 
   // Refresh all data
   Future<void> refreshData() async {
-    await fetchAllBooks();
+    await fetchAllBooks(forceRefresh: true);
   }
 
   // Fetch related books for a specific book
