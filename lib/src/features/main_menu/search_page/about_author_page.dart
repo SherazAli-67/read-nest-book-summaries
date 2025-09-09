@@ -55,7 +55,7 @@ class _AboutAuthorPageState extends State<AboutAuthorPage> {
                         spacing: 5,
                         children: [
                           Text(widget._author.authorName, style: AppTextStyles.regularTextStyle,),
-                          Text(widget._author.books.first.aboutAuthor, maxLines: 5, overflow: TextOverflow.ellipsis, style: AppTextStyles.smallTextStyle.copyWith(color: Colors.grey),)
+                          Text(widget._author.books.first.aboutAuthor, maxLines: 3, overflow: TextOverflow.ellipsis, style: AppTextStyles.smallTextStyle.copyWith(color: Colors.grey),)
                         ],
                       ),
                     )
@@ -65,12 +65,33 @@ class _AboutAuthorPageState extends State<AboutAuthorPage> {
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   spacing: 10,
                   children: [
-                    _buildAuthorInfoWidget(value: '850k', title: 'Followers'),
-                    _buildAuthorInfoWidget(value: '${widget._author.books.length}', title: 'Books'),
-                    _buildAuthorInfoWidget(value: '4.5', title: 'Rating'),
+                    _buildAuthorInfoItemWidget(value: '850k', title: 'Followers'),
+                    _buildAuthorInfoItemWidget(value: '${widget._author.books.length}', title: 'Books'),
+                    _buildAuthorInfoItemWidget(value: '4.5', title: 'Rating'),
 
                   ],
                 )
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.textFieldFillColor.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(15)
+            ),
+            padding: EdgeInsets.all(15),
+            child: Column(
+              spacing: 20,
+              children: [
+                Row(
+                  spacing: 10,
+                  children: [
+                    Icon(Icons.person),
+                    Text("About author", style: AppTextStyles.smallTextStyle,)
+                  ],
+                ),
+                Text(widget._author.books.first.aboutAuthor,  style: AppTextStyles.smallTextStyle,)
               ],
             ),
           )
@@ -79,7 +100,7 @@ class _AboutAuthorPageState extends State<AboutAuthorPage> {
     );
   }
 
-  Widget _buildAuthorInfoWidget({required String value, required String title}) {
+  Widget _buildAuthorInfoItemWidget({required String value, required String title}) {
     return Expanded(
       child: Card(
         color: Colors.white,
