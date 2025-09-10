@@ -1,12 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/authentication/login_email_page.dart';
+import 'package:read_nest/src/features/main_menu/main_menu_page.dart';
 import 'package:read_nest/src/features/widgets/app_textfield_widget.dart';
 import 'package:read_nest/src/features/widgets/primary_btn.dart';
+import 'package:read_nest/src/models/user_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+import 'package:read_nest/src/res/firebase_const.dart';
 import 'package:read_nest/src/upload/upload_books_page.dart';
 
 class SignupPage extends StatefulWidget{
@@ -99,12 +103,18 @@ class _SignupPageState extends State<SignupPage> {
   void _onSignupTap()async{
     FirebaseAuth auth = FirebaseAuth.instance;
     setState(()=> _creatingAccount = true);
-    // String fName = _firstNameController.text.trim();
-    // String lName = _lastNameController.text.trim();
+    String fName = _firstNameController.text.trim();
+    String lName = _lastNameController.text.trim();
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
-    await auth.createUserWithEmailAndPassword(email: email, password: password);
-    setState(()=> _creatingAccount = false);
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> UploadBooksPage()), (_)=> false);
+    UserCredential credential = await auth.createUserWithEmailAndPassword(email: email, password: password);
+
+    if(credential.user != null){
+      String userID = credential.user!.uid;
+      UserModel user = UserModel(userID: userID, fName: fName, lName: lName, email: email);
+      await FirebaseFirestore.instance.collection(FirebaseConst.usersCollection).doc(userID).set(user.toMap());
+      setState(()=> _creatingAccount = false);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_)=> MainMenuPage()), (_)=> false);
+    }
   }
 }

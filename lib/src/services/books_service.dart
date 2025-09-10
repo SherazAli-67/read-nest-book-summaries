@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:read_nest/src/res/firebase_const.dart';
 import '../models/book_model.dart';
 import '../models/author_spotlight_model.dart';
 
@@ -224,4 +226,10 @@ class BooksService {
       throw Exception('Failed to fetch related books: $e');
     }
   }
+
+  /*static StreamBuilder<bool> getIsFav(String bookID) {
+    String currentUID = FirebaseAuth.instance.currentUser!.uid;
+
+    FirebaseFirestore.instance.collection(FirebaseConst.usersCollection).doc(currentUID);
+  }*/
 }

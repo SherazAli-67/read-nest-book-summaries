@@ -102,7 +102,7 @@ class _AboutAuthorPageState extends State<AboutAuthorPage> {
                       width: size.width,
                       child: HomePageCategoriesBooksWidget(
                         width: size.width * 0.45,
-                        icon: Icons.trending_up,
+                        icon: Icons.book_sharp,
                         title: 'Books by ${widget._author.authorName}',
                         books: widget._author.books,
                         onSeeAllTap: () {},

@@ -27,12 +27,15 @@ class HomePageCategoriesBooksWidget extends StatelessWidget{
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              spacing: 5,
-              children: [
-                Icon(_icon, color: Colors.black, size: 20,),
-                Text(_title, style: AppTextStyles.smallTextStyle,),
-              ],
+            Expanded(
+              child: Row(
+                spacing: 5,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(_icon, color: Colors.black, size: 20,),
+                  Expanded(child: Text(_title, style: AppTextStyles.smallTextStyle,)),
+                ],
+              ),
             ),
             TextButton(onPressed: _onSeeAllTap, child: Text("See All", style: AppTextStyles.smallTextStyle))
           ],

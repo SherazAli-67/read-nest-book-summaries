@@ -8,6 +8,7 @@ import 'package:read_nest/src/features/summary_reading/summary_reading_page.dart
 import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+import 'package:read_nest/src/services/books_service.dart';
 
 class SummaryDetailPage extends StatelessWidget{
   const SummaryDetailPage({super.key, required Book book}) : _book = book;
@@ -24,7 +25,14 @@ class SummaryDetailPage extends StatelessWidget{
           elevation: 0,
           actions: [
             IconButton(onPressed: (){}, icon: Icon(Icons.share)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border_rounded)),
+            IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border_rounded))
+           /*StreamBuilder(stream: BooksService.getIsFav(_book.bookID), builder: (_, snapshot){
+             if(snapshot.hasData){
+               // bool isFav = snapshot.requireData;
+               return  IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border_rounded));
+             }
+             return IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border_rounded));
+           })*/
           ],
         ),
         body: SafeArea(

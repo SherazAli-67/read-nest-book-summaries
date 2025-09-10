@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:read_nest/firebase_options.dart';
 import 'package:read_nest/src/features/authentication/login_email_page.dart';
+import 'package:read_nest/src/features/authentication/signup_email_page.dart';
 import 'package:read_nest/src/features/main_menu/main_menu_page.dart';
 import 'package:read_nest/src/providers/books_provider.dart';
 import 'package:read_nest/src/providers/categories_provider.dart';
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor, ),
         scaffoldBackgroundColor: Colors.white
       ),
-      home:  FirebaseAuth.instance.currentUser != null ? MainMenuPage() : LoginEmailPage()
+      home: FirebaseAuth.instance.currentUser != null ? MainMenuPage() : LoginEmailPage()
     );
   }
 }
