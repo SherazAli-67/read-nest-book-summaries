@@ -228,7 +228,6 @@ class BooksService {
   }
 
   static Future<void> addToFavorite({required String bookID,required bool isRemove})async {
-    debugPrint("On tap");
     String userID = FirebaseAuth.instance.currentUser!.uid;
     final userFavDoc = _firestore
         .collection(FirebaseConst.usersCollection)

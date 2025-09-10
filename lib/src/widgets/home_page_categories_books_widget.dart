@@ -143,7 +143,7 @@ class HomePageCategoriesBooksWidget extends StatelessWidget{
     );
   }
 
-  GestureDetector _buildFavIcon(String bookID, {bool isFav = false}) {
+  Widget _buildFavIcon(String bookID, {bool isFav = false}) {
     return GestureDetector(
       onTap: () => BooksService.addToFavorite(bookID: bookID, isRemove: isFav),
       child: Container(

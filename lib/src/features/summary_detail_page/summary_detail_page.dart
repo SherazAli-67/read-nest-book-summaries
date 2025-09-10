@@ -25,7 +25,16 @@ class SummaryDetailPage extends StatelessWidget{
           elevation: 0,
           actions: [
             IconButton(onPressed: (){}, icon: Icon(Icons.share)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.favorite_border_rounded))
+            StreamBuilder(
+              stream: BooksService.getIsFav(_book.bookID),
+              builder: (context, snapshot) {
+                if(snapshot.hasData){
+                  bool isFav = snapshot.requireData;
+                  return IconButton(onPressed: ()=> BooksService.addToFavorite(bookID: _book.bookID, isRemove: isFav), icon: isFav  ? Icon(Icons.favorite, color: Colors.red,) : Icon(Icons.favorite_border_rounded));
+                }
+                return IconButton(onPressed: ()=> BooksService.addToFavorite(bookID: _book.bookID, isRemove: false), icon: Icon(Icons.favorite_border_rounded));
+              }
+            )
            /*StreamBuilder(stream: BooksService.getIsFav(_book.bookID), builder: (_, snapshot){
              if(snapshot.hasData){
                // bool isFav = snapshot.requireData;

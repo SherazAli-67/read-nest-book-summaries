@@ -100,7 +100,7 @@ class _SummaryRelatedBooksState extends State<SummaryRelatedBooks> {
                     minLeadingWidth: 45,
                     leading: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: CachedNetworkImage(imageUrl: book.image,)),
+                        child: CachedNetworkImage(imageUrl: book.image, height: 45,)),
                     title: Text(book.bookName, style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
                     subtitle:  Row(
                       mainAxisSize: MainAxisSize.min,
