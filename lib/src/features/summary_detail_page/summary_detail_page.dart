@@ -9,6 +9,7 @@ import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:read_nest/src/services/books_service.dart';
+import 'package:read_nest/src/services/share_service.dart';
 
 class SummaryDetailPage extends StatelessWidget{
   const SummaryDetailPage({super.key, required Book book}) : _book = book;
@@ -24,7 +25,7 @@ class SummaryDetailPage extends StatelessWidget{
           scrolledUnderElevation: 0,
           elevation: 0,
           actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.share)),
+            IconButton(onPressed: () => ShareService.shareBook(_book), icon: Icon(Icons.share)),
             StreamBuilder(
               stream: BooksService.getIsFav(_book.bookID),
               builder: (context, snapshot) {

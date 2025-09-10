@@ -11,7 +11,6 @@ import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:read_nest/src/res/firebase_const.dart';
-import 'package:read_nest/src/upload/upload_books_page.dart';
 
 class SignupPage extends StatefulWidget{
   const SignupPage({super.key, required this.emailAddress});
