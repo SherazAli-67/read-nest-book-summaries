@@ -6,8 +6,10 @@ import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 import '../../../res/app_colors.dart';
 import '../../../providers/books_provider.dart';
+import '../../../providers/categories_provider.dart';
 import '../../../models/author_spotlight_model.dart';
 import '../../../widgets/shimmer_widgets.dart';
+import '../../../widgets/category_widgets.dart';
 
 class SearchPage extends StatefulWidget{
   const SearchPage({super.key});
@@ -22,6 +24,14 @@ class _SearchPageState extends State<SearchPage> {
     'Productivity', 'Motivation', 'Leadership', 'Business',  'Money', 'Psychology'
   ];
   String _selectedTrending = '';
+  
+  @override
+  void initState() {
+    super.initState();
+    // Fetch categories when the page loads
+    WidgetsBinding.instance.addPostFrameCallback((_)=> context.read<CategoriesProvider>().fetchCategories());
+  }
+  
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -328,42 +338,92 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  _buildAllCategories() {
-    return SizedBox(
-      height: 400,
-      child: Column(
-        spacing: 20,
-        children: [
-          Row(
-            spacing: 5,
+  Widget _buildAllCategories() {
+    return Consumer<CategoriesProvider>(
+      builder: (context, categoriesProvider, child) {
+        // Show shimmer while loading and no cache
+        if (categoriesProvider.isLoadingCategories && !categoriesProvider.hasCategoriesCache) {
+          return const CategoriesGridShimmer(itemCount: 6);
+        }
+
+        // Show error state
+        if (categoriesProvider.categoriesError != null && !categoriesProvider.hasCategoriesCache) {
+          return CategoriesErrorState(
+            error: categoriesProvider.categoriesError!,
+            onRetry: () => categoriesProvider.fetchCategories(forceRefresh: true),
+          );
+        }
+
+        // Show empty state
+        if (categoriesProvider.categories.isEmpty) {
+          return const CategoriesEmptyState();
+        }
+
+        // Calculate dynamic height
+        final dynamicHeight = categoriesProvider.calculateCategoriesGridHeight(
+          categoriesProvider.categories.length,
+        );
+
+        return SizedBox(
+          height: dynamicHeight,
+          child: Column(
+            spacing: 20,
             children: [
-              Icon(Icons.star_border_rounded, color: Colors.black, size: 20,),
-              Text("Browse All Categories", style: AppTextStyles.smallTextStyle,),
-            ],
-          ),
-          Expanded(child: GridView.builder(
-            itemCount: 7,
-            physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10, childAspectRatio: 3/2), itemBuilder: (_, index) {
-            return Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  color: AppColors.textFieldFillColor.withValues(alpha: 0.4),
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              // Section header
+              Row(
+                spacing: 5,
                 children: [
-                  Text("Business", style: AppTextStyles.regularTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                  const Spacer(),
-                  Text('3 books', style: AppTextStyles.smallTextStyle,)
+                  Icon(Icons.star_border_rounded, color: Colors.black, size: 20),
+                  Text("Browse All Categories", style: AppTextStyles.smallTextStyle),
                 ],
               ),
-            );
-          }))
-        ],
-      ),
+              
+              // Categories grid
+              Expanded(
+                child: GridView.builder(
+                  itemCount: categoriesProvider.categories.length,
+                  physics: const NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 3 / 2,
+                  ),
+                  itemBuilder: (context, index) {
+
+                    final category = categoriesProvider.categories[index];
+                    return CategoryCard(
+                      category: category,
+                      onTap: () {
+                        // TODO: Navigate to category books page
+                        debugPrint('Tapped on category: ${category.title}');
+                      },
+                    );
+                  },
+                ),
+              ),
+
+              // Show refresh indicator if refreshing in background
+              if (categoriesProvider.isRefreshingCategories)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      SizedBox(width: 8),
+                      Text('Updating categories...', style: TextStyle(fontSize: 12)),
+                    ],
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

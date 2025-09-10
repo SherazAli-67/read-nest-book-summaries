@@ -20,7 +20,7 @@ class CategoriesService {
           .map((doc) => Category.fromMap(doc.data()))
           .toList();
 
-      debugPrint('Categories fetched: ${categories.length}');
+      categories.sort((a, b)=> b.totalSummaries.compareTo(a.totalSummaries));
       return categories;
     } catch (e) {
       debugPrint('Error fetching categories: $e');
