@@ -9,6 +9,7 @@ import 'package:read_nest/src/features/main_menu/main_menu_page.dart';
 import 'package:read_nest/src/providers/books_provider.dart';
 import 'package:read_nest/src/providers/categories_provider.dart';
 import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
+import 'package:read_nest/src/providers/user_provider.dart';
 import 'package:read_nest/src/providers/user_preferences_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
@@ -23,6 +24,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => MainMenuTabChangeProvider()),
         ChangeNotifierProvider(create: (_) => BooksProvider()),
         ChangeNotifierProvider(create: (_) => CategoriesProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: MyApp(),
     ),

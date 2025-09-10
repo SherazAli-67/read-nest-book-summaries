@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:read_nest/src/data/app_data.dart';
+import 'package:read_nest/src/providers/user_provider.dart';
 import 'package:read_nest/src/providers/books_provider.dart';
 import 'package:read_nest/src/res/app_avatars.dart';
 import 'package:read_nest/src/res/app_colors.dart';
@@ -81,6 +82,10 @@ class _OptimizedHomePageState extends State<OptimizedHomePage> {
   }
 
   Widget _buildHeader() {
+    final userProvider = context.watch<UserProvider>();
+    final String greetingName = userProvider.currentUser != null
+        ? '${userProvider.currentUser!.fName} ${userProvider.currentUser!.lName}'
+        : 'Reader';
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -94,7 +99,7 @@ class _OptimizedHomePageState extends State<OptimizedHomePage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Hi, Sheraz", style: AppTextStyles.titleTextStyle),
+                Text("Hi, $greetingName", style: AppTextStyles.titleTextStyle),
                 Text("Good Morning", style: AppTextStyles.regularTextStyle),
               ],
             ),
