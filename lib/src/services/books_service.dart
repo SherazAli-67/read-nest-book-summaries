@@ -227,9 +227,43 @@ class BooksService {
     }
   }
 
-  /*static StreamBuilder<bool> getIsFav(String bookID) {
-    String currentUID = FirebaseAuth.instance.currentUser!.uid;
+  static Future<void> addToFavorite({required String bookID,required bool isRemove})async {
+    debugPrint("On tap");
+    String userID = FirebaseAuth.instance.currentUser!.uid;
+    final userFavDoc = _firestore
+        .collection(FirebaseConst.usersCollection)
+        .doc(userID)
+        .collection(FirebaseConst.favoritesCollection)
+        .doc(bookID);
 
-    FirebaseFirestore.instance.collection(FirebaseConst.usersCollection).doc(currentUID);
-  }*/
+    final bookFavDoc = _firestore
+        .collection(FirebaseConst.booksCollection)
+        .doc(bookID)
+        .collection(FirebaseConst.favoritesCollection)
+        .doc(userID);
+
+    if (isRemove) {
+      await Future.wait([
+        userFavDoc.delete(),
+        bookFavDoc.delete(),
+      ]);
+    } else {
+      await Future.wait([
+        userFavDoc.set({'bookID' : bookID}),
+        bookFavDoc.set({'userID' : userID}),
+      ]);
+    }
+
+  }
+
+  static Stream<bool> getIsFav(String bookID) {
+    String currentUID = FirebaseAuth.instance.currentUser!.uid;
+    return _firestore
+        .collection(FirebaseConst.usersCollection)
+        .doc(currentUID)
+        .collection(FirebaseConst.favoritesCollection)
+        .doc(bookID)
+        .snapshots()
+        .map((snapshot)=> snapshot.exists);
+  }
 }

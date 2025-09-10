@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_detail_page.dart';
 import 'package:read_nest/src/models/book_model.dart';
+import 'package:read_nest/src/services/books_service.dart';
 
 import '../res/app_colors.dart';
 import '../res/app_textstyle.dart';
@@ -81,13 +82,15 @@ class HomePageCategoriesBooksWidget extends StatelessWidget{
                                   Positioned(
                                       right: 10,
                                       top: 10,
-                                      child: Container(
-                                        padding: EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                            color: AppColors.textFieldFillColor,
-                                            shape: BoxShape.circle
-                                        ),
-                                        child: Icon(Icons.favorite_border, color: Colors.black45, size: 18,),)),
+                                      child: StreamBuilder(
+                                        stream: BooksService.getIsFav(book.bookID),
+                                        builder: (_, snapshot){
+                                          if(snapshot.hasData){
+                                            return _buildFavIcon(book.bookID, isFav: snapshot.requireData);
+                                          }
+                                          return _buildFavIcon(book.bookID);
+                                        },
+                                      )),
                                   Positioned(
                                       left: 10,
                                       bottom: 10,
@@ -137,6 +140,20 @@ class HomePageCategoriesBooksWidget extends StatelessWidget{
                 }),
         ),
       ],
+    );
+  }
+
+  GestureDetector _buildFavIcon(String bookID, {bool isFav = false}) {
+    return GestureDetector(
+      onTap: () => BooksService.addToFavorite(bookID: bookID, isRemove: isFav),
+      child: Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              color: AppColors.textFieldFillColor,
+              shape: BoxShape.circle
+          ),
+          child: isFav ? Icon(Icons.favorite, color: Colors.red, size: 18,) : Icon(Icons.favorite_border, color: Colors.black45, size: 18,)
+      ),
     );
   }
   
