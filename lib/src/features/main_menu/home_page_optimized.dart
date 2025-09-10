@@ -9,8 +9,8 @@ import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:read_nest/src/widgets/home_page_categories_books_widget.dart';
+import 'package:read_nest/src/widgets/searchbar_clickable_widget.dart';
 import 'package:read_nest/src/widgets/shimmer_widgets.dart';
-import 'package:read_nest/src/features/search_page.dart';
 
 class OptimizedHomePage extends StatefulWidget {
   const OptimizedHomePage({super.key});
@@ -56,7 +56,7 @@ class _OptimizedHomePageState extends State<OptimizedHomePage> {
                     spacing: 20,
                     children: [
                       _buildHeader(),
-                      _buildSearchBar(),
+                      SearchBarClickableWidget(),
                       _buildCategoryFilter(),
                     ],
                   ),
@@ -114,31 +114,7 @@ class _OptimizedHomePageState extends State<OptimizedHomePage> {
     );
   }
 
-  Widget _buildSearchBar() {
-    return GestureDetector(
-      onTap: (){
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const SearchPage()),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.textFieldFillColor,
-          borderRadius: BorderRadius.circular(99)
-        ),
-        padding: EdgeInsets.all(10),
-        child: Row(
-          spacing: 5,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(Icons.search_rounded),
-            Text("Search summaries", style: AppTextStyles.smallTextStyle,)
-          ],
-        ),
-      ),
-    );
-  }
+
 
   Widget _buildCategoryFilter() {
     return SizedBox(

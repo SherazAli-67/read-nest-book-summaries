@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:read_nest/src/features/category_books_page.dart';
 import 'package:shimmer/shimmer.dart';
 import '../models/category_model.dart';
 import '../res/app_colors.dart';
@@ -16,7 +17,54 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ElevatedButton(
+      onPressed: (){
+        Navigator.of(context).push(MaterialPageRoute(builder: (_)=> CategoryBooksPage(category: category)));
+      },
+      style: ElevatedButton.styleFrom(
+        alignment: Alignment.centerLeft,
+        backgroundColor: AppColors.textFieldFillColor.withValues(alpha: 0.4),
+        elevation: 0,
+        padding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(
+            color: AppColors.textFieldFillColor.withValues(alpha: 0.6),
+          ),
+        ),
+      ),
+      child:
+
+      Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          // Category title
+          Text(
+            category.title,
+            style: AppTextStyles.regularTextStyle.copyWith(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+                color: Colors.black
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 8),
+          // Book count
+          Text(
+            '${category.totalSummaries} ${category.totalSummaries == 1 ? 'book' : 'books'}',
+            style: AppTextStyles.smallTextStyle.copyWith(
+              color: Colors.grey[600],
+              fontSize: 12,
+            ),
+          ),
+        ],
+            ),
+      ),);
+   /* return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(12),
@@ -56,7 +104,7 @@ class CategoryCard extends StatelessWidget {
           ],
         ),
       ),
-    );
+    );*/
   }
 }
 

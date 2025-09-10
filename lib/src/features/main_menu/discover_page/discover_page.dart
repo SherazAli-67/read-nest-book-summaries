@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+import 'package:read_nest/src/widgets/searchbar_clickable_widget.dart';
 import '../../../res/app_colors.dart';
 import '../../../providers/books_provider.dart';
 import '../../../providers/categories_provider.dart';
@@ -20,7 +21,6 @@ class DiscoverPage extends StatefulWidget{
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-  final TextEditingController _searchTextEditingController = TextEditingController();
   final List<String>  _trendingSearches = [
     'Productivity', 'Motivation', 'Leadership', 'Business',  'Money', 'Psychology'
   ];
@@ -47,27 +47,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
               Icon(Icons.filter_alt_rounded)
             ],
           ),
-          SizedBox(
-            height: 45,
-            child: TextField(
-              controller: _searchTextEditingController,
-              decoration: InputDecoration(
-                  fillColor: AppColors.textFieldFillColor.withValues(alpha: 0.5),
-                  filled: true,
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(99),
-                      borderSide: BorderSide(color: Colors.transparent)
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(99),
-                      borderSide: BorderSide(color: Colors.transparent)
-                  ),
-                  hintText: 'Search books',
-                  hintStyle: AppTextStyles.smallTextStyle,
-                  prefixIcon: Icon(Icons.search_rounded)
-              ),
-            ),
-          ),
+          SearchBarClickableWidget(),
           _buildTrendingSearches(),
           _buildAuthorsSpotLight(),
           _buildReadingGoals(),
@@ -378,7 +358,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 spacing: 5,
                 children: [
                   Icon(Icons.star_border_rounded, color: Colors.black, size: 20),
-                  Text("Browse All Categories", style: AppTextStyles.smallTextStyle),
+                  // Text("Browse All Categories", style: AppTextStyles.smallTextStyle),
                 ],
               ),
               

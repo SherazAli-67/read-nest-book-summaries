@@ -102,15 +102,30 @@ class BooksService {
     }
   }
 
-  // Fetch books by category
-  static Future<List<Book>> getBooksByCategory(String category, {int limit = 10}) async {
+  // Fetch books by category with pagination support
+  static Future<Map<String, dynamic>> getBooksByCategory(
+    String category, {
+    int limit = 10,
+    DocumentSnapshot? lastDocument,
+  }) async {
     try {
-      final snapshot = await _booksCollection
-          .where('categories', arrayContains: category)
-          .limit(limit)
-          .get();
-
-      return snapshot.docs.map((doc) => Book.fromMap(doc.data())).toList();
+      Query query = _booksCollection
+          .where('categories', arrayContains: category);
+          // .orderBy('createdOn', descending: true);
+      
+      if (lastDocument != null) {
+        query = query.startAfterDocument(lastDocument);
+      }
+      
+      final snapshot = await query.limit(limit).get();
+      
+      List<Book> books = snapshot.docs.map((doc) => Book.fromMap(doc.data() as Map<String,dynamic>)).toList();
+      
+      return {
+        'books': books,
+        'lastDocument': snapshot.docs.isNotEmpty ? snapshot.docs.last : null,
+        'hasMore': snapshot.docs.length == limit,
+      };
     } catch (e) {
       throw Exception('Failed to fetch books by category: $e');
     }
