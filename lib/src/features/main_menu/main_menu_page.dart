@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:read_nest/src/features/main_menu/home_page_optimized.dart';
 import 'package:read_nest/src/features/main_menu/profile_page/profile_page.dart';
-import 'package:read_nest/src/features/main_menu/search_page/search_page.dart';
+import 'package:read_nest/src/features/main_menu/discover_page/discover_page.dart';
 import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
@@ -60,7 +60,7 @@ class MainMenuPage extends StatelessWidget{
         return OptimizedHomePage();
 
       case 1:
-        return SearchPage();
+        return DiscoverPage();
 
       case 2:
         return ProfilePage();

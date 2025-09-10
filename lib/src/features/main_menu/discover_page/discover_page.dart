@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:read_nest/src/features/main_menu/search_page/about_author_page.dart';
-import 'package:read_nest/src/features/main_menu/search_page/authors_spotlight_page.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 import '../../../res/app_colors.dart';
@@ -11,15 +9,17 @@ import '../../../providers/categories_provider.dart';
 import '../../../models/author_spotlight_model.dart';
 import '../../../widgets/shimmer_widgets.dart';
 import '../../../widgets/category_widgets.dart';
+import 'about_author_page.dart';
+import 'authors_spotlight_page.dart';
 
-class SearchPage extends StatefulWidget{
-  const SearchPage({super.key});
+class DiscoverPage extends StatefulWidget{
+  const DiscoverPage({super.key});
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<DiscoverPage> createState() => _DiscoverPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _DiscoverPageState extends State<DiscoverPage> {
   final TextEditingController _searchTextEditingController = TextEditingController();
   final List<String>  _trendingSearches = [
     'Productivity', 'Motivation', 'Leadership', 'Business',  'Money', 'Psychology'

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:read_nest/src/models/book_model.dart';
+import 'package:read_nest/src/services/books_service.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ShareService {
@@ -8,10 +9,14 @@ class ShareService {
     final shareText = _formatBookShareText(book);
     
     try {
-      await Share.share(
+      final result = await Share.shareWithResult(
         shareText,
         subject: 'Check out "${book.bookName}" on ReadNest',
       );
+      if(result.status == ShareResultStatus.success){
+        //add to Firebase
+        BooksService.addToShare(bookID: book.bookID);
+      }
     } catch (e) {
       // Handle sharing error gracefully
       if (kDebugMode) {

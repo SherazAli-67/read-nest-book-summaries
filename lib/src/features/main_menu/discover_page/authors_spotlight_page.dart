@@ -1,12 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:read_nest/src/features/main_menu/search_page/about_author_page.dart';
 import 'package:read_nest/src/models/author_spotlight_model.dart';
 import 'package:read_nest/src/providers/books_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+
+import 'about_author_page.dart';
 
 class AuthorsSpotLightPage extends StatefulWidget{
   const AuthorsSpotLightPage({super.key});

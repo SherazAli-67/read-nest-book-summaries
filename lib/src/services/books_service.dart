@@ -265,4 +265,14 @@ class BooksService {
         .snapshots()
         .map((snapshot)=> snapshot.exists);
   }
+
+  static Future<void> addToShare({required String bookID})async {
+    String userID = FirebaseAuth.instance.currentUser!.uid;
+    await _firestore
+        .collection(FirebaseConst.booksCollection)
+        .doc(bookID)
+        .collection(FirebaseConst.summarySharedCollection).add({
+      'userID': userID
+    });
+  }
 }

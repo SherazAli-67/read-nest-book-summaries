@@ -19,7 +19,8 @@ class _SummaryRelatedBooksState extends State<SummaryRelatedBooks> {
   void initState() {
     super.initState();
     // Fetch related books when the widget loads
-    WidgetsBinding.instance.addPostFrameCallback((_) => context.read<BooksProvider>().fetchRelatedBooks(widget.currentBook));
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        context.read<BooksProvider>().fetchRelatedBooks(widget.currentBook));
   }
 
   @override
@@ -43,7 +44,8 @@ class _SummaryRelatedBooksState extends State<SummaryRelatedBooks> {
                 ),
                 SizedBox(height: 8),
                 ElevatedButton(
-                  onPressed: () => booksProvider.fetchRelatedBooks(widget.currentBook),
+                  onPressed: () =>
+                      booksProvider.fetchRelatedBooks(widget.currentBook),
                   child: Text('Retry'),
                 ),
               ],
@@ -65,7 +67,8 @@ class _SummaryRelatedBooksState extends State<SummaryRelatedBooks> {
                 SizedBox(height: 8),
                 Text(
                   'Try exploring other books in our collection',
-                  style: AppTextStyles.smallTextStyle.copyWith(color: Colors.grey),
+                  style: AppTextStyles.smallTextStyle.copyWith(
+                      color: Colors.grey),
                 ),
               ],
             ),
@@ -83,58 +86,68 @@ class _SummaryRelatedBooksState extends State<SummaryRelatedBooks> {
                   Icon(Icons.auto_stories, color: Colors.grey),
                   Text(
                     'You might also like',
-                    style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),
+                    style: AppTextStyles.smallTextStyle.copyWith(
+                        fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
               SizedBox(height: 20),
               ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: booksProvider.relatedBooks.length,
-                itemBuilder: (ctx, index){
-                final book = booksProvider.relatedBooks[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ListTile(
-                    minLeadingWidth: 45,
-                    leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(5),
-                        child: CachedNetworkImage(imageUrl: book.image, height: 45,)),
-                    title: Text(book.bookName, style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                    subtitle:  Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 10,
-                      children: [
-                        Expanded(child: Text(book.author)),
-                        Container(
-                            padding: EdgeInsets.all(3),
-                            decoration: BoxDecoration(
-                                color: AppColors.textFieldFillColor.withValues(alpha: 0.7),
-                                borderRadius: BorderRadius.circular(99)
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                spacing: 4,
-                                children: [
-                                  Icon(Icons.access_time_outlined, size: 18,),
-                                  Text(book.time, style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12, fontWeight: FontWeight.w600),)
-                                ],
-                              ),
-                            )),
-                      ],
-                    ),
-                  ),
-                );
-              })
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: booksProvider.relatedBooks.length,
+                  itemBuilder: (ctx, index) {
+                    final book = booksProvider.relatedBooks[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ListTile(
+                        leading: SizedBox(
+                          height: 45,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: CachedNetworkImage(
+                                imageUrl: book.image, height: 45,)),
+                        ),
+                        title: Text(book.bookName, style: AppTextStyles
+                            .smallTextStyle.copyWith(fontWeight: FontWeight
+                            .w600),),
+                        subtitle: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 10,
+                          children: [
+                            Expanded(child: Text(book.author)),
+                            Container(
+                                padding: EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                    color: AppColors.textFieldFillColor
+                                        .withValues(alpha: 0.7),
+                                    borderRadius: BorderRadius.circular(99)
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    spacing: 4,
+                                    children: [
+                                      Icon(
+                                        Icons.access_time_outlined, size: 18,),
+                                      Text(book.time,
+                                        style: AppTextStyles.smallTextStyle
+                                            .copyWith(fontSize: 12,
+                                            fontWeight: FontWeight.w600),)
+                                    ],
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ),
+                    );
+                  })
             ],
           ),
         );
       },
     );
   }
-
-
 }

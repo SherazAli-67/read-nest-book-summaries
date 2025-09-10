@@ -10,6 +10,7 @@ import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:read_nest/src/widgets/home_page_categories_books_widget.dart';
 import 'package:read_nest/src/widgets/shimmer_widgets.dart';
+import 'package:read_nest/src/features/search_page.dart';
 
 class OptimizedHomePage extends StatefulWidget {
   const OptimizedHomePage({super.key});
@@ -114,24 +115,26 @@ class _OptimizedHomePageState extends State<OptimizedHomePage> {
   }
 
   Widget _buildSearchBar() {
-    return SizedBox(
-      height: 45,
-      child: TextField(
-        controller: _searchTextEditingController,
-        decoration: InputDecoration(
-          fillColor: AppColors.textFieldFillColor,
-          filled: true,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(99),
-            borderSide: const BorderSide(color: Colors.transparent),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(99),
-            borderSide: const BorderSide(color: Colors.transparent),
-          ),
-          hintText: 'Search books',
-          hintStyle: AppTextStyles.smallTextStyle,
-          prefixIcon: const Icon(Icons.search_rounded),
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SearchPage()),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.textFieldFillColor,
+          borderRadius: BorderRadius.circular(99)
+        ),
+        padding: EdgeInsets.all(10),
+        child: Row(
+          spacing: 5,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.search_rounded),
+            Text("Search summaries", style: AppTextStyles.smallTextStyle,)
+          ],
         ),
       ),
     );
