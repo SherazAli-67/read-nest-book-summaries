@@ -7,7 +7,9 @@ import 'package:read_nest/src/widgets/searchbar_clickable_widget.dart';
 import '../../../res/app_colors.dart';
 import '../../../providers/books_provider.dart';
 import '../../../providers/categories_provider.dart';
+import '../../../providers/reading_goals_provider.dart';
 import '../../../models/author_spotlight_model.dart';
+import '../../../models/reading_goal_model.dart';
 import '../../../widgets/shimmer_widgets.dart';
 import '../../../widgets/category_widgets.dart';
 import 'about_author_page.dart';
@@ -29,8 +31,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
   @override
   void initState() {
     super.initState();
-    // Fetch categories when the page loads
-    WidgetsBinding.instance.addPostFrameCallback((_)=> context.read<CategoriesProvider>().fetchCategories());
+    // Fetch categories and goals when the page loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CategoriesProvider>().fetchCategories();
+      context.read<ReadingGoalsProvider>().fetchGoalTemplates();
+    });
   }
   
   @override
@@ -40,18 +45,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
       child: Column(
         spacing: 20,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Discover", style: AppTextStyles.regularTextStyle,),
-              Icon(Icons.filter_alt_rounded)
-            ],
-          ),
+          Text("Discover", style: AppTextStyles.regularTextStyle,),
           SearchBarClickableWidget(),
           _buildTrendingSearches(),
           _buildAuthorsSpotLight(),
           _buildReadingGoals(),
-          _buildMostSearchedThisWeek(),
+          // _buildMostSearchedThisWeek(),
           _buildAllCategories()
         ],
       ),
@@ -235,56 +234,207 @@ class _DiscoverPageState extends State<DiscoverPage> {
   }
 
   _buildReadingGoals() {
-    return SizedBox(
-      height: 450,
-      child: Column(
-        spacing: 10,
-        children: [
-          Row(
-            spacing: 5,
+    return Consumer<ReadingGoalsProvider>(
+      builder: (context, goalsProvider, child) {
+        return SizedBox(
+          height: 450,
+          child: Column(
+            spacing: 10,
             children: [
-              Icon(Icons.ac_unit_rounded, color: Colors.black, size: 20,),
-              Text("Reading Goals", style: AppTextStyles.smallTextStyle,),
+              Row(
+                spacing: 5,
+                children: [
+                  Icon(Icons.track_changes_rounded, color: Colors.black, size: 20,),
+                  Text("Reading Goals", style: AppTextStyles.smallTextStyle,),
+                ],
+              ),
+              Expanded(
+                child: goalsProvider.isLoading
+                    ? _buildGoalsShimmer()
+                    : goalsProvider.goalTemplates.isEmpty
+                        ? _buildEmptyGoalsState()
+                        : GridView.builder(
+                            itemCount: goalsProvider.goalTemplates.length.clamp(0, 4),
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, 
+                              crossAxisSpacing: 10, 
+                              mainAxisSpacing: 15
+                            ), 
+                            itemBuilder: (context, index) {
+                              final goal = goalsProvider.goalTemplates[index];
+                              final isActive = goalsProvider.hasActiveGoalOfType(goal.type);
+                              
+                              return GestureDetector(
+                                onTap: () => _onGoalTapped(goal, goalsProvider),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: goal.color.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: isActive 
+                                          ? Border.all(color: goal.color, width: 2)
+                                          : null,
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    spacing: 8,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(goal.icon, color: goal.color, size: 24),
+                                          Spacer(),
+                                          if (isActive)
+                                            Container(
+                                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                              decoration: BoxDecoration(
+                                                color: goal.color,
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              child: Text(
+                                                'ACTIVE',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 8,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                        ],
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              goal.title, 
+                                              style: AppTextStyles.smallTextStyle.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              goal.targetType == 'books'
+                                                  ? '${goal.targetValue} books'
+                                                  : '${goal.targetValue} minutes',
+                                              style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),
+                                            ),
+                                            SizedBox(height: 4),
+                                            Text(
+                                              goal.description,
+                                              style: AppTextStyles.smallTextStyle.copyWith(
+                                                fontSize: 10,
+                                                color: Colors.grey[600],
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      // Difficulty indicator
+                                      Container(
+                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: _getDifficultyColor(goal.difficulty).withValues(alpha: 0.2),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Text(
+                                          goal.difficulty.toUpperCase(),
+                                          style: TextStyle(
+                                            color: _getDifficultyColor(goal.difficulty),
+                                            fontSize: 8,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                          ),
+              ),
             ],
           ),
-          Expanded(
-            child: GridView.builder(
-                itemCount: 4,
-                physics: NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 15), itemBuilder: (_, index){
-              return Container(
-                margin: EdgeInsets.only(right: 10, bottom: 10),
-                decoration: BoxDecoration(
-                    color: AppColors.primaryColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(10)
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: 10,
-                  children: [
-                    Icon(Icons.attach_money_rounded, color: Colors.amber,),
-                    Text("Wealth Building", style: AppTextStyles.smallTextStyle.copyWith(fontWeight: FontWeight.w600),),
-                    Text('4 books', style: AppTextStyles.smallTextStyle.copyWith(fontSize: 12),),
-                    Wrap(
-                      spacing: 5,
-                      children: List.generate(4, (index){
-                        return ClipRRect(
-                            borderRadius: BorderRadius.circular(2),
-                            child: CachedNetworkImage(imageUrl: AppIcons.dummyBookImageUrl2, height: 25,));
-                      }),
-                    )
-                  ],
-                ),
-              );
-            }),
+        );
+      },
+    );
+  }
+
+  Widget _buildGoalsShimmer() {
+    return GridView.builder(
+      itemCount: 4,
+      physics: NeverScrollableScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, 
+        crossAxisSpacing: 10, 
+        mainAxisSpacing: 15
+      ),
+      itemBuilder: (context, index) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildEmptyGoalsState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.track_changes_rounded, size: 48, color: Colors.grey),
+          SizedBox(height: 8),
+          Text(
+            'No reading goals available',
+            style: AppTextStyles.smallTextStyle.copyWith(color: Colors.grey),
           ),
         ],
       ),
     );
   }
 
-  _buildMostSearchedThisWeek() {
+  Color _getDifficultyColor(String difficulty) {
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return Colors.green;
+      case 'medium':
+        return Colors.orange;
+      case 'hard':
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  void _onGoalTapped(ReadingGoal goal, ReadingGoalsProvider provider) {
+    // For now, just show a snackbar. Later we'll add proper goal selection UI
+    final hasActive = provider.hasActiveGoalOfType(goal.type);
+    
+    if (hasActive) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('You already have an active ${goal.type} goal'),
+          backgroundColor: Colors.blue,
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Goal selection coming soon: ${goal.title}'),
+          backgroundColor: goal.color,
+        ),
+      );
+    }
+  }
+
+  /*_buildMostSearchedThisWeek() {
     return Column(
       spacing: 10,
       children: [
@@ -320,7 +470,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
         )
       ],
     );
-  }
+  }*/
 
   Widget _buildAllCategories() {
     return Consumer<CategoriesProvider>(
@@ -358,7 +508,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 spacing: 5,
                 children: [
                   Icon(Icons.star_border_rounded, color: Colors.black, size: 20),
-                  // Text("Browse All Categories", style: AppTextStyles.smallTextStyle),
+                  Expanded(child: Text("Browse All Categories", style: AppTextStyles.smallTextStyle)),
                 ],
               ),
               
