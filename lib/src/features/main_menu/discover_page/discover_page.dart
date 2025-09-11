@@ -14,6 +14,7 @@ import '../../../widgets/shimmer_widgets.dart';
 import '../../../widgets/category_widgets.dart';
 import 'about_author_page.dart';
 import 'authors_spotlight_page.dart';
+import '../../reading_goals/reading_goal_detail_page.dart';
 
 class DiscoverPage extends StatefulWidget{
   const DiscoverPage({super.key});
@@ -414,24 +415,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
   }
 
   void _onGoalTapped(ReadingGoal goal, ReadingGoalsProvider provider) {
-    // For now, just show a snackbar. Later we'll add proper goal selection UI
-    final hasActive = provider.hasActiveGoalOfType(goal.type);
-    
-    if (hasActive) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('You already have an active ${goal.type} goal'),
-          backgroundColor: Colors.blue,
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Goal selection coming soon: ${goal.title}'),
-          backgroundColor: goal.color,
-        ),
-      );
-    }
+    // Navigate to the goal detail page
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ReadingGoalDetailPage(goal: goal),
+      ),
+    );
   }
 
   /*_buildMostSearchedThisWeek() {

@@ -6,6 +6,7 @@ import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:read_nest/src/services/books_service.dart';
+import 'package:read_nest/src/widgets/book_card_shimmer.dart';
 import 'package:read_nest/src/widgets/book_card_widget.dart';
 
 import '../models/category_model.dart';
@@ -218,7 +219,7 @@ class _CategoryBooksPageState extends State<CategoryBooksPage> {
                     childAspectRatio: 0.7,
                   ),
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => const BookCardShimmer(),
+                    (context, index) => const GridBookCardShimmer(),
                     childCount: 6,
                   ),
                 ),

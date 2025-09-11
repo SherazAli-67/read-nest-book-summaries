@@ -13,7 +13,6 @@ import 'package:read_nest/src/providers/user_preferences_provider.dart';
 import 'package:read_nest/src/providers/reading_goals_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
-import 'package:read_nest/src/upload/upload_goals_page.dart';
 
 Future<void> main() async {
    WidgetsFlutterBinding.ensureInitialized();
