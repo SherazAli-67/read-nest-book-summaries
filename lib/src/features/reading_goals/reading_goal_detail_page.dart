@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:read_nest/src/widgets/book_card_shimmer.dart';
 import '../../models/reading_goal_model.dart';
 import '../../models/user_goal_model.dart';
@@ -11,7 +10,6 @@ import '../../services/books_service.dart';
 import '../../res/app_textstyle.dart';
 import '../../res/app_colors.dart';
 import '../../widgets/book_card_widget.dart';
-import '../../widgets/shimmer_widgets.dart';
 
 class ReadingGoalDetailPage extends StatefulWidget {
   final ReadingGoal goal;
@@ -339,7 +337,7 @@ class _ReadingGoalDetailPageState extends State<ReadingGoalDetailPage>
               const SizedBox(height: 20),
               
               if (hasActiveGoal) ...[
-                _buildProgressBar(userGoal!),
+                _buildProgressBar(userGoal),
                 const SizedBox(height: 16),
                 _buildProgressStats(userGoal),
                 const SizedBox(height: 20),

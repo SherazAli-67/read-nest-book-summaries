@@ -280,8 +280,8 @@ class ReadingGoalsProvider extends ChangeNotifier {
 
   // Get total books read this month
   int get booksReadThisMonth {
-    final now = DateTime.now();
-    final startOfMonth = DateTime(now.year, now.month, 1);
+    // final now = DateTime.now();
+    // final startOfMonth = DateTime(now.year, now.month, 1);
     
     int totalBooks = 0;
     for (final goal in _activeGoals) {

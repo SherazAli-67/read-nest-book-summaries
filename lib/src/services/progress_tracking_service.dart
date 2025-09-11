@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:read_nest/src/models/achievement_model.dart';
-import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/models/chapter_progress_model.dart';
 import 'package:read_nest/src/models/daily_activity_model.dart';
 import 'package:read_nest/src/models/reading_mode.dart';
@@ -265,7 +264,7 @@ class ProgressTrackingService {
   /// Check achievements - Triggers achievement checks
   static Future<void> checkAchievements() async {
     try {
-      final userID = _auth.currentUser!.uid;
+      // final userID = _auth.currentUser!.uid;
       
       // Get current stats
       final statsDoc = await _userStatsRef.get();
