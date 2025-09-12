@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:read_nest/src/models/book_model.dart';
+import 'package:read_nest/src/models/reading_mode.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
+import 'package:read_nest/src/services/progress_tracking_service.dart';
 import 'package:read_nest/src/widgets/on_boarding_dot_widget.dart';
 
 class SummaryReadingPage extends StatefulWidget{

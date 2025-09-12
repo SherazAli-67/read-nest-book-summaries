@@ -39,9 +39,7 @@ class _ReadingGoalDetailPageState extends State<ReadingGoalDetailPage>
     _loadSuggestedBooks();
     
     // Fetch user goals to get progress
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ReadingGoalsProvider>().fetchUserGoals();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_)=> context.read<ReadingGoalsProvider>().fetchUserGoals());
   }
 
   void _setupAnimations() {
