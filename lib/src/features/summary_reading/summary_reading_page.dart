@@ -8,8 +8,14 @@ import 'package:read_nest/src/services/progress_tracking_service.dart';
 import 'package:read_nest/src/widgets/on_boarding_dot_widget.dart';
 
 class SummaryReadingPage extends StatefulWidget{
-  const SummaryReadingPage({super.key, required Book book}): _book = book;
+  const SummaryReadingPage({
+    super.key, 
+    required Book book,
+    this.goalId,
+  }): _book = book;
+  
   final Book _book;
+  final String? goalId; // For goal-specific tracking
 
   @override
   State<SummaryReadingPage> createState() => _SummaryReadingPageState();
@@ -23,6 +29,9 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
   Timer? _pageTimer;
   final Stopwatch _stopwatch = Stopwatch();
   int _pageTimeInSeconds = 0;
+  int _sessionTimeInSeconds = 0;
+  Timer? _progressSaveTimer;
+  DateTime? _sessionStartTime;
 
   @override
   void initState() {
