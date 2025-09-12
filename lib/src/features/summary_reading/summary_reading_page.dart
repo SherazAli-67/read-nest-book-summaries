@@ -32,6 +32,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
   int _sessionTimeInSeconds = 0;
   Timer? _progressSaveTimer;
   DateTime? _sessionStartTime;
+  // final ProgressTrackingService _progressService = ProgressTrackingService();
 
   @override
   void initState() {
@@ -49,6 +50,8 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
     ));
     
     _startPageTimer();
+    _startProgressTracking();
+    _loadUserProgress();
     _progressAnimationController.forward();
   }
 
@@ -56,6 +59,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
   void dispose() {
     _progressAnimationController.dispose();
     _stopPageTimer();
+    _stopProgressTracking();
     super.dispose();
   }
 
@@ -126,6 +130,79 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
 
   // Helper method to check if we can go to next chapter
   bool get _canGoNext => _currentReadingChapter < widget._book.sections.length - 1;
+
+  // Progress tracking methods
+  Future<void> _loadUserProgress() async {
+    try {
+      final progress = await ProgressTrackingService.getUserProgress(widget._book.bookID);
+      if (progress != null && mounted) {
+        setState(() {
+          _currentReadingChapter = progress.lastChapterRead;
+        });
+        _animateToNewProgress();
+      }
+    } catch (e) {
+      debugPrint('Error loading user progress: $e');
+    }
+  }
+
+  Future<void> _saveCurrentProgress() async {
+    if (_sessionStartTime == null) return;
+    
+    try {
+      await ProgressTrackingService.updateReadingProgress(
+        bookID: widget._book.bookID,
+        currentChapter: _currentReadingChapter,
+        timeSpentSeconds: _sessionTimeInSeconds,
+        mode: ReadingMode.READING,
+        goalID: widget.goalId,
+      );
+    } catch (e) {
+      debugPrint('Error saving progress: $e');
+    }
+  }
+
+  Future<void> _completeCurrentChapter() async {
+    if (_sessionStartTime == null) return;
+
+    try {
+      await ProgressTrackingService.completeChapter(
+        bookID: widget._book.bookID,
+        chapterIndex: _currentReadingChapter,
+        timeSpentSeconds: _sessionTimeInSeconds,
+        mode: ReadingMode.READING,
+        goalId: widget.goalId,
+      );
+
+      // Check if book is completed
+      if (_currentReadingChapter == widget._book.sections.length - 1) {
+        await ProgressTrackingService.completeBook(
+          bookID: widget._book.bookID,
+          totalTimeSpent: _sessionTimeInSeconds,
+          goalId: widget.goalId,
+        );
+      }
+    } catch (e) {
+      debugPrint('Error completing chapter: $e');
+    }
+  }
+
+  void _startProgressTracking() {
+    _sessionStartTime = DateTime.now();
+    _sessionTimeInSeconds = 0;
+    
+    _progressSaveTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      _sessionTimeInSeconds = DateTime.now().difference(_sessionStartTime!).inSeconds;
+      _saveCurrentProgress();
+    });
+  }
+
+  void _stopProgressTracking() {
+    _progressSaveTimer?.cancel();
+    if (_sessionTimeInSeconds > 0) {
+      _saveCurrentProgress();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,9 +296,10 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextButton(
-                    onPressed: _canGoPrevious ? () {
+                    onPressed: _canGoPrevious ? () async {
+                      // Save current progress before moving
+                      await _saveCurrentProgress();
                       setState(() => _currentReadingChapter--);
-                      // _resetPageTimer();
                       _animateToNewProgress();
                     } : null,
                     child: Row(
@@ -236,9 +314,10 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
                       style: ElevatedButton.styleFrom(
                           backgroundColor: _canGoNext ? Colors.black : Colors.grey
                       ),
-                      onPressed: _canGoNext ? () {
+                      onPressed: _canGoNext ? () async {
+                        // Complete current chapter before moving to next
+                        await _completeCurrentChapter();
                         setState(() => _currentReadingChapter++);
-                        // _resetPageTimer();
                         _animateToNewProgress();
                       } : null,
                       child: Row(

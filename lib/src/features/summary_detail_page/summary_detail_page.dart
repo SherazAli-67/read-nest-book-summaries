@@ -12,8 +12,10 @@ import 'package:read_nest/src/services/books_service.dart';
 import 'package:read_nest/src/services/share_service.dart';
 
 class SummaryDetailPage extends StatelessWidget{
-  const SummaryDetailPage({super.key, required Book book}) : _book = book;
+  const SummaryDetailPage({super.key, required Book book, this.goalId}) : _book = book;
   final Book _book;
+  final String? goalId; // For goal-specific tracking
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -237,9 +239,9 @@ class SummaryDetailPage extends StatelessWidget{
         ),
         onPressed: () {
           if(isReading){
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryReadingPage(book: _book)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryReadingPage(book: _book, goalId: goalId)));
           }else{
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryListeningPage(book: _book)));
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=> SummaryListeningPage(book: _book, goalId: goalId)));
           }
         }, child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
