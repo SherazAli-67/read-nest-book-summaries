@@ -8,7 +8,7 @@ import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:read_nest/src/widgets/on_boarding_dot_widget.dart';
 
 class SummaryListeningPage extends StatefulWidget {
-  const SummaryListeningPage({super.key, required Book book}) : _book = book;
+  const SummaryListeningPage({super.key, required Book book, String? goalId}) : _book = book;
   final Book _book;
 
   @override

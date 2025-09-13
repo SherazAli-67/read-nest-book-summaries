@@ -39,10 +39,11 @@ class ProgressTrackingService {
 
   /// Update reading progress - called from reading/listening pages
   static Future<void> updateReadingProgress({
-    required String bookID,
-    required int currentChapter,
-    required int timeSpentSeconds,
+    required String bookId,
+    required int chapterIndex,
+    required int timeSpent,
     required ReadingMode mode,
+    String? goalId,
     double? customProgress,
     int? totalChapters,
   }) async {
@@ -51,25 +52,25 @@ class ProgressTrackingService {
       final now = DateTime.now();
       
       // Get current progress or create new
-      final progressDoc = await _userProgressRef.doc(bookID).get();
+      final progressDoc = await _userProgressRef.doc(bookId).get();
       UserProgress progress;
       
       if (progressDoc.exists) {
         progress = UserProgress.fromMap(progressDoc.data() as Map<String, dynamic>);
       } else {
-        progress = UserProgress.initial(userID: userID, bookID: bookID);
+        progress = UserProgress.initial(userID: userID, bookID: bookId);
       }
       
       // Calculate progress percentage
       double progressPercentage = customProgress ?? 0.0;
       if (customProgress == null && totalChapters != null) {
-        progressPercentage = ((currentChapter + 1) / totalChapters).clamp(0.0, 1.0);
+        progressPercentage = ((chapterIndex + 1) / totalChapters).clamp(0.0, 1.0);
       }
       
       // Update progress
       progress = progress.copyWith(
-        currentChapter: currentChapter,
-        totalTimeSpentSeconds: progress.totalTimeSpentSeconds + timeSpentSeconds,
+        currentChapter: chapterIndex,
+        totalTimeSpentSeconds: progress.totalTimeSpentSeconds + timeSpent,
         lastReadDate: now,
         lastMode: mode,
         progressPercentage: progressPercentage,
@@ -77,28 +78,33 @@ class ProgressTrackingService {
       
       // Update chapter-specific progress
       final updatedChapterProgress = Map<int, ChapterProgress>.from(progress.chapterProgress);
-      final existingChapterProgress = updatedChapterProgress[currentChapter];
+      final existingChapterProgress = updatedChapterProgress[chapterIndex];
       
       if (existingChapterProgress != null) {
-        updatedChapterProgress[currentChapter] = existingChapterProgress.copyWith(
-          timeSpentSeconds: existingChapterProgress.timeSpentSeconds + timeSpentSeconds,
+        updatedChapterProgress[chapterIndex] = existingChapterProgress.copyWith(
+          timeSpentSeconds: existingChapterProgress.timeSpentSeconds + timeSpent,
           completedWith: mode,
         );
       } else {
-        updatedChapterProgress[currentChapter] = ChapterProgress.initial(
-          chapterIndex: currentChapter,
+        updatedChapterProgress[chapterIndex] = ChapterProgress.initial(
+          chapterIndex: chapterIndex,
           mode: mode,
-        ).copyWith(timeSpentSeconds: timeSpentSeconds);
+        ).copyWith(timeSpentSeconds: timeSpent);
       }
       
       progress = progress.copyWith(chapterProgress: updatedChapterProgress);
       
       // Save to Firestore using batch
       final batch = _firestore.batch();
-      batch.set(_userProgressRef.doc(bookID), progress.toMap());
+      batch.set(_userProgressRef.doc(bookId), progress.toMap());
       
       // Update daily activity
-      await _updateDailyActivity(timeSpentSeconds, mode, bookID);
+      await _updateDailyActivity(timeSpent, mode, bookId);
+      
+      // Update goal progress if goalId is provided
+      if (goalId != null) {
+        // await _updateGoalProgress(goalId, bookId, chapterIndex, timeSpent, mode);
+      }
       
       await batch.commit();
       
@@ -113,14 +119,15 @@ class ProgressTrackingService {
 
   /// Complete a chapter - marks chapter as completed
   static Future<void> completeChapter({
-    required String bookID,
+    required String bookId,
     required int chapterIndex,
     required ReadingMode mode,
-    required int timeSpentSeconds,
+    required int timeSpent,
+    String? goalId,
     int? totalChapters,
   }) async {
     try {
-      final progressDoc = await _userProgressRef.doc(bookID).get();
+      final progressDoc = await _userProgressRef.doc(bookId).get();
       if (!progressDoc.exists) return;
       
       final progress = UserProgress.fromMap(progressDoc.data() as Map<String, dynamic>);
@@ -133,7 +140,7 @@ class ProgressTrackingService {
         mode: mode,
       )).copyWith(
         isCompleted: true,
-        timeSpentSeconds: timeSpentSeconds,
+        timeSpentSeconds: timeSpent,
         completedWith: mode,
         completedDate: DateTime.now(),
       );
@@ -143,20 +150,20 @@ class ProgressTrackingService {
         lastReadDate: DateTime.now(),
       );
       
-      await _userProgressRef.doc(bookID).set(updatedProgress.toMap());
+      await _userProgressRef.doc(bookId).set(updatedProgress.toMap());
       
       // Check if book is completed
       if (totalChapters != null) {
         final completedChapters = updatedChapterProgress.values.where((ch) => ch.isCompleted).length;
         
         if (completedChapters == totalChapters) {
-          await completeBook(bookID: bookID, mode: mode);
+          await completeBook(bookID: bookId, mode: mode);
         }
       }
       
       // Update stats and check achievements
       await _updateUserStats(chapterCompleted: true, mode: mode);
-      await _updateDailyActivity(0, mode, bookID, chapterCompleted: true);
+      await _updateDailyActivity(0, mode, bookId, chapterCompleted: true);
       
       _checkAchievements();
       

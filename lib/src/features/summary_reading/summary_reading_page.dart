@@ -133,7 +133,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
 
   // Progress tracking methods
   Future<void> _loadUserProgress() async {
-    try {
+    /*try {
       final progress = await ProgressTrackingService.getUserProgress(widget._book.bookID);
       if (progress != null && mounted) {
         setState(() {
@@ -143,13 +143,13 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
       }
     } catch (e) {
       debugPrint('Error loading user progress: $e');
-    }
+    }*/
   }
 
   Future<void> _saveCurrentProgress() async {
     if (_sessionStartTime == null) return;
     
-    try {
+   /* try {
       await ProgressTrackingService.updateReadingProgress(
         bookID: widget._book.bookID,
         currentChapter: _currentReadingChapter,
@@ -159,13 +159,13 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
       );
     } catch (e) {
       debugPrint('Error saving progress: $e');
-    }
+    }*/
   }
 
   Future<void> _completeCurrentChapter() async {
     if (_sessionStartTime == null) return;
 
-    try {
+    /*try {
       await ProgressTrackingService.completeChapter(
         bookID: widget._book.bookID,
         chapterIndex: _currentReadingChapter,
@@ -184,7 +184,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
       }
     } catch (e) {
       debugPrint('Error completing chapter: $e');
-    }
+    }*/
   }
 
   void _startProgressTracking() {
