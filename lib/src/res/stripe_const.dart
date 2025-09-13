@@ -1,4 +1,0 @@
-class StripeConst {
-  static final publishableKey ='pk_test_51S6S8dQ62zn0GuiLpvfNIxrOutmP1rZ5NI7FkfOwjlRSVWv80cjJIh8qZSo2yjqwZbt5CogVY6jiJZFe7uO9zEgC007F6lOQld';
-  static final secretKey = 'sk_test_51S6S8dQ62zn0GuiLDbpMBNJD0yrSzej5PQaS1Io75nvyh5tNqnQYuiSn70BsUFvR55KJ4LXbUAecuZ193UuHNHzk00x2M7F3cx';
-}

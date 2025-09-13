@@ -7,6 +7,7 @@ import 'package:read_nest/src/features/main_menu/discover_page/discover_page.dar
 import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_icons.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 class MainMenuPage extends StatelessWidget{
   const MainMenuPage({super.key});
@@ -15,15 +16,17 @@ class MainMenuPage extends StatelessWidget{
   Widget build(BuildContext context) {
     return Consumer<MainMenuTabChangeProvider>(builder: (ctx, provider, _){
       return Scaffold(
-        bottomNavigationBar: BottomNavigationBar(
+        bottomNavigationBar:
+
+        /*BottomNavigationBar(
             onTap: (int index)=> provider.onTabChange(index),
             items: [
           _buildBottomNavigationItemWidget(icon: AppIcons.icHome, label: 'Home', isSelected: provider.currentIndex == 0),
           _buildBottomNavigationItemWidget(icon: AppIcons.icBookmark, label: 'Discover', isSelected: provider.currentIndex == 1),
           _buildBottomNavigationItemWidget(icon: AppIcons.icUserProfile, label: 'Profile', isSelected: provider.currentIndex == 2),
-        ]),
+        ]),*/
 
-        /*SalomonBottomBar(
+        SalomonBottomBar(
           onTap: (index)=> provider.onTabChange(index),
             selectedItemColor: AppColors.primaryColor,
             currentIndex: provider.currentIndex,
@@ -32,27 +35,27 @@ class MainMenuPage extends StatelessWidget{
             items: [
           _buildBottomNavigationItemWidget(icon: AppIcons.icHome, label: 'Home', isSelected: provider.currentIndex == 0),
           _buildBottomNavigationItemWidget(icon: AppIcons.icDiscover, label: 'Discover', isSelected: provider.currentIndex == 1),
-          _buildBottomNavigationItemWidget(icon: AppIcons.icBookmark, label: 'Bookmark', isSelected: provider.currentIndex == 2),
+          // _buildBottomNavigationItemWidget(icon: AppIcons.icBookmark, label: 'Bookmark', isSelected: provider.currentIndex == 2),
           _buildBottomNavigationItemWidget(icon: AppIcons.icUserProfile, label: 'Profile', isSelected: provider.currentIndex == 3),
-        ]),*/
+        ]),
         body: SafeArea(child: _buildPage(provider.currentIndex)),
       );
     },
     );
   }
 
-  BottomNavigationBarItem _buildBottomNavigationItemWidget({required String icon, required String label, required bool isSelected}) =>
-      /*SalomonBottomBarItem(
+  SalomonBottomBarItem _buildBottomNavigationItemWidget({required String icon, required String label, required bool isSelected}) =>
+      SalomonBottomBarItem(
         icon: SvgPicture.asset(icon, colorFilter: ColorFilter.mode(
             isSelected ? AppColors.primaryColor : Colors.grey,
             BlendMode.srcIn)),
         title: Text(label),
         selectedColor: AppColors.primaryColor,
-      );*/
-      BottomNavigationBarItem(
+      );
+      /*BottomNavigationBarItem(
         icon: SvgPicture.asset(icon, colorFilter: ColorFilter.mode(
             isSelected ? AppColors.primaryColor : Colors.grey,
-            BlendMode.srcIn)), label: label,);
+            BlendMode.srcIn)), label: label,);*/
 
   Widget _buildPage(int currentIndex) {
     switch(currentIndex){

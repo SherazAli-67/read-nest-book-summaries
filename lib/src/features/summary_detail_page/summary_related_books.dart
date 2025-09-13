@@ -101,12 +101,13 @@ class _SummaryRelatedBooksState extends State<SummaryRelatedBooks> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: ListTile(
+                        minLeadingWidth: 65,
                         leading: SizedBox(
                           height: 45,
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: CachedNetworkImage(
-                                imageUrl: book.image, height: 45,)),
+                                imageUrl: book.image, width: 65,)),
                         ),
                         title: Text(book.bookName, style: AppTextStyles
                             .smallTextStyle.copyWith(fontWeight: FontWeight

@@ -157,7 +157,7 @@ class ProgressTrackingService {
         final completedChapters = updatedChapterProgress.values.where((ch) => ch.isCompleted).length;
         
         if (completedChapters == totalChapters) {
-          await completeBook(bookID: bookId, mode: mode);
+          await completeBook(bookId: bookId, mode: mode, goalId: goalId);
         }
       }
       
@@ -175,11 +175,13 @@ class ProgressTrackingService {
 
   /// Complete a book - handles book completion logic
   static Future<void> completeBook({
-    required String bookID,
+    required String bookId,
     required ReadingMode mode,
+    int? totalTimeSpent,
+    String? goalId,
   }) async {
     try {
-      final progressDoc = await _userProgressRef.doc(bookID).get();
+      final progressDoc = await _userProgressRef.doc(bookId).get();
       if (!progressDoc.exists) return;
       
       final progress = UserProgress.fromMap(progressDoc.data() as Map<String, dynamic>);
@@ -191,7 +193,7 @@ class ProgressTrackingService {
         progressPercentage: 1.0,
       );
       
-      await _userProgressRef.doc(bookID).set(completedProgress.toMap());
+      await _userProgressRef.doc(bookId).set(completedProgress.toMap());
       
       // Update user stats
       await _updateUserStats(bookCompleted: true, mode: mode);
@@ -393,6 +395,11 @@ class ProgressTrackingService {
       debugPrint('Failed to get reading stats: $e');
       throw Exception('Failed to get reading stats: $e');
     }
+  }
+
+  /// Get user progress for a specific book (alias for getBookProgress)
+  static Future<UserProgress?> getUserProgress(String bookId) async {
+    return getBookProgress(bookId);
   }
 
   /// Get user progress for a specific book

@@ -5,7 +5,7 @@ class AppIcons {
   static const icApple = 'assets/icons/ic_apple.svg';
   static const icGoogle = 'assets/icons/ic_google.svg';
   static const icHome ='assets/icons/home.svg';
-  static const icDiscover ='assets/icons/discover.svg';
+  static const icDiscover ='assets/icons/ic_discover.svg';
   static const icBookmark ='assets/icons/bookmark.svg';
   static const icUserProfile ='assets/icons/user.svg';
   static const icNotification ='assets/icons/ic_notification.svg';

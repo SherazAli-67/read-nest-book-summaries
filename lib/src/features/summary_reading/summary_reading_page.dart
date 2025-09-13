@@ -133,58 +133,61 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
 
   // Progress tracking methods
   Future<void> _loadUserProgress() async {
-    /*try {
+    try {
       final progress = await ProgressTrackingService.getUserProgress(widget._book.bookID);
       if (progress != null && mounted) {
         setState(() {
-          _currentReadingChapter = progress.lastChapterRead;
+          _currentReadingChapter = progress.currentChapter;
         });
         _animateToNewProgress();
       }
     } catch (e) {
       debugPrint('Error loading user progress: $e');
-    }*/
+    }
   }
 
   Future<void> _saveCurrentProgress() async {
     if (_sessionStartTime == null) return;
     
-   /* try {
+    try {
       await ProgressTrackingService.updateReadingProgress(
-        bookID: widget._book.bookID,
-        currentChapter: _currentReadingChapter,
-        timeSpentSeconds: _sessionTimeInSeconds,
+        bookId: widget._book.bookID,
+        chapterIndex: _currentReadingChapter,
+        timeSpent: _sessionTimeInSeconds,
         mode: ReadingMode.READING,
-        goalID: widget.goalId,
+        goalId: widget.goalId,
+        totalChapters: widget._book.sections.length,
       );
     } catch (e) {
       debugPrint('Error saving progress: $e');
-    }*/
+    }
   }
 
   Future<void> _completeCurrentChapter() async {
     if (_sessionStartTime == null) return;
 
-    /*try {
+    try {
       await ProgressTrackingService.completeChapter(
-        bookID: widget._book.bookID,
+        bookId: widget._book.bookID,
         chapterIndex: _currentReadingChapter,
-        timeSpentSeconds: _sessionTimeInSeconds,
+        timeSpent: _sessionTimeInSeconds,
         mode: ReadingMode.READING,
         goalId: widget.goalId,
+        totalChapters: widget._book.sections.length,
       );
 
       // Check if book is completed
       if (_currentReadingChapter == widget._book.sections.length - 1) {
         await ProgressTrackingService.completeBook(
-          bookID: widget._book.bookID,
+          bookId: widget._book.bookID,
+          mode: ReadingMode.READING,
           totalTimeSpent: _sessionTimeInSeconds,
           goalId: widget.goalId,
         );
       }
     } catch (e) {
       debugPrint('Error completing chapter: $e');
-    }*/
+    }
   }
 
   void _startProgressTracking() {
