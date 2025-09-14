@@ -24,7 +24,7 @@ class DiscoverPage extends StatefulWidget{
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-  final List<String>  _trendingSearches = [
+  final List<String>  _recentSearches = [
     'Productivity', 'Motivation', 'Leadership', 'Business',  'Money', 'Psychology'
   ];
   String _selectedTrending = '';
@@ -48,7 +48,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
         children: [
           Text("Discover", style: AppTextStyles.regularTextStyle,),
           SearchBarClickableWidget(),
-          _buildTrendingSearches(),
+          _buildRecentSearches(),
           _buildAuthorsSpotLight(),
           _buildReadingGoals(),
           // _buildMostSearchedThisWeek(),
@@ -58,7 +58,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
     );
   }
 
-  Widget _buildTrendingSearches() {
+  Widget _buildRecentSearches() {
     return Column(
       spacing: 10,
       children: [
@@ -66,11 +66,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
           spacing: 5,
           children: [
             Icon(Icons.trending_up, color: Colors.black, size: 20,),
-            Text("Trending searches", style: AppTextStyles.smallTextStyle,),
+            Text("Recent searches", style: AppTextStyles.smallTextStyle,),
           ],
         ),
         Wrap(
-          children: _trendingSearches.map((trending){
+          children: _recentSearches.map((trending){
             bool isSelected = _selectedTrending == trending;
             return Padding(
               padding: const EdgeInsets.only(right: 10.0, bottom: 10),
