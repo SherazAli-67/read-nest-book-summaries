@@ -10,7 +10,9 @@ import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_detail_page.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final String? initialQuery;
+  
+  const SearchPage({super.key, this.initialQuery});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -28,10 +30,21 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
+    
+    // Set initial query if provided
+    if (widget.initialQuery != null) {
+      _searchController.text = widget.initialQuery!;
+      _searchQuery = widget.initialQuery!;
+    }
+    
     _searchController.addListener(_onSearchChanged);
     // Initialize with all books
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _initializeAllBooks();
+      // If there's an initial query, perform the search
+      if (widget.initialQuery != null && widget.initialQuery!.isNotEmpty) {
+        _performSearch(widget.initialQuery!);
+      }
     });
   }
 

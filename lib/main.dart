@@ -11,6 +11,7 @@ import 'package:read_nest/src/providers/main_menu_tab_change_provider.dart';
 import 'package:read_nest/src/providers/user_provider.dart';
 import 'package:read_nest/src/providers/user_preferences_provider.dart';
 import 'package:read_nest/src/providers/reading_goals_provider.dart';
+import 'package:read_nest/src/providers/search_history_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_constants.dart';
 
@@ -26,6 +27,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => CategoriesProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ReadingGoalsProvider()),
+        ChangeNotifierProvider(create: (_) => SearchHistoryProvider()),
       ],
       child: MyApp(),
     ),
