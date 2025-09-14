@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:read_nest/src/models/book_model.dart';
 import 'package:read_nest/src/providers/books_provider.dart';
+import 'package:read_nest/src/providers/search_history_provider.dart';
 import 'package:read_nest/src/res/app_colors.dart';
 import 'package:read_nest/src/res/app_textstyle.dart';
 import 'package:read_nest/src/features/summary_detail_page/summary_detail_page.dart';
