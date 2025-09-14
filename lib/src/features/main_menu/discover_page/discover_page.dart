@@ -26,9 +26,6 @@ class DiscoverPage extends StatefulWidget{
 }
 
 class _DiscoverPageState extends State<DiscoverPage> {
-  final List<String>  _recentSearches = [
-    'Productivity', 'Motivation', 'Leadership', 'Business',  'Money', 'Psychology'
-  ];
   String _selectedTrending = '';
   
   @override
@@ -61,35 +58,79 @@ class _DiscoverPageState extends State<DiscoverPage> {
   }
 
   Widget _buildRecentSearches() {
-    return Column(
-      spacing: 10,
-      children: [
-        Row(
-          spacing: 5,
+    return Consumer<SearchHistoryProvider>(
+      builder: (context, searchHistoryProvider, child) {
+        final searches = searchHistoryProvider.displaySearches;
+        
+        if (searches.isEmpty) {
+          return SizedBox.shrink(); // Hide section if no searches
+        }
+        
+        return Column(
+          spacing: 10,
           children: [
-            Icon(Icons.trending_up, color: Colors.black, size: 20,),
-            Text("Recent searches", style: AppTextStyles.smallTextStyle,),
-          ],
-        ),
-        Wrap(
-          children: _recentSearches.map((trending){
-            bool isSelected = _selectedTrending == trending;
-            return Padding(
-              padding: const EdgeInsets.only(right: 10.0, bottom: 10),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: isSelected ? Colors.black : AppColors.textFieldFillColor,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(99)
+            Row(
+              spacing: 5,
+              children: [
+                Icon(Icons.trending_up, color: Colors.black, size: 20,),
+                Expanded(child: Text(
+                  searchHistoryProvider.hasHistory ? "Recent searches" : "Suggested searches", 
+                  style: AppTextStyles.smallTextStyle,
+                )),
+                // Clear history button (only show if user has actual search history)
+                if (searchHistoryProvider.hasHistory)
+                  TextButton(
+                    onPressed: () {
+                      searchHistoryProvider.clearHistory();
+                      setState(() => _selectedTrending = '');
+                    },
+                    child: Text(
+                      "Clear",
+                      style: AppTextStyles.smallTextStyle.copyWith(
+                        color: Colors.grey[600],
+                        fontSize: 12,
+                      ),
                     ),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap
-                ),
-                onPressed: ()=> setState(()=> _selectedTrending = trending), child: Text(trending, textAlign: TextAlign.center, style: AppTextStyles.smallTextStyle.copyWith(color: isSelected ? Colors.white : Colors.black),),),
-            );
-          }).toList(),
-        )
-      ],
+                  ),
+              ],
+            ),
+            Wrap(
+              children: searches.map((searchTerm) {
+                bool isSelected = _selectedTrending == searchTerm;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10.0, bottom: 10),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isSelected ? Colors.black : AppColors.textFieldFillColor,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(99)
+                      ),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap
+                    ),
+                    onPressed: () {
+                      setState(() => _selectedTrending = searchTerm);
+                      // Navigate to search page with pre-filled query
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => SearchPage(initialQuery: searchTerm),
+                        ),
+                      );
+                    }, 
+                    child: Text(
+                      searchTerm, 
+                      textAlign: TextAlign.center, 
+                      style: AppTextStyles.smallTextStyle.copyWith(
+                        color: isSelected ? Colors.white : Colors.black
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            )
+          ],
+        );
+      },
     );
   }
 
