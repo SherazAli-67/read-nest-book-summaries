@@ -8,6 +8,7 @@ import '../../../res/app_colors.dart';
 import '../../../providers/books_provider.dart';
 import '../../../providers/categories_provider.dart';
 import '../../../providers/reading_goals_provider.dart';
+import '../../../providers/search_history_provider.dart';
 import '../../../models/author_spotlight_model.dart';
 import '../../../models/reading_goal_model.dart';
 import '../../../widgets/shimmer_widgets.dart';
@@ -15,6 +16,7 @@ import '../../../widgets/category_widgets.dart';
 import 'about_author_page.dart';
 import 'authors_spotlight_page.dart';
 import '../../reading_goals/reading_goal_detail_page.dart';
+import '../../search_page.dart';
 
 class DiscoverPage extends StatefulWidget{
   const DiscoverPage({super.key});

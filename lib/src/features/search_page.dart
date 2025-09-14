@@ -105,6 +105,11 @@ class _SearchPageState extends State<SearchPage> {
         
         return matchesQuery;
       }).toList();
+
+      // Save search query to history if it's a meaningful search with results
+      if (searchResults.isNotEmpty) {
+        context.read<SearchHistoryProvider>().addSearch(query);
+      }
     }
     
     setState(() {
