@@ -253,32 +253,48 @@ class ReadingGoalsService {
         Map<String, dynamic> updates = {};
         
         // Update based on target type
-        if (goal.targetType == 'books' && !goal.booksCompleted.contains(bookId)) {
-          // Book-based goal: increment progress and add book to completed list
-          updates = {
-            'currentProgress': goal.currentProgress + 1,
-            'minutesRead': goal.minutesRead + minutesRead,
-            'booksCompleted': [...goal.booksCompleted, bookId],
-          };
-          
-          // Check completion
-          if (goal.currentProgress + 1 >= goal.targetValue) {
-            updates['status'] = 'completed';
-            updates['completedOn'] = DateTime.now().toIso8601String();
+        if (goal.targetType == 'books') {
+          // For book-based goals, only update if this book hasn't been completed for this goal yet
+          if (!goal.booksCompleted.contains(bookId)) {
+            // Add book to completed list and increment progress
+            final updatedBooksCompleted = [...goal.booksCompleted, bookId];
+            final newProgress = updatedBooksCompleted.length;
+            
+            updates = {
+              'currentProgress': newProgress,
+              'minutesRead': goal.minutesRead + minutesRead,
+              'booksCompleted': updatedBooksCompleted,
+            };
+            
+            // Check if goal is completed
+            if (newProgress >= goal.targetValue) {
+              updates['status'] = 'completed';
+              updates['completedOn'] = DateTime.now().toIso8601String();
+            }
+            
+            debugPrint('Book-based goal updated: ${goal.title}, progress: $newProgress/${goal.targetValue}');
+          } else {
+            // Book already completed for this goal, just update reading time
+            updates = {
+              'minutesRead': goal.minutesRead + minutesRead,
+            };
+            debugPrint('Book already completed for goal: ${goal.title}, only updating minutes');
           }
         } else if (goal.targetType == 'minutes') {
-          // Time-based goal: increment minutes
+          // Time-based goal: increment minutes and update progress
           final newMinutes = goal.minutesRead + minutesRead;
           updates = {
             'minutesRead': newMinutes,
             'currentProgress': newMinutes, // For time-based goals, progress = minutes
           };
           
-          // Check completion
+          // Check if goal is completed
           if (newMinutes >= goal.targetValue) {
             updates['status'] = 'completed';
             updates['completedOn'] = DateTime.now().toIso8601String();
           }
+          
+          debugPrint('Time-based goal updated: ${goal.title}, progress: $newMinutes/${goal.targetValue} minutes');
         }
         
         if (updates.isNotEmpty) {
@@ -289,11 +305,12 @@ class ReadingGoalsService {
               .doc(goal.userGoalId)
               .update(updates);
           
-          debugPrint('Updated goal: ${goal.title}');
+          debugPrint('Successfully updated goal: ${goal.title}');
         }
       }
     } catch (e) {
       debugPrint('Error tracking reading activity: $e');
+      throw Exception('Failed to track reading activity: $e');
     }
   }
 
