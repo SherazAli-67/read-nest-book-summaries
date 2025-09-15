@@ -631,59 +631,66 @@ class _ReadingGoalDetailPageState extends State<ReadingGoalDetailPage>
   }
 
   Widget _buildBooksGrid() {
-    if (_loadingBooks) {
-      return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
-        ),
-        itemCount: 6,
-        itemBuilder: (context, index) => const GridBookCardShimmer(),
-      );
-    }
+    return Consumer<ReadingGoalsProvider>(
+      builder: (context, provider, _) {
+        final userGoal = provider.getActiveGoalByType(widget.goal.type);
+        
+        if (_loadingBooks) {
+          return GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.75,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
+            itemCount: 6,
+            itemBuilder: (context, index) => const GridBookCardShimmer(),
+          );
+        }
 
-    final filteredBooks = _selectedCategory == 'All'
-        ? _suggestedBooks
-        : _suggestedBooks.where((book) =>
-            book.categories.contains(_selectedCategory)).toList();
+        final filteredBooks = _selectedCategory == 'All'
+            ? _suggestedBooks
+            : _suggestedBooks.where((book) =>
+                book.categories.contains(_selectedCategory)).toList();
 
-    if (filteredBooks.isEmpty) {
-      return SizedBox(
-        height: 200,
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.book_outlined, size: 48, color: Colors.grey[400]),
-              const SizedBox(height: 8),
-              Text(
-                'No books found in this category',
-                style: AppTextStyles.smallTextStyle.copyWith(color: Colors.grey),
+        if (filteredBooks.isEmpty) {
+          return SizedBox(
+            height: 200,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.book_outlined, size: 48, color: Colors.grey[400]),
+                  const SizedBox(height: 8),
+                  Text(
+                    'No books found in this category',
+                    style: AppTextStyles.smallTextStyle.copyWith(color: Colors.grey),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      );
-    }
+            ),
+          );
+        }
 
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.75,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-      ),
-      itemCount: filteredBooks.length.clamp(0, 8),
-      itemBuilder: (context, index) {
-        final book = filteredBooks[index];
-        return BookCard(
-          book: book,
+        return GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+          ),
+          itemCount: filteredBooks.length.clamp(0, 8),
+          itemBuilder: (context, index) {
+            final book = filteredBooks[index];
+            return BookCard(
+              book: book,
+              goalId: userGoal?.userGoalId, // Pass the current active goal ID
+            );
+          },
         );
       },
     );
