@@ -131,6 +131,12 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
   // Helper method to check if we can go to next chapter
   bool get _canGoNext => _currentReadingChapter < widget._book.sections.length - 1;
 
+  // Helper method to check if this is the final chapter
+  bool get _isLastChapter => _currentReadingChapter == widget._book.sections.length - 1;
+
+  // Helper method to get the appropriate button text
+  String get _nextButtonText => _isLastChapter ? 'Complete Book' : 'Next';
+
   // Progress tracking methods
   Future<void> _loadUserProgress() async {
     try {
@@ -167,6 +173,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
     if (_sessionStartTime == null) return;
 
     try {
+      debugPrint("GoalID: ${widget.goalId}");
       await ProgressTrackingService.completeChapter(
         bookId: widget._book.bookID,
         chapterIndex: _currentReadingChapter,
