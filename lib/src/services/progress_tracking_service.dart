@@ -644,6 +644,49 @@ class ProgressTrackingService {
     ];
   }
 
+  /// Update goal progress for reading activity
+  static Future<void> _updateGoalProgress(
+    String goalId,
+    String bookId,
+    int chapterIndex,
+    int timeSpent,
+    ReadingMode mode,
+  ) async {
+    try {
+      final userID = _auth.currentUser!.uid;
+      final minutesSpent = (timeSpent / 60).round();
+      
+      await ReadingGoalsService.updateGoalProgress(
+        userId: userID,
+        userGoalId: goalId,
+        minutesIncrement: minutesSpent,
+      );
+      
+      debugPrint('Updated goal progress for goal: $goalId, minutes: $minutesSpent');
+    } catch (e) {
+      debugPrint('Failed to update goal progress: $e');
+    }
+  }
+
+  /// Update all relevant goals when a book is completed
+  static Future<void> _updateGoalsForBookCompletion(String bookId, int totalTimeSpent) async {
+    try {
+      final userID = _auth.currentUser!.uid;
+      final minutesSpent = (totalTimeSpent / 60).round();
+      
+      // Track reading activity which will update all relevant active goals
+      await ReadingGoalsService.trackReadingActivity(
+        userId: userID,
+        bookId: bookId,
+        minutesRead: minutesSpent,
+      );
+      
+      debugPrint('Updated all goals for book completion: $bookId');
+    } catch (e) {
+      debugPrint('Failed to update goals for book completion: $e');
+    }
+  }
+
   /// Async achievement checking (fire and forget)
   static void _checkAchievements() {
     checkAchievements().catchError((e) {
