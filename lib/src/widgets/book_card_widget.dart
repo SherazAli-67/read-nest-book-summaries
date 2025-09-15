@@ -12,17 +12,22 @@ class BookCard extends StatelessWidget {
     super.key,
     required this.book,
     this.onTap,
+    this.goalId,
   });
 
   final Book book;
   final VoidCallback? onTap;
+  final String? goalId;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap ?? () => Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (_) => SummaryDetailPage(book: book),
+          builder: (_) => SummaryDetailPage(
+            book: book,
+            goalId: goalId,
+          ),
         ),
       ),
       child: Container(
@@ -185,4 +190,3 @@ class BookCard extends StatelessWidget {
     );
   }
 }
-
