@@ -214,6 +214,125 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
     }
   }
 
+  Future<void> _completeBookAndShowFeedback() async {
+    if (_sessionStartTime == null) return;
+
+    try {
+      debugPrint("Completing final chapter and book. GoalID: ${widget.goalId}");
+      
+      // Complete the final chapter
+      await ProgressTrackingService.completeChapter(
+        bookId: widget._book.bookID,
+        chapterIndex: _currentReadingChapter,
+        timeSpent: _sessionTimeInSeconds,
+        mode: ReadingMode.READING,
+        goalId: widget.goalId,
+        totalChapters: widget._book.sections.length,
+      );
+
+      // Complete the entire book
+      await ProgressTrackingService.completeBook(
+        bookId: widget._book.bookID,
+        mode: ReadingMode.READING,
+        totalTimeSpent: _sessionTimeInSeconds,
+        goalId: widget.goalId,
+      );
+
+      // Show completion feedback
+      _showBookCompletionDialog();
+      
+    } catch (e) {
+      debugPrint('Error completing book: $e');
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error completing book. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  void _showBookCompletionDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.celebration_rounded,
+                size: 64,
+                color: Colors.green,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Congratulations!',
+                style: AppTextStyles.titleTextStyle.copyWith(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 8),
+              Text(
+                'You have successfully completed "${widget._book.bookName}"',
+                style: AppTextStyles.regularTextStyle,
+                textAlign: TextAlign.center,
+              ),
+              if (widget.goalId != null) ...[
+                SizedBox(height: 12),
+                Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.green.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.track_changes_rounded, color: Colors.green, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'Reading goal progress updated!',
+                        style: AppTextStyles.smallTextStyle.copyWith(
+                          color: Colors.green,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close dialog
+                    Navigator.of(context).pop(); // Close reading page
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: Text('Continue'),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -322,18 +441,23 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
                   OnBoardingDotWidget(dotsLength: widget._book.sections.length, isDarkTheme: false, currentPage: _currentReadingChapter),
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: _canGoNext ? Colors.black : Colors.grey
+                          backgroundColor: (_canGoNext || _isLastChapter) ? Colors.black : Colors.grey
                       ),
-                      onPressed: _canGoNext ? () async {
-                        // Complete current chapter before moving to next
-                        await _completeCurrentChapter();
-                        setState(() => _currentReadingChapter++);
-                        _animateToNewProgress();
+                      onPressed: (_canGoNext || _isLastChapter) ? () async {
+                        if (_isLastChapter) {
+                          // Complete the final chapter and book
+                          await _completeBookAndShowFeedback();
+                        } else {
+                          // Complete current chapter before moving to next
+                          await _completeCurrentChapter();
+                          setState(() => _currentReadingChapter++);
+                          _animateToNewProgress();
+                        }
                       } : null,
                       child: Row(
                         children: [
-                          Text('Next', style: AppTextStyles.smallTextStyle.copyWith(color: Colors.white),),
-                          Icon(Icons.navigate_next, color: Colors.white,)
+                          Text(_nextButtonText, style: AppTextStyles.smallTextStyle.copyWith(color: Colors.white),),
+                          Icon(_isLastChapter ? Icons.check_rounded : Icons.navigate_next, color: Colors.white,)
                         ],
                       ))
                 ],
