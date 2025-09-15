@@ -10,6 +10,7 @@ import 'package:read_nest/src/models/user_progress_model.dart';
 import 'package:read_nest/src/models/user_stats_model.dart';
 import 'package:read_nest/src/res/firebase_const.dart';
 import 'package:read_nest/src/services/books_service.dart';
+import 'package:read_nest/src/services/reading_goals_service.dart';
 
 class ProgressTrackingService {
   static final _firestore = FirebaseFirestore.instance;
@@ -103,7 +104,7 @@ class ProgressTrackingService {
       
       // Update goal progress if goalId is provided
       if (goalId != null) {
-        // await _updateGoalProgress(goalId, bookId, chapterIndex, timeSpent, mode);
+        await _updateGoalProgress(goalId, bookId, chapterIndex, timeSpent, mode);
       }
       
       await batch.commit();
@@ -197,6 +198,9 @@ class ProgressTrackingService {
       
       // Update user stats
       await _updateUserStats(bookCompleted: true, mode: mode);
+      
+      // Update reading goals progress
+      await _updateGoalsForBookCompletion(bookId, totalTimeSpent ?? 0);
       
       _checkAchievements();
       

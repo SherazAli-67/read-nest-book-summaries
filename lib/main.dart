@@ -48,10 +48,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor, ),
         scaffoldBackgroundColor: Colors.white
       ),
-      home:
-      // UploadGoalsPage()
-
-      FirebaseAuth.instance.currentUser != null ? MainMenuPage() : LoginEmailPage()
+      home: FirebaseAuth.instance.currentUser != null ? MainMenuPage() : LoginEmailPage()
     );
   }
 }
