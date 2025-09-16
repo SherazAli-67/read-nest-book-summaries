@@ -184,6 +184,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
       );
 
       // Check if book is completed
+      debugPrint("Current reading chapter: $_currentReadingChapter");
       if (_currentReadingChapter == widget._book.sections.length - 1) {
         await ProgressTrackingService.completeBook(
           bookId: widget._book.bookID,
@@ -230,6 +231,7 @@ class _SummaryReadingPageState extends State<SummaryReadingPage>
         totalChapters: widget._book.sections.length,
       );
 
+      debugPrint("Completing book after complete chapter");
       // Complete the entire book
       await ProgressTrackingService.completeBook(
         bookId: widget._book.bookID,

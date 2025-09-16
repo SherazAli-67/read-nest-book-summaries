@@ -156,7 +156,7 @@ class ProgressTrackingService {
       // Check if book is completed
       if (totalChapters != null) {
         final completedChapters = updatedChapterProgress.values.where((ch) => ch.isCompleted).length;
-        
+        debugPrint("Completed chapterS: $completedChapters");
         if (completedChapters == totalChapters) {
           await completeBook(bookId: bookId, mode: mode, goalId: goalId);
         }
@@ -181,27 +181,29 @@ class ProgressTrackingService {
     int? totalTimeSpent,
     String? goalId,
   }) async {
+    debugPrint("Completing book, GoalID: $goalId");
     try {
       final progressDoc = await _userProgressRef.doc(bookId).get();
-      if (!progressDoc.exists) return;
-      
-      final progress = UserProgress.fromMap(progressDoc.data() as Map<String, dynamic>);
-      
-      // Mark book as completed
-      final completedProgress = progress.copyWith(
-        isCompleted: true,
-        completedDate: DateTime.now(),
-        progressPercentage: 1.0,
-      );
-      
-      await _userProgressRef.doc(bookId).set(completedProgress.toMap());
-      
-      // Update user stats
-      await _updateUserStats(bookCompleted: true, mode: mode);
+      debugPrint("ProgressDoc Exists: ${progressDoc.exists}");
+      if (progressDoc.exists){
+        final progress = UserProgress.fromMap(progressDoc.data() as Map<String, dynamic>);
+
+        // Mark book as completed
+        final completedProgress = progress.copyWith(
+          isCompleted: true,
+          completedDate: DateTime.now(),
+          progressPercentage: 1.0,
+        );
+
+        await _userProgressRef.doc(bookId).set(completedProgress.toMap());
+        debugPrint("Marked book as completed in the user progress section");
+        // Update user stats
+        await _updateUserStats(bookCompleted: true, mode: mode);
+      }
       
       // Update reading goals progress
       await _updateGoalsForBookCompletion(bookId, totalTimeSpent ?? 0);
-      
+
       _checkAchievements();
       
     } catch (e) {
@@ -671,6 +673,7 @@ class ProgressTrackingService {
   /// Update all relevant goals when a book is completed
   static Future<void> _updateGoalsForBookCompletion(String bookId, int totalTimeSpent) async {
     try {
+      debugPrint("Updating goals for book completion: $bookId");
       final userID = _auth.currentUser!.uid;
       final minutesSpent = (totalTimeSpent / 60).round();
       

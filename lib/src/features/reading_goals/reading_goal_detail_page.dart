@@ -352,7 +352,8 @@ class _ReadingGoalDetailPageState extends State<ReadingGoalDetailPage>
 
   Widget _buildProgressBar(UserGoal userGoal) {
     final progress = userGoal.progressPercentage;
-    
+
+    // debugPrint("Progress: $progress");
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
