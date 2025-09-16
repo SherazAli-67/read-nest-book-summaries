@@ -103,39 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             Text(provider.currentUser!.email, style: AppTextStyles.smallTextStyle,),
                           ],
                         ),
-                        Row(
-                          spacing: 20,
-                          children: [
-                            Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(99),
-                                    color: Colors.white
-                                ),
-                                padding: EdgeInsets.all(5),
-                                child:   Row(
-                                  spacing: 5,
-                                  children: [
-                                    Icon(Icons.leaderboard, size: 15,),
-                                    Text("Reading Pro", style: AppTextStyles.smallTextStyle.copyWith(fontSize: 10, fontWeight: FontWeight.w600),)
-                                  ],
-                                )
-                            ),
-                            Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(99),
-                                    color: Colors.white
-                                ),
-                                padding: EdgeInsets.all(5),
-                                child:   Row(
-                                  spacing: 5,
-                                  children: [
-                                    Icon(Icons.local_fire_department_outlined, size: 15, color: Colors.amber,),
-                                    Text("7 days streak", style: AppTextStyles.smallTextStyle.copyWith(fontSize: 10, fontWeight: FontWeight.w600),)
-                                  ],
-                                )
-                            )
-                          ],
-                        ),
+                        _buildUserBadges(),
                       ],
                     )
                   ],
@@ -156,5 +124,130 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ) : SizedBox();
         });
+  }
+
+  Widget _buildUserBadges() {
+    if (isLoading) {
+      return Row(
+        spacing: 20,
+        children: [
+          _buildLoadingBadge(),
+          _buildLoadingBadge(),
+        ],
+      );
+    }
+
+    if (errorMessage != null) {
+      return Row(
+        spacing: 20,
+        children: [
+          _buildErrorBadge(),
+          _buildErrorBadge(),
+        ],
+      );
+    }
+
+    return Row(
+      spacing: 20,
+      children: [
+        _buildAchievementBadge(),
+        _buildStreakBadge(),
+      ],
+    );
+  }
+
+  Widget _buildAchievementBadge() {
+    String achievementText;
+    if (userAchievements.isNotEmpty) {
+      // Show the most recent achievement or count
+      if (userAchievements.length == 1) {
+        achievementText = userAchievements.first.title;
+      } else {
+        achievementText = "${userAchievements.length} Achievements";
+      }
+    } else {
+      achievementText = "Beginner";
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(99),
+        color: Colors.white
+      ),
+      padding: EdgeInsets.all(5),
+      child: Row(
+        spacing: 5,
+        children: [
+          Icon(Icons.leaderboard, size: 15,),
+          Text(achievementText, style: AppTextStyles.smallTextStyle.copyWith(fontSize: 10, fontWeight: FontWeight.w600),)
+        ],
+      )
+    );
+  }
+
+  Widget _buildStreakBadge() {
+    final streakCount = userStats?.currentStreak ?? 0;
+    final streakText = streakCount == 0 
+      ? "Start reading!" 
+      : streakCount == 1 
+        ? "1 day streak"
+        : "$streakCount days streak";
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(99),
+        color: Colors.white
+      ),
+      padding: EdgeInsets.all(5),
+      child: Row(
+        spacing: 5,
+        children: [
+          Icon(
+            Icons.local_fire_department_outlined, 
+            size: 15, 
+            color: streakCount > 0 ? Colors.amber : Colors.grey,
+          ),
+          Text(streakText, style: AppTextStyles.smallTextStyle.copyWith(fontSize: 10, fontWeight: FontWeight.w600),)
+        ],
+      )
+    );
+  }
+
+  Widget _buildLoadingBadge() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(99),
+        color: Colors.white
+      ),
+      padding: EdgeInsets.all(5),
+      child: Row(
+        spacing: 5,
+        children: [
+          SizedBox(
+            width: 15,
+            height: 15,
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+          Text("Loading...", style: AppTextStyles.smallTextStyle.copyWith(fontSize: 10, fontWeight: FontWeight.w600),)
+        ],
+      )
+    );
+  }
+
+  Widget _buildErrorBadge() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(99),
+        color: Colors.white
+      ),
+      padding: EdgeInsets.all(5),
+      child: Row(
+        spacing: 5,
+        children: [
+          Icon(Icons.error_outline, size: 15, color: Colors.red),
+          Text("Error", style: AppTextStyles.smallTextStyle.copyWith(fontSize: 10, fontWeight: FontWeight.w600),)
+        ],
+      )
+    );
   }
 }
