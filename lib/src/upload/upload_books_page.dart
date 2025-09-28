@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:csv/csv.dart';
+// import 'package:csv/csv.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,7 +14,7 @@ class UploadBooksPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(child: ElevatedButton(
-          onPressed: uploadBooksFromCsv, child: Text("Upload Books"))),
+          onPressed: (){}, child: Text("Upload Books"))),
     );
   }
 
@@ -23,7 +23,8 @@ class UploadBooksPage extends StatelessWidget {
 
   /// Reads assets/csv/test_accounts.csv and uploads to Firestore.
   /// REQUIRE: pubspec.yaml includes the asset path.
-  Future<void> uploadBooksFromCsv() async {
+/*  Future<void> uploadBooksFromCsv() async {
+
     debugPrint("On tap occurred");
     // 1) Load CSV from assets (don’t use manual split — use csv package)
     final raw = await rootBundle.loadString('assets/csv/books.csv');
@@ -148,7 +149,7 @@ class UploadBooksPage extends StatelessWidget {
 
     // Create/Update category documents with total summary counts
     await _createCategoryDocuments(categoryColRef, categorySummaryCounts);
-  }
+  }*/
 
   /// Creates category documents with total summary counts
   Future<void> _createCategoryDocuments(
